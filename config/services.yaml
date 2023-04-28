@@ -11,14 +11,33 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+        
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    
+#    App\Home\Presentation\Controller\:
+#        resource: '../src/Home/Presentation/Controller/*'
+#        tags: ['controller.service_arguments']
+#
+#    App\Blog\Presentation\Controller\:
+#        resource: '../src/Blog/Presentation/Controller/*'
+#        tags: ['controller.service_arguments']
+#
+#    App\Security\Presentation\Controller\:
+#        resource: '../src/Security/Presentation/Controller/*'
+#        tags: ['controller.service_arguments']
+    
+    App\Stream\Presentation\Controller\:
+        resource: '../src/Stream/Presentation/Controller/*'
+        tags: [ 'controller.service_arguments' ]
+
+    App\Stream\Application\CommandHandler\:
+        resource: '../src/Stream/Application/CommandHandler/*Handler.php'
+        public: true
+        tags: ['messenger.message_handler']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
