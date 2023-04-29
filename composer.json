@@ -8,6 +8,7 @@
         "php": ">=8.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "aminyazdanpanah/php-ffmpeg-video-streaming": "^1.2",
         "doctrine/doctrine-bundle": "^2.9",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
