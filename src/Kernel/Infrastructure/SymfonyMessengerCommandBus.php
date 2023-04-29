@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Kernel\Infrastructure;
 
+use App\Kernel\Application\Command;
+use App\Kernel\Application\CommandBus;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class SymfonyMessengerCommandBus implements CommandBus
