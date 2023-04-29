@@ -11,6 +11,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/php_socket:/var/run/php
+      - ./data/video_data:/video_data
     healthcheck:
       interval: 10s
       timeout: 3s
