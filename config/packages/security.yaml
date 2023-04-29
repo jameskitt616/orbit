@@ -1,33 +1,59 @@
+#security:
+#    enable_authenticator_manager: true
+#
+#    providers:
+#        app_user_provider:
+#            entity:
+#                class: App\Security\Domain\Model\User
+#                property: username
+#    password_hashers:
+#        App\Security\Domain\Model\User:
+#            id: App\Kernel\Infrastructure\Security\Hasher\UserPasswordHasher
+#    firewalls:
+#        dev:
+#            pattern: ^/(_(profiler|wdt)|css|images|js)/
+#            security: false
+#        main:
+#            lazy: true
+#            custom_authenticator: App\Security\Infrastructure\Authenticator\LoginFormAuthenticator
+#            logout:
+#                path: logout
+#
+#            # activate different ways to authenticate
+#            # https://symfony.com/doc/current/security.html#firewalls-authentication
+#
+#            # https://symfony.com/doc/current/security/impersonating_user.html
+#            # switch_user: true
+#
+#    # Easy way to control access for large sections of your site
+#    # Note: Only the *first* access control that matches will be used
+#    access_control:
+#        - { path: ^/login$, roles: PUBLIC_ACCESS }
+#        - { path: ^/stream/*, roles: PUBLIC_ACCESS }
+#        - { path: ^/.*, role: ROLE_USER }
+
+
 security:
-    enable_authenticator_manager: true
+    password_hashers:
+        App\Security\Domain\Entity\User:
+            id: App\Kernel\Infrastructure\Security\Hasher\UserPasswordHasher
 
     providers:
         app_user_provider:
             entity:
-                class: App\Security\Domain\Model\User
-                property: name
-    password_hashers:
-        App\Security\Domain\Model\User:
-            id: App\Kernel\Infrastructure\Security\Hasher\UserPasswordHasher
+                class: App\Security\Domain\Entity\User
+                property: username
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            lazy: true
-            custom_authenticator: App\Security\Infrastructure\Authenticator\LoginFormAuthenticator
+            custom_authenticators:
+                - App\Security\Infrastructure\Authenticator\LoginFormAuthenticator
+
             logout:
                 path: logout
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/login$, roles: PUBLIC_ACCESS }
-        - { path: ^/stream/*, roles: PUBLIC_ACCESS }
-        - { path: ^/.*, role: ROLE_USER }
+        - { path: ^/admin, roles: IS_AUTHENTICATED_REMEMBERED }
