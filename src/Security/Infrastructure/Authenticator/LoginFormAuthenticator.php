@@ -39,8 +39,7 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
     public function supports(Request $request): bool
     {
         // do your work when we're POSTing to the login page
-        return $request->attributes->get('_route') === 'login'
-            && $request->isMethod('POST');
+        return $request->attributes->get('_route') === 'login' && $request->isMethod('POST');
     }
 
     public function authenticate(Request $request): Passport
@@ -68,12 +67,12 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
         $user->resetFailureCounter();
         $this->userRepository->save($user);
 
-//        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
-//            return new RedirectResponse($targetPath);
-//        }
+        //        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+        //            return new RedirectResponse($targetPath);
+        //        }
 
         return new RedirectResponse($this->requestStack->getSession()->get('loginRedirectURL') ?? '/');
-//        return new RedirectResponse($this->requestStack->getSession()->get('loginRedirectURL') ?? '/desktop');
+        //        return new RedirectResponse($this->requestStack->getSession()->get('loginRedirectURL') ?? '/desktop');
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
