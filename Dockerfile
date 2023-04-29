@@ -44,6 +44,8 @@ RUN apk add --no-cache \
 		gettext \
 		git \
     	ffmpeg \
+    	yarn \
+    	nodejs-current \
 	;
 
 RUN set -eux; \
@@ -107,6 +109,9 @@ RUN set -eux; \
 		composer run-script --no-dev post-install-cmd; \
 		chmod +x bin/console; sync; \
     fi
+
+RUN yarn install
+RUN yarn encore dev
 
 # Dev image
 FROM app_php AS app_php_dev
