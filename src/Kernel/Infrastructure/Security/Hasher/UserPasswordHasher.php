@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PAPP\Kernel\Infrastructure\Security\Hasher;
+namespace App\Kernel\Infrastructure\Security\Hasher;
 
 use Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
 use Symfony\Component\PasswordHasher\Hasher\CheckPasswordLengthTrait;

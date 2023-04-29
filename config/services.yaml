@@ -14,8 +14,8 @@ services:
     App\:
         resource: '../src/'
         exclude:
-            - '../src/V3/{DependencyInjection,Model,Migrations,Tests,Controller,Kernel.php}'
-            - '../src/V3/*/Domain/Model/*'
+            - '../src/{DependencyInjection,Model,Migrations,Tests,Controller,Kernel.php}'
+            - '../src/*/Domain/Model/*'
         
     App\Security\Presentation\Controller\:
         resource: '../src/Security/Presentation/Controller/*'
