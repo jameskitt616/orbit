@@ -110,6 +110,8 @@ RUN set -eux; \
 		chmod +x bin/console; sync; \
     fi
 
+RUN mkdir /video_data
+RUN chown -R www-data:www-data /video_data
 RUN yarn install
 RUN yarn encore dev
 
