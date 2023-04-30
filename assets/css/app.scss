@@ -1,0 +1,9 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+[contenteditable] {
+  outline: 0 solid transparent;
+}

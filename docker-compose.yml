@@ -11,7 +11,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/php_socket:/var/run/php
-      - ./data/video_data:/video_data
+      - /home/james/docker/data/video_data/live:/orbit/transcode
+      - /home/james/Videos/test:/orbit/videos
     healthcheck:
       interval: 10s
       timeout: 3s

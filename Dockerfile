@@ -45,7 +45,9 @@ RUN apk add --no-cache \
 		git \
     	ffmpeg \
     	yarn \
-    	nodejs-current \
+    	nodejs \
+    	python3 \
+    	make \
 	;
 
 RUN set -eux; \
@@ -110,8 +112,9 @@ RUN set -eux; \
 		chmod +x bin/console; sync; \
     fi
 
-RUN mkdir /video_data
-RUN chown -R www-data:www-data /video_data
+RUN mkdir -p /orbit/transcode
+RUN mkdir /orbit/videos
+RUN chown -R www-data:www-data /orbit/transcode
 RUN yarn install
 RUN yarn encore dev
 
