@@ -21,6 +21,11 @@ services:
         resource: '../src/Security/Presentation/Controller/*'
         tags: [ 'controller.service_arguments' ]
         
+    App\Security\Application\CommandHandler\:
+        resource: '../src/Security/Application/CommandHandler/*Handler.php'
+        public: true
+        tags: [ 'messenger.message_handler' ]
+        
     App\Transcode\Presentation\Controller\:
         resource: '../src/Transcode/Presentation/Controller/*'
         tags: [ 'controller.service_arguments' ]

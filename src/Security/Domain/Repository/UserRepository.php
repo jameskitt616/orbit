@@ -22,6 +22,11 @@ interface UserRepository
      */
     public function findByUsername(string $username): ?User;
 
+    /**
+     * @return array
+     */
+    public function findAll(): array;
+
 
     /**
      * @param User $user

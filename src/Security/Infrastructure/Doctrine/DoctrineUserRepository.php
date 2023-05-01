@@ -38,6 +38,15 @@ readonly class DoctrineUserRepository implements UserRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    public function findAll(): array
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('user')
+            ->from(User::class, 'user');
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function save(User $user): void
     {
         $this->em->persist($user);

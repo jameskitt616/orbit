@@ -8,7 +8,6 @@ use App\Security\Domain\Model\User;
 use App\Security\Domain\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -31,7 +30,6 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
         private readonly RouterInterface             $router,
         private readonly CsrfTokenManagerInterface   $csrfTokenManager,
         private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly RequestStack                $requestStack
     )
     {
     }
@@ -67,12 +65,8 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
         $user->resetFailureCounter();
         $this->userRepository->save($user);
 
-        //        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
-        //            return new RedirectResponse($targetPath);
-        //        }
-
-        return new RedirectResponse($this->requestStack->getSession()->get('loginRedirectURL') ?? '/');
-        //        return new RedirectResponse($this->requestStack->getSession()->get('loginRedirectURL') ?? '/desktop');
+        $route = $this->router->generate('default_entry');
+        return new RedirectResponse($route);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response

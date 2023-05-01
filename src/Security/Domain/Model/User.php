@@ -23,17 +23,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'password', type: 'string', length: 512, nullable: false)]
     private string $password;
 
+    #[ORM\Column(name: 'isAdmin', type: 'boolean', nullable: false)]
+    private bool $isAdmin;
+
     #[ORM\Column(name: 'loginFailureCounter', type: 'integer', nullable: false)]
     private int $loginFailureCounter;
 
     #[ORM\Column(name: 'roles', type: 'json', nullable: false)]
     private array $roles;
 
-    public function __construct(string $username, string $password)
+    public function __construct(string $username, bool $isAdmin)
     {
         $this->id = Uuid::uuid4()->toString();
         $this->username = $username;
-        $this->password = $password;
+        $this->isAdmin = $isAdmin;
         $this->loginFailureCounter = 0;
         $this->roles = ['ROLE_USER'];
     }
@@ -80,5 +83,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->getUsername();
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 }

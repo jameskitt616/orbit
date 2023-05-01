@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07aa39e6c1d698b3a15e60e1f2816537",
+    "content-hash": "5d1c448bff03d95db24a0f7d79374c9f",
     "packages": [
         {
             "name": "aminyazdanpanah/php-ffmpeg-video-streaming",
