@@ -40,12 +40,12 @@ final class TranscodeService
 
     public function transcode(Transcode $transcode): void
     {
-        //TODO: expose config?
+        //TODO: expose config
         $config = [
             'ffmpeg.binaries' => '/usr/bin/ffmpeg',
             'ffprobe.binaries' => '/usr/bin/ffprobe',
-            'timeout' => 3600, //TODO: probably increase timeout to max length of movie. 5h?
-            'ffmpeg.threads' => 4, //TODO: maybe configure in admin system settings?
+            'timeout' => 18000, //TODO: probably increase timeout to max length of movie. default 5h?
+            'ffmpeg.threads' => 12, //TODO: maybe configure in admin system settings? -> not sure if this has any impact
         ];
 
         $ffmpeg = FFMpeg::create($config);
@@ -58,7 +58,7 @@ final class TranscodeService
         $format = $this->getFormat(Format::HEVC->value);
         $format->on('progress', function ($video, $format, $percentage, $transcode) {
             $percentage = (int) round($percentage);
-            //dump($percentage);
+//            dump($transcode);
             //dump(sprintf("\rTranscoding...(%s%%) [%s%s]", $percentage, str_repeat('#', $percentage), str_repeat('-', (100 - $percentage))));
         });
 
