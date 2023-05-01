@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Security\Domain\Model;
 
+use App\Transcode\Domain\Entity\Transcode;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -31,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(name: 'roles', type: 'json', nullable: false)]
     private array $roles;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Transcode::class, cascade: ['persist'])]
+    private Collection $transcodes;
 
     public function __construct(string $username, bool $isAdmin)
     {

@@ -12,17 +12,20 @@
         </div>
         <div class="w-3/4 p-4 m-2 border-l">
             <h1>Select video to transcode</h1>
+            <a href="{{ path('transcode_create') }}">
+                <i class="fas fa-plus"></i>
+            </a>
             <div class="max-h-96 overflow-auto">
-                {% for video in videos %}
+                {% for transcode in transcodes %}
                     <div class="flex justify-between gap-x-6 p-2 {{ loop.index != 1 ? 'mt-1' }} cursor-pointer border rounded hover:bg-gray-600">
                         <div class="flex gap-x-4">
                             <div class="min-w-0 flex-auto">
-                                <p class="text-sm font-semibold leading-6" title="{{ video.fileName }}">{{ video.fileName }}</p>
-                                <p class="truncate text-xs leading-5 text-gray-500" title="{{ video.getDisplayFilePath }}">{{ video.getDisplayFilePath }}</p>
+                                <p class="text-sm font-semibold leading-6" title="{{ transcode.fileName }}">{{ transcode.fileName }}</p>
+                                <p class="truncate text-xs leading-5 text-gray-500" title="{{ transcode.filePath }}">{{ transcode.filePath }}</p>
                             </div>
                         </div>
                         <div class="hidden sm:flex sm:flex-col sm:items-end">
-                            <p class="text-sm leading-6">{{ video.getFileSize }}</p>
+{#                            <p class="text-sm leading-6">{{ transcodes.getFileSize }}</p>#}
                         </div>
                     </div>
                 {% endfor %}

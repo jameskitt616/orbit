@@ -27,7 +27,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/', name: 'default_entry', methods: ['GET'])]
     public function defaultEntryRoute(): Response
     {
-        return $this->redirectToRoute('transcode_select');
+        return $this->redirectToRoute('transcode_list');
     }
 
     #[Route(path: '/register/admin', name: 'register_admin', methods: ['GET', 'POST'])]
