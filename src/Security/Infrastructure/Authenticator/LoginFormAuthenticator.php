@@ -6,16 +6,14 @@ namespace App\Security\Infrastructure\Authenticator;
 
 use App\Security\Domain\Model\User;
 use App\Security\Domain\Repository\UserRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\InteractiveAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -26,10 +24,8 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 class LoginFormAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface, InteractiveAuthenticatorInterface
 {
     public function __construct(
-        private readonly UserRepository              $userRepository,
-        private readonly RouterInterface             $router,
-        private readonly CsrfTokenManagerInterface   $csrfTokenManager,
-        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly UserRepository  $userRepository,
+        private readonly RouterInterface $router,
     )
     {
     }
@@ -58,7 +54,7 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -66,6 +62,7 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
         $this->userRepository->save($user);
 
         $route = $this->router->generate('default_entry');
+
         return new RedirectResponse($route);
     }
 
