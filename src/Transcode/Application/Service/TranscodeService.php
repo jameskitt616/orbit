@@ -26,7 +26,6 @@ final class TranscodeService
                 continue;
             }
 
-            dump($file);
             $files[] = new File($file->getFilename(), $file->getPathname(), $file->getSize());
         }
 

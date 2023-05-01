@@ -1,7 +1,7 @@
 <header class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1">
-            <a href="#" class="-m-1.5 p-1.5">
+            <a href="{{ path('default_entry') }}" class="-m-1.5 p-1.5">
                 <span class="sr-only">Your Company</span>
                 <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="">
             </a>
@@ -17,10 +17,7 @@
         <div class="hidden lg:flex lg:gap-x-12">
             <div class="relative">
                 <button type="button" class="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900" aria-expanded="false">
-                    Stream
-                    <svg class="h-5 w-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                    </svg>
+                    Stream <i class="fas fa-chevron-down"></i>
                 </button>
 
                 <!--
@@ -128,7 +125,7 @@
             <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Admin Settings</a>
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="{{ path('logout') }}" class="text-sm font-semibold leading-6 text-gray-900">Sign Out <span aria-hidden="true">&rarr;</span></a>
+            <a href="{{ path('logout') }}" class="text-sm font-semibold leading-6 text-gray-900">Sign Out <span aria-hidden="true"><i class="fas fa-arrow-right"></i></span></a>
         </div>
     </nav>
     <!-- Mobile menu, show/hide based on menu open state. -->
@@ -153,15 +150,15 @@
                     <div class="space-y-2 py-6">
                         <div class="-mx-3">
                             <button type="button" class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 hover:bg-gray-50" aria-controls="disclosure-1" aria-expanded="false">
-                                Stream
+                                Stream Stream <i class="fas fa-chevron-down"></i>
                                 <!--
                                   Expand/collapse icon, toggle classes based on menu open state.
 
                                   Open: "rotate-180", Closed: ""
                                 -->
-                                <svg class="h-5 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                                </svg>
+{#                                <svg class="h-5 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">#}
+{#                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />#}
+{#                                </svg>#}
                             </button>
                             <!-- 'Stream' sub-menu, show/hide based on menu state. -->
                             <div class="mt-2 space-y-2" id="disclosure-1">
@@ -178,7 +175,7 @@
                         <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Admin Settings</a>
                     </div>
                     <div class="py-6">
-                        <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Sign Out</a>
+                        <a href="{{ path('logout') }}" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Sign Out</a>
                     </div>
                 </div>
             </div>
