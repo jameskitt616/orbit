@@ -21,7 +21,7 @@ final class TranscodeService
 
         /** @var SplFileInfo $file */
         foreach ($rii as $file) {
-            //TODO: add additional checks if file is video source
+            //TODO: add additional checks if file is not a video source
             if ($file->isDir()) {
                 continue;
             }
@@ -39,7 +39,7 @@ final class TranscodeService
             'ffmpeg.binaries' => '/usr/bin/ffmpeg',
             'ffprobe.binaries' => '/usr/bin/ffprobe',
             'timeout' => 3600, //TODO: probably increase timeout to max length of movie. 5h?
-            'ffmpeg.threads' => 4,
+            'ffmpeg.threads' => 4, //TODO: maybe configure in admin system settings?
         ];
 
         $ffmpeg = FFMpeg::create($config);
