@@ -22,7 +22,7 @@ readonly class CreateTranscodeHandler
     {
         $file = $command->file;
         $currentUser = $command->currentUser;
-        $transcode = new Transcode($file->fileName, $file->filePath, $currentUser);
+        $transcode = new Transcode($file->fileName, $file->filePath, $currentUser, $command->format, $command->representations);
 
         $this->transcodeRepository->save($transcode);
 

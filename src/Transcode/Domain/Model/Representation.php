@@ -43,7 +43,7 @@ class Representation
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->name . ' (' . $this->kiloBiteRate . ' kbps)';
     }
 
     public function setName(string $name): void

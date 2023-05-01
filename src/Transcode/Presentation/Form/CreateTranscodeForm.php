@@ -6,7 +6,10 @@ namespace App\Transcode\Presentation\Form;
 
 use App\Transcode\Application\Command\CreateTranscode;
 use App\Transcode\Application\Service\TranscodeService;
-use App\Transcode\Domain\Model\File;
+use App\Transcode\Domain\Enum\Format;
+use App\Transcode\Domain\Model\Representation;
+use App\Transcode\Domain\Repository\RepresentationRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class CreateTranscodeForm extends AbstractType
 {
     public function __construct(
-        private readonly TranscodeService $transcodeService,
+        private readonly TranscodeService         $transcodeService,
+        private readonly RepresentationRepository $representationRepository
     )
     {
     }
@@ -29,18 +33,18 @@ final class CreateTranscodeForm extends AbstractType
             'choices' => $this->transcodeService->listAvailableVideos(),
         ]);
 
-//        $builder->add('resolution', ChoiceType::class, [
-//            'choices' => [
-//                'Main Statuses' => [
-//                    'Yes' => 'stock_yes',
-//                    'No' => 'stock_no',
-//                ],
-//                'Out of Stock Statuses' => [
-//                    'Backordered' => 'stock_backordered',
-//                    'Discontinued' => 'stock_discontinued',
-//                ],
-//            ],
-//        ]);
+        $builder->add('format', ChoiceType::class, [
+            'label' => false,
+            'choices' => Format::getFormats(),
+        ]);
+
+        $builder->add('representations', EntityType::class, [
+            'label' => false,
+            'class' => Representation::class,
+            'choice_label' => 'name',
+            'choices' => $this->representationRepository->findAll(),
+            'multiple' => true,
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

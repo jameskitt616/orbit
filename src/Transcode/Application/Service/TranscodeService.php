@@ -50,34 +50,23 @@ final class TranscodeService
 
         $ffmpeg = FFMpeg::create($config);
         $sFfmpeg = new SFFMpeg($ffmpeg);
-        //        $video = $sFfmpeg->open('/video_data/files/beat.mkv');
         $video = $sFfmpeg->open($transcode->getFilePath());
-        //        $video = $sFfmpeg->open($_ENV['VIDEO_PATH'] . '/Backup.mp4');
-        //        $video = $sFfmpeg->open('/video_data/files/biscuits.mp4');
-
-        //        $loadedFileName = substr(strrchr($video->baseMedia()->getPathfile(), '/'),1);
         $fileName = 'stream';
+
         $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $fileName;
-        //        dump($saveLocation);
 
-        $r_720p = (new Representation)->setKiloBitrate(2048)->setResize(1280, 720);
-        $r_1080p = (new Representation)->setKiloBitrate(4096)->setResize(1920, 1080);
-        $r_4k = (new Representation)->setKiloBitrate(17408)->setResize(3840, 2160);
-
-        dump(Format::HEVC->value);
         $format = $this->getFormat(Format::HEVC->value);
         $format->on('progress', function ($video, $format, $percentage, $transcode) {
             $percentage = (int) round($percentage);
-            //            dump($percentage);
-            //            dump(sprintf("\rTranscoding...(%s%%) [%s%s]", $percentage, str_repeat('#', $percentage), str_repeat('-', (100 - $percentage))));
+            //dump($percentage);
+            //dump(sprintf("\rTranscoding...(%s%%) [%s%s]", $percentage, str_repeat('#', $percentage), str_repeat('-', (100 - $percentage))));
         });
 
         $representations = $this->getRepresentations($transcode);
 
         $video->hls()
             ->setFormat($format)
-            ->addRepresentations([$r_1080p])
-            //->addRepresentations($representations)
+            ->addRepresentations($representations)
             ->save($saveLocation);
     }
 

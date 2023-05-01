@@ -40,7 +40,7 @@ class Transcode
     #[ORM\ManyToMany(targetEntity: Representation::class, cascade: ['persist'])]
     private Collection $representations;
 
-    public function __construct(string $fileName, string $filePath, User $ownedBy, string $transcodeFormat, array $representations)
+    public function __construct(string $fileName, string $filePath, User $ownedBy, string $transcodeFormat, Collection $representations)
     {
         $this->id = Uuid::uuid4()->toString();
         $this->fileName = $fileName;
@@ -49,7 +49,7 @@ class Transcode
         $this->ownedBy = $ownedBy;
         $this->transcodingProgress = 0;
         $this->transcodeFormat = $transcodeFormat;
-        $this->representations = new ArrayCollection($representations);
+        $this->representations = $representations;
     }
 
     public function getId(): string
