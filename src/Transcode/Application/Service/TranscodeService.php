@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Transcode\Application\Service;
 
 use App\Transcode\Domain\Entity\File;
+use App\Transcode\Domain\Entity\Transcode;
 use FFMpeg\FFMpeg;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -32,7 +33,7 @@ final class TranscodeService
         return $files;
     }
 
-    public function stream(): void
+    public function transcode(Transcode $transcode): void
     {
         //TODO: expose config?
         $config = [
@@ -45,13 +46,13 @@ final class TranscodeService
         $ffmpeg = FFMpeg::create($config);
         $sFfmpeg = new SFFMpeg($ffmpeg);
         //        $video = $sFfmpeg->open('/video_data/files/beat.mkv');
-        $video = $sFfmpeg->open($_ENV['VIDEO_PATH'] . '/Backup.mp4');
+        $video = $sFfmpeg->open($transcode->getFilePath());
+//        $video = $sFfmpeg->open($_ENV['VIDEO_PATH'] . '/Backup.mp4');
         //        $video = $sFfmpeg->open('/video_data/files/biscuits.mp4');
 
         //        $loadedFileName = substr(strrchr($video->baseMedia()->getPathfile(), '/'),1);
         $fileName = 'stream';
-        $path = rand();
-        $saveLocation = $_ENV['TRANSCODE_PATH'] . $path . '/' . $fileName;
+        $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $fileName;
         dump($saveLocation);
 
         $r_720p = (new Representation)->setKiloBitrate(2048)->setResize(1280, 720);

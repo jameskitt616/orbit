@@ -41,10 +41,7 @@ final class TranscodeController extends AbstractController
     #[Route(path: '/show/{transcode}', name: 'transcode_show', methods: ['GET'])]
     public function show(Transcode $transcode): Response
     {
-        $videos = $this->transcodeService->listAvailableVideos();
-
-        return $this->render('transcode/list.html.twig', [
-            'videos' => $videos,
+        return $this->render('transcode/show.html.twig', [
             'transcode' => $transcode,
         ]);
     }
