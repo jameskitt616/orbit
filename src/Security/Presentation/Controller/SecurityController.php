@@ -31,7 +31,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/register/admin', name: 'register_admin', methods: ['GET', 'POST'])]
-    public function createPost(Request $request): Response
+    public function registerAdmin(Request $request): Response
     {
         $users = $this->userRepository->findAll();
 
@@ -63,6 +63,12 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'login', methods: ['GET', 'POST'])]
     public function login(): Response
     {
+        $users = $this->userRepository->findAll();
+
+        if (empty($users)) {
+            return $this->redirectToRoute('register_admin');
+        }
+
         $error = $this->authenticationUtils->getLastAuthenticationError();
         $lastUsername = $this->authenticationUtils->getLastUsername();
 
