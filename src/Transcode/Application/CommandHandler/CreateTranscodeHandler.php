@@ -6,7 +6,7 @@ namespace App\Transcode\Application\CommandHandler;
 
 use App\Transcode\Application\Command\CreateTranscode;
 use App\Transcode\Application\Service\TranscodeService;
-use App\Transcode\Domain\Entity\Transcode;
+use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Repository\TranscodeRepository;
 
 readonly class CreateTranscodeHandler

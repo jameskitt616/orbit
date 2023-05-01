@@ -3,7 +3,10 @@
 
     <div class="max-w-7xl justify-between mx-auto flex mt-5">
         <div class="w-1/3 p-3">
-            <div>{{ 'title'|trans }}</div>
+            <div class="flex">
+                <img src="{{ asset('build/images/OrbitLogo_500.png') }}" class="h-14" alt="Orbit Logo">
+                {{ 'title'|trans }}
+            </div>
         </div>
         <div class="w-1/3 p-3 border-l">
             <a href="https://github.com/jameskitt616/orbit" title="{{ 'brands.github'|trans }}">

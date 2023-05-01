@@ -8,7 +8,7 @@ use App\Kernel\Application\CommandBus;
 use App\Security\Application\Service\SecurityService;
 use App\Transcode\Application\Command\CreateTranscode;
 use App\Transcode\Application\Service\TranscodeService;
-use App\Transcode\Domain\Entity\Transcode;
+use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Repository\TranscodeRepository;
 use App\Transcode\Presentation\Form\CreateTranscodeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Transcode\Domain\Entity;
+namespace App\Transcode\Domain\Model;
 
 class File
 {

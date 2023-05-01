@@ -6,7 +6,7 @@ namespace App\Transcode\Presentation\Form;
 
 use App\Transcode\Application\Command\CreateTranscode;
 use App\Transcode\Application\Service\TranscodeService;
-use App\Transcode\Domain\Entity\File;
+use App\Transcode\Domain\Model\File;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;

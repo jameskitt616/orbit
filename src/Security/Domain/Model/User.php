@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security\Domain\Model;
 
-use App\Transcode\Domain\Entity\Transcode;
+use App\Transcode\Domain\Model\Transcode;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;

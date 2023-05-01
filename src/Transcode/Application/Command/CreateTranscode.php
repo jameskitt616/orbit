@@ -6,8 +6,8 @@ namespace App\Transcode\Application\Command;
 
 use App\Kernel\Application\Command;
 use App\Security\Domain\Model\User;
-use App\Transcode\Domain\Entity\File;
-use App\Transcode\Domain\Entity\Transcode;
+use App\Transcode\Domain\Model\File;
+use App\Transcode\Domain\Model\Transcode;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateTranscode implements Command

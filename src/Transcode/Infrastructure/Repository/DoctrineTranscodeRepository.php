@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Transcode\Infrastructure\Repository;
 
 use App\Security\Domain\Model\User;
-use App\Transcode\Domain\Entity\Transcode;
+use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Repository\TranscodeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
