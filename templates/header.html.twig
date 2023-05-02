@@ -15,9 +15,11 @@
             </button>
         </div>
         <div class="hidden lg:flex lg:gap-x-12">
+            <a href="{{ path('transcode_list') }}" class="text-sm font-semibold leading-6 text-gray-900">Stream</a>
+
             <div class="relative">
                 <button type="button" class="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900" aria-expanded="false">
-                    Stream <i class="fas fa-chevron-down"></i>
+                    Settings <i class="fas fa-chevron-down"></i>
                 </button>
 
                 <!--
@@ -120,10 +122,6 @@
                     </div>
                 </div>
             </div>
-
-{#            //TODO: subselects: System Information (cores, available storage, ram), System Settings (resolutions, usable ffmpeg cores etc), Users, Account Settings #}
-            <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Settings</a>
-            <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Admin Settings</a>
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
             <a href="{{ path('logout') }}" class="text-sm font-semibold leading-6 text-gray-900">Sign Out <span aria-hidden="true"><i class="fas fa-arrow-right"></i></span></a>
@@ -173,7 +171,6 @@
                             </div>
                         </div>
                         <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Settings</a>
-                        <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Admin Settings</a>
                     </div>
                     <div class="py-6">
                         <a href="{{ path('logout') }}" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Sign Out</a>
