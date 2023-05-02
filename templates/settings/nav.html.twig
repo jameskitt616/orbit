@@ -1,15 +1,25 @@
 {#//TODO: subselects: System Information (cores, available storage, ram), System Settings (resolutions, usable ffmpeg cores etc), Users, Account Settings #}
 <div class="w-1/4 p-3 mt-8">
-    <a href="{{ path('settings_system_information') }}" class="rounded border font-semibold p-1 hover:bg-gray-600 cursor-pointer mt-1 {{ nav == 'system_information' ? 'bg-gray-500' }}">
-        {{ 'settings.system.information'|trans }}
-    </a>
-    <div class="rounded border font-semibold p-1 hover:bg-gray-600 cursor-pointer mt-1">
-        System Settings -edit me
-    </div>
-    <div class="rounded border font-semibold p-1 hover:bg-gray-600 cursor-pointer mt-1">
-        Users
-    </div>
-    <div class="rounded border font-semibold p-1 hover:bg-gray-600 cursor-pointer mt-1">
-        Account Settings
+    <div>
+        <div class="border-b pb-2 mb-1">
+            <a href="{{ path('settings_system_information') }}">
+                {{ 'settings.system.information'|trans }}
+            </a>
+        </div>
+        <div class="border-b pb-2 mb-1">
+            <a href="{{ path('settings_system_information') }}">
+                System Settings
+            </a>
+        </div>
+        <div class="border-b pb-2 mb-1">
+            <a href="{{ path('settings_system_information') }}">
+                Users
+            </a>
+        </div>
+        <div>
+            <a href="{{ path('settings_system_information') }}">
+                Account Settings
+            </a>
+        </div>
     </div>
 </div>
