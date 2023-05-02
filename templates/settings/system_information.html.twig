@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="max-w-7xl mt-5 justify-between mx-auto flex">
+        {% include 'settings/nav.html.twig' %}
+        <div class="w-3/4 p-4 m-2 border-l">
+            {% include 'settings/storage_paths.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
