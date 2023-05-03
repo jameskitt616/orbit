@@ -5,6 +5,9 @@ brands.github: "Github"
 login.sign_in: "Sign in to your account"
 login.sign_up: "Create new admin account"
 
+nav.live: "Live"
+nav.settings: "Settings"
+
 settings.system.information: "System Information"
 
 total: "Total"
@@ -19,3 +22,6 @@ system.cpu.model: "Model"
 system.cpu.threads: "Threads"
 system.load_average: "Sys Load avg. (1m, 5m, 15m)"
 system.ram: "RAM"
+
+live.streams: "Streams"
+live.transcodes: "Transcodes"
