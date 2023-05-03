@@ -4,6 +4,30 @@
     <div class="max-w-7xl mt-5 justify-between mx-auto flex">
         {% include 'settings/nav.html.twig' %}
         <div class="w-3/4 p-4 m-2 border-l">
+            {% if systemSpecs is not null %}
+                <div class="mt-3">
+                    <div class="font-semibold">System specifications:</div>
+                    <div class="ml-5 mt-3">
+                        <div class="bg-indigo-400 rounded p-2 w-3/4">
+                            <div>Model: {{ systemSpecs.name }}</div>
+                            <div>Threads: {{ systemSpecs.threads }} <i class="fa-solid fa-microchip"></i></div>
+                            <div>Sys Load avg. (1m, 5m, 15m): {{ systemSpecs.sysLoadAvg }}</div>
+{#                            <div class="mt-2">RAM:</div>#}
+{#                            <div class="flex">#}
+{#                                <div class="w-1/2">{{ 'path.disk_space.used'|trans }}: {{ storagePath.usedSpace }}</div>#}
+{#                                <div class="w-1/2 text-right">{{ 'path.disk_space.free'|trans }}: {{ storagePath.freeSpace }}</div>#}
+{#                            </div>#}
+{#                            <div class="rounded-lg bg-green-400"#}
+{#                                 title="{{ 'path.disk_space.free.long'|trans }}: {{ storagePath.freeSpace }}">#}
+{#                                <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-center" style="width: {{ storagePath.usedSpacePercentage }}%">#}
+{#                                    {{ storagePath.usedSpacePercentage }}%#}
+{#                                </div>#}
+{#                            </div>#}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             {% include 'settings/storage_paths.html.twig' %}
         </div>
     </div>

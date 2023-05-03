@@ -21,12 +21,12 @@ class SettingsController extends AbstractController
     #[Route(path: '/system/information', name: 'settings_system_information', methods: ['GET'])]
     public function systemInformation(): Response
     {
-        $cores = $this->systemInformationService->getCPUCores();
+        $systemSpecs = $this->systemInformationService->getSystemSpecs();
         $storagePaths = $this->systemInformationService->getStoragePaths();
 
         return $this->render('settings/system_information.html.twig', [
             'nav' => 'system_information',
-            'cores' => $cores,
+            'systemSpecs' => $systemSpecs,
             'storagePaths' => $storagePaths,
         ]);
     }
