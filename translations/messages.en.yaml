@@ -7,9 +7,15 @@ login.sign_up: "Create new admin account"
 
 settings.system.information: "System Information"
 
+total: "Total"
+free: "Free"
+used: "Used"
+
 path: "Path"
 path.disk_space: "Storage Paths"
-path.disk_space.total: "Total"
-path.disk_space.free: "Free"
-path.disk_space.free.long: "Free Disk Space"
-path.disk_space.used: "Used"
+
+system.system_specification: "System specifications"
+system.cpu.model: "Model"
+system.cpu.threads: "Threads"
+system.load_average: "Sys Load avg. (1m, 5m, 15m)"
+system.ram: "RAM"

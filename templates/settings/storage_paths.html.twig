@@ -4,13 +4,13 @@
         {% for storagePath in storagePaths %}
             <div class="bg-indigo-400 rounded p-2 w-3/4 {{ loop.index != 1 ? 'mt-5' }}">
                 <div>{{ 'path'|trans }}: {{ storagePath.path }}</div>
-                <div>{{ 'path.disk_space.total'|trans }}: {{ storagePath.totalSpace }}</div>
+                <div>{{ 'total'|trans }}: {{ storagePath.totalSpace }}</div>
                 <div class="flex mt-2">
-                    <div class="w-1/2">{{ 'path.disk_space.used'|trans }}: {{ storagePath.usedSpace }}</div>
-                    <div class="w-1/2 text-right">{{ 'path.disk_space.free'|trans }}: {{ storagePath.freeSpace }}</div>
+                    <div class="w-1/2">{{ 'used'|trans }}: {{ storagePath.usedSpace }}</div>
+                    <div class="w-1/2 text-right">{{ 'free'|trans }}: {{ storagePath.freeSpace }}</div>
                 </div>
                 <div class="rounded-lg bg-green-400"
-                     title="{{ 'path.disk_space.free.long'|trans }}: {{ storagePath.freeSpace }}">
+                     title="{{ 'free'|trans }}: {{ storagePath.freeSpace }}">
                     <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-center" style="width: {{ storagePath.usedSpacePercentage }}%">
                         {{ storagePath.usedSpacePercentage }}%
                     </div>

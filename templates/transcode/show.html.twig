@@ -2,14 +2,7 @@
 
 {% block body %}
     <div class="max-w-7xl mt-5 justify-between mx-auto flex">
-        <div class="w-1/4 p-3 mt-8">
-            <div class="rounded border font-semibold p-1 hover:bg-gray-600 cursor-pointer mt-1">
-                Transcodes (HLS)
-            </div>
-            <div class="rounded border font-semibold p-1 hover:bg-gray-600 cursor-pointer mt-1">
-                Transcodes (DASH)
-            </div>
-        </div>
+        {% include 'transcode/nav.html.twig' %}
         <div class="w-3/4 p-4 m-2 border-l">
             <h1>Select video to transcode</h1>
             <a href="{{ path('transcode_create') }}">
