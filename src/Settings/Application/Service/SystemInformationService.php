@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Settings\Application\Service;
 
-use App\Settings\Domain\Model\SystemSpecs;
 use App\Settings\Domain\Model\StoragePath;
+use App\Settings\Domain\Model\SystemSpecs;
 
 readonly class SystemInformationService
 {
@@ -23,7 +23,7 @@ readonly class SystemInformationService
 
     public function getSystemSpecs(): ?SystemSpecs
     {
-        if(!is_file('/proc/cpuinfo')) {
+        if (!is_file('/proc/cpuinfo')) {
             return null;
         }
 
@@ -34,27 +34,11 @@ readonly class SystemInformationService
         $threads = count($matches[0]);
 
         $sysLoadAvg = sys_getloadavg();
-        $sysLoad = round($sysLoadAvg[0],2) . ' ' . round($sysLoadAvg[1],2) . ' ' . round($sysLoadAvg[2],2);
+        $sysLoad = round($sysLoadAvg[0], 2) . ' ' . round($sysLoadAvg[1], 2) . ' ' . round($sysLoadAvg[2], 2);
 
-//        $data = explode("\n", file_get_contents("/proc/meminfo"));
-//        $meminfo = array();
-//        foreach ($data as $line) {
-//            list($key, $val) = explode(":", $line);
-//            $meminfo[$key] = trim($val);
-//        }
+        $ram = trim(shell_exec('free -b | awk \'NR==2{print $2,$3,$4,$5,$6,$7}\''));
+        $ram = explode(' ', $ram);
 
-        return new SystemSpecs($cpuDescription, $threads, $sysLoad);
-    }
-
-    private function getHumanReadableSizeByBytes(float $bytes): string
-    {
-        $dec = 2;
-        $bytes = (string) $bytes;
-        $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-        $factor = floor((strlen($bytes) - 1) / 3);
-        if ($factor == 0)
-            $dec = 0;
-
-        return sprintf("%.{$dec}f %s", $bytes / (1024 ** $factor), $size[$factor]);
+        return new SystemSpecs($cpuDescription, $threads, $sysLoad, (int) $ram[0], (int) $ram[1]);
     }
 }

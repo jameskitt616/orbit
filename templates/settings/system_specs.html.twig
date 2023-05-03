@@ -1,0 +1,25 @@
+{% if systemSpecs is not null %}
+    <div class="mt-3">
+        <div class="font-semibold">System specifications:</div>
+        <div class="ml-5 mt-3">
+            <div class="bg-indigo-400 rounded p-2 w-3/4">
+                <div>Model: {{ systemSpecs.name }}</div>
+                <div>Threads: {{ systemSpecs.threads }} <i class="fa-solid fa-microchip"></i></div>
+                <div>Sys Load avg. (1m, 5m, 15m): {{ systemSpecs.sysLoadAvg }}</div>
+                <div class="mt-2">RAM:</div>
+                <div>Total: {{ systemSpecs.totalRam }}</div>
+                <div class="flex">
+                    <div class="w-1/2">{{ 'path.disk_space.used'|trans }}: {{ systemSpecs.usedRam }}</div>
+                    <div class="w-1/2 text-right">{{ 'path.disk_space.free'|trans }}: {{ systemSpecs.freeRam }}</div>
+                </div>
+                <div class="rounded-lg bg-green-400"
+                     title="{{ 'path.disk_space.free.long'|trans }}: {{ systemSpecs.freeRam }}">
+                    <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-center"
+                         style="width: {{ systemSpecs.usedRamPercentage }}%">
+                        {{ systemSpecs.usedRamPercentage }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
