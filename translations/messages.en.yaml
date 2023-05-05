@@ -1,5 +1,10 @@
 title: "Orbit"
 
+common.save: "Save"
+common.cancel: "Cancel"
+common.search: "Search"
+common.clipboard.copy: "Copy to Clipboard"
+
 brands.github: "Github"
 
 login.sign_in: "Sign in to your account"
@@ -24,4 +29,6 @@ system.load_average: "Sys Load avg. (1m, 5m, 15m)"
 system.ram: "RAM"
 
 live.streams: "Streams"
+live.streams.create: "Create new Livestream"
+live.streams.current_streams: "Current available Livestreams"
 live.transcodes: "Transcodes"
