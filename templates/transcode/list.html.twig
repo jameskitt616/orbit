@@ -8,7 +8,8 @@
                 <div class="w-2/3">
                     {#                //TODO: check if this is actually is true. put message into translation file #}
                     <h1>{{ 'live.streams.current_streams'|trans }}
-                        <div class="tooltip" data-message="Live Streams do not sync in VRChat, if someone joins the lobby they will start from the beginning">
+                        <div class="tooltip"
+                             data-message="Live Streams do not sync in VRChat, if someone joins the lobby they will start from the beginning">
                             <i class="fas fa-circle-info"></i>
                         </div>
                     </h1>
@@ -43,16 +44,17 @@
                             <div class="mt-2 text-sm text-gray-500 sm:col-span-2 sm:mt-0">
                                 <span
                                     class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{ transcode.transcodeFormat }}</span>
-                                    {% set backgroundColors = ['bg-red-50', 'bg-yellow-50', 'bg-green-50', 'bg-blue-50', 'bg-indigo-50', 'bg-purple-50', 'bg-pink-50'] %}
+                                {% set backgroundColors = ['bg-red-50', 'bg-yellow-50', 'bg-green-50', 'bg-blue-50', 'bg-indigo-50', 'bg-purple-50', 'bg-pink-50'] %}
                                 {% set testColors = ['text-red-700', 'text-yellow-800', 'text-green-700', 'text-blue-700', 'text-indigo-700', 'text-purple-700', 'text-pink-700'] %}
                                 {% set ringColors = ['ring-red-600', 'ring-yellow-800', 'ring-green-700', 'ring-blue-700', 'ring-indigo-700', 'ring-purple-700', 'ring-pink-700'] %}
                                 {% for representation in transcode.representations %}
-                                <span
-                                    class="inline-flex items-center rounded-md {{ backgroundColors[loop.index] }} px-2 py-1 text-xs font-medium {{ testColors[loop.index] }} ring-1 ring-inset {{ ringColors[loop.index] }}/10">{{ representation.resolutionHeight }}p</span>
+                                    <span
+                                        class="inline-flex items-center rounded-md {{ backgroundColors[loop.index] }} px-2 py-1 text-xs font-medium {{ testColors[loop.index] }} ring-1 ring-inset {{ ringColors[loop.index] }}/10">{{ representation.resolutionHeight }}p</span>
                                 {% endfor %}
                             </div>
                             <div class="mt-2">
-                                <div class="text-sm text-white w-full tooltip" data-message="{{ 'live.stream.transcoding_progress'|trans }}">
+                                <div class="text-sm text-white w-full tooltip"
+                                     data-message="{{ 'live.stream.transcoding_progress'|trans }}">
                                     <div class="rounded-lg bg-green-400 w-full">
                                         <div style="width: 50%"
                                              class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-center p-1">
