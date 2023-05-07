@@ -36,8 +36,7 @@ readonly class SystemInformationService
         $sysLoadAvg = sys_getloadavg();
         $sysLoad = round($sysLoadAvg[0], 2) . ' ' . round($sysLoadAvg[1], 2) . ' ' . round($sysLoadAvg[2], 2);
 
-        $ram = trim(shell_exec('free -b | awk \'NR==2{print $2,$3,$4,$5,$6,$7}\''));
-        $ram = explode(' ', $ram);
+        $ram = explode(' ', shell_exec('free -b | awk \'NR==2{print $2,$3,$4,$5,$6,$7}\''));
 
         return new SystemSpecs($cpuDescription, $threads, $sysLoad, (int) $ram[0], (int) $ram[1]);
     }
