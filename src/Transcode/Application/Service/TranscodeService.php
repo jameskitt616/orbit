@@ -51,9 +51,8 @@ final class TranscodeService
         $ffmpeg = FFMpeg::create($config);
         $sFfmpeg = new SFFMpeg($ffmpeg);
         $video = $sFfmpeg->open($transcode->getFilePath());
-        $fileName = 'stream';
 
-        $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $fileName;
+        $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $_ENV['STREAM_FILENAME'];
 
         $format = $this->getFormat(Format::HEVC->value);
         $format->on('progress', function ($video, $format, $percentage, $transcode) {

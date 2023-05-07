@@ -41,6 +41,7 @@ final class TranscodeController extends AbstractController
     {
         return $this->render('transcode/show.html.twig', [
             'transcode' => $transcode,
+            'streamFilename' => $_ENV['STREAM_FILENAME']
         ]);
     }
 
