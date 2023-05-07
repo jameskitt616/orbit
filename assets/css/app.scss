@@ -7,3 +7,30 @@
 [contenteditable] {
   outline: 0 solid transparent;
 }
+
+.tooltipText {
+    width: 140px;
+    text-align: center;
+    padding: 5px;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -75px;
+    transition: opacity 0.3s;
+    opacity: 1;
+}
+
+.tooltipText::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-top-color: rgb(99, 102, 241);
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    border-right-color: transparent;
+}
+
