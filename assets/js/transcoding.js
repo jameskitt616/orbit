@@ -9,7 +9,8 @@ transcoding.init = function () {
 };
 
 transcoding.copyUrl = function () {
-  let tooltipTextCopyUrl = $('.tooltipTextCopyUrl');
+  let index = $(this).data('index');
+  let tooltipTextCopyUrl = $('.tooltipTextCopyUrl_' + index);
   let url = $('.copyUrl').data('url');
   navigator.clipboard.writeText(url);
   tooltipTextCopyUrl.show();
