@@ -163,9 +163,13 @@
                 </div>
             </div>
         </div>
-        <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="{{ path('logout') }}" class="text-sm font-semibold leading-6 text-white">Sign Out <span
-                    aria-hidden="true"><i class="fas fa-arrow-right"></i></span></a>
+        <div class="hidden lg:flex lg:flex-1 lg:justify-end text-sm font-semibold">
+{#            <div class="leading-6 text-red-500 mr-3 animate-bounce">#}
+{#                Update available!#}
+{#            </div>#}
+            <a href="{{ path('logout') }}" class="leading-6 text-white">{{ 'login.log_out'|trans }}
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
     </nav>
     <!-- Mobile menu, show/hide based on menu open state. -->
