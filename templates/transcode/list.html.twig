@@ -51,10 +51,12 @@
                                     class="inline-flex items-center rounded-md {{ backgroundColors[loop.index] }} px-2 py-1 text-xs font-medium {{ testColors[loop.index] }} ring-1 ring-inset {{ ringColors[loop.index] }}/10">{{ representation.resolutionHeight }}p</span>
                                 {% endfor %}
                             </div>
-                            <div class="mt-2 text-sm text-white w-full">
-                                <div class="rounded-lg bg-green-400 w-full" title="{{ 'live.stream.transcoding_progress'|trans }}">
-                                    <div style="width: 50%"
-                                         class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-center p-1">
+                            <div class="mt-2">
+                                <div class="text-sm text-white w-full tooltip" data-message="{{ 'live.stream.transcoding_progress'|trans }}">
+                                    <div class="rounded-lg bg-green-400 w-full">
+                                        <div style="width: 50%"
+                                             class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-center p-1">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
