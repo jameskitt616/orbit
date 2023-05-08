@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Transcode\Application\Service;
 
 use App\Transcode\Domain\Enum\Format;
-use App\Transcode\Domain\Enum\VideoProperty;
 use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
+use App\Transcode\Domain\Model\VideoProperty;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use RecursiveDirectoryIterator;
@@ -129,9 +129,7 @@ final class TranscodeService
     {
         $filePath = escapeshellarg($filePath);
         $output = shell_exec("ffmpeg -i $filePath 2>&1");
-
         $lines = explode("\n", $output);
-
         $streams = [];
 
         foreach ($lines as $line) {
@@ -142,12 +140,11 @@ final class TranscodeService
                 $streamName = $languageCode . ' - ' . $attributes;
                 preg_match('/Stream #\d+:(\d+)/', $line, $matches);
                 $streamNumber = $matches[1];
-                $streams[] = [$streamName => $streamNumber];
-//                $streams[$streamNumber] = $streamName;
+                $streams[] = new VideoProperty($streamNumber, $streamName);
+//                $streams[] = [$streamName => $streamNumber];
             }
         }
 
-        dump($streams);
         return $streams;
     }
 }

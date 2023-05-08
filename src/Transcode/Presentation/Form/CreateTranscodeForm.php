@@ -16,12 +16,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class CreateTranscodeForm extends AbstractType
 {
     public function __construct(
         private readonly RepresentationRepository $representationRepository,
         private readonly TranscodeService         $transcodeService,
+        private readonly TranslatorInterface      $translator
     )
     {
     }
@@ -33,34 +35,25 @@ final class CreateTranscodeForm extends AbstractType
         $audioTracks = $this->transcodeService->getAvailableTracksByFilePathAndVideoProperty($file->filePath, VideoProperty::AUDIO->value);
         $subtitles = $this->transcodeService->getAvailableTracksByFilePathAndVideoProperty($file->filePath, VideoProperty::SUBTITLE->value);
 
-        $builder->add('streamNumber', ChoiceType::class, [
+        $builder->add('audioTrackNumber', ChoiceType::class, [
             'label' => false,
             'choices' => $audioTracks,
-            'multiple' => false,
-            'expanded' => true,
-            'choice_attr' => function ($choice, $key, $value) {
-                return ['class' => 'ml-4 mr-1'];
-            },
+            'choice_label' => 'streamName',
+            'choice_value' => 'streamNumber',
         ]);
 
         $builder->add('subtitleNumber', ChoiceType::class, [
             'label' => false,
+            'required' => false,
             'choices' => $subtitles,
-            'multiple' => false,
-            'expanded' => true,
-            'choice_attr' => function ($choice, $key, $value) {
-                return ['class' => 'ml-4 mr-1'];
-            },
+            'choice_label' => 'streamName',
+            'choice_value' => 'streamNumber',
+            'placeholder' => $this->translator->trans('live.stream.no_subtitles'),
         ]);
 
         $builder->add('format', ChoiceType::class, [
             'label' => false,
             'choices' => Format::getFormats(),
-            'multiple' => false,
-            'expanded' => true,
-            'choice_attr' => function ($choice, $key, $value) {
-                return ['class' => 'ml-4 mr-1'];
-            },
         ]);
 
         $builder->add('representations', EntityType::class, [
@@ -82,7 +75,7 @@ final class CreateTranscodeForm extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => CreateTranscode::class,
-            'file' => 'file'
+            'file' => 'file',
         ]);
     }
 }

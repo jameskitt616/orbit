@@ -21,13 +21,15 @@ class CreateTranscode implements Command
     public string $format;
     public Collection $representations;
     public ?Transcode $transcode;
-    public int $streamNumber;
-    public int $subtitleNumber;
+    public ?int $audioTrackNumber;
+    public ?int $subtitleNumber;
 
     public function __construct(User $currentUser, File $file)
     {
         $this->currentUser = $currentUser;
         $this->file = $file;
         $this->format = Format::HEVC->name;
+        $this->audioTrackNumber = null;
+        $this->subtitleNumber = null;
     }
 }
