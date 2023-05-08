@@ -8,6 +8,7 @@ use App\Transcode\Domain\Enum\Format;
 use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
 use FFMpeg\FFMpeg;
+use FFMpeg\FFProbe;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -40,7 +41,7 @@ final class TranscodeService
 
     public function transcode(Transcode $transcode): void
     {
-        //TODO: expose config
+        //TODO: expose config? also check if it has any impact
         $config = [
             'ffmpeg.binaries' => '/usr/bin/ffmpeg',
             'ffprobe.binaries' => '/usr/bin/ffprobe',
@@ -50,18 +51,36 @@ final class TranscodeService
 
         $ffmpeg = FFMpeg::create($config);
         $sFfmpeg = new SFFMpeg($ffmpeg);
+//        $video = $sFfmpeg->openAdvanced([$transcode->getFilePath()]);
         $video = $sFfmpeg->open($transcode->getFilePath());
 
         $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $_ENV['STREAM_FILENAME'];
 
         $format = $this->getFormat(Format::HEVC->value);
-        $format->on('progress', function ($video, $format, $percentage, $transcode) {
+        $format->on('progress', function ($video, $format, $percentage) {
             $percentage = (int) round($percentage);
 //            dump($transcode);
             //dump(sprintf("\rTranscoding...(%s%%) [%s%s]", $percentage, str_repeat('#', $percentage), str_repeat('-', (100 - $percentage))));
         });
 
         $representations = $this->getRepresentations($transcode);
+
+//        $sFfmpeg->getFFProbe()->getMapper()
+
+//        SFFMpeg::create()
+//        $streams = FFMpeg::create()
+//            ->open($transcode->getFilePath());
+
+//        dump($streams->getStreams()->all());
+//        dump($streams->getFFProbe());
+//        $general = $streams->general();
+//        $video = $streams->videos()->first();
+//        $audio = $streams->audios()->first();
+
+//        $ffprobe = FFProbe::create();
+//        dump($ffprobe
+//            ->format($transcode->getFilePath())
+//            ->all());
 
         $video->hls()
             ->setFormat($format)
