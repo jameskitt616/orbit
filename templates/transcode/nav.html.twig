@@ -1,10 +1,16 @@
-{#//TODO: subselects: System Information (cores, available storage, ram), System Settings (resolutions, usable ffmpeg cores etc), Users, Account Settings #}
+{# //TODO: subselects: System Information (cores, available storage, ram), System Settings (resolutions, usable ffmpeg cores etc), Users, Account Settings #}
 <div class="w-1/4 p-3 mt-8">
     <div>
         <div class="border-b pb-2 mb-1">
             <a href="{{ path('transcode_list') }}">
                 {{ 'live.streams'|trans }}
+                {#                //TODO: check if this is actually is true. put message into translation file #}
             </a>
+            <div class="tooltip"
+                 data-message="Livestreams do not work like conventional Livestreams, it's more like live transcoding and being
+                    able to watch while it's transcoding.">
+                <i class="fas fa-circle-info"></i>
+            </div>
         </div>
         <div class="border-b pb-2 mb-1">
             <a href="{{ path('settings_system_information') }}">

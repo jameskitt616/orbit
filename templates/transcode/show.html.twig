@@ -105,7 +105,9 @@
                                 {% set ringColors = ['ring-red-600', 'ring-yellow-800', 'ring-green-700', 'ring-blue-700', 'ring-indigo-700', 'ring-purple-700', 'ring-pink-700'] %}
                                 {% for representation in transcode.representations %}
                                     <span
-                                        class="inline-flex items-center rounded-md {{ backgroundColors[loop.index] }} px-2 py-1 text-xs font-medium {{ testColors[loop.index] }} ring-1 ring-inset {{ ringColors[loop.index] }}/10">{{ representation.resolutionHeight }}p</span>
+                                        class="inline-flex items-center rounded-md {{ backgroundColors[loop.index] }} px-2 py-1 text-xs font-medium {{ testColors[loop.index] }} ring-1 ring-inset {{ ringColors[loop.index] }}/10">
+                                        {{ representation.resolutionHeight }}p
+                                    </span>
                                 {% endfor %}
                             </div>
                         </div>

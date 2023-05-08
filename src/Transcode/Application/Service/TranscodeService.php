@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Transcode\Application\Service;
 
 use App\Transcode\Domain\Enum\Format;
+use App\Transcode\Domain\Enum\VideoProperty;
 use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
 use FFMpeg\FFMpeg;
@@ -122,5 +123,31 @@ final class TranscodeService
             default:
                 return new X264();
         }
+    }
+
+    public function getAvailableTracksByFilePathAndVideoProperty(string $filePath, string $videoProperty): array
+    {
+        $filePath = escapeshellarg($filePath);
+        $output = shell_exec("ffmpeg -i $filePath 2>&1");
+
+        $lines = explode("\n", $output);
+
+        $streams = [];
+
+        foreach ($lines as $line) {
+            if (str_contains($line, "$videoProperty:")) {
+                preg_match('/\((\w+)\)/', $line, $matches);
+                $languageCode = strtoupper($matches[1]);
+                $attributes = explode("$videoProperty: ", $line)[1];
+                $streamName = $languageCode . ' - ' . $attributes;
+                preg_match('/Stream #\d+:(\d+)/', $line, $matches);
+                $streamNumber = $matches[1];
+                $streams[] = [$streamName => $streamNumber];
+//                $streams[$streamNumber] = $streamName;
+            }
+        }
+
+        dump($streams);
+        return $streams;
     }
 }

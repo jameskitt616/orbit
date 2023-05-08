@@ -21,6 +21,8 @@ class CreateTranscode implements Command
     public string $format;
     public Collection $representations;
     public ?Transcode $transcode;
+    public int $streamNumber;
+    public int $subtitleNumber;
 
     public function __construct(User $currentUser, File $file)
     {

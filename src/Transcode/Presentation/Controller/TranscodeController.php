@@ -83,6 +83,7 @@ final class TranscodeController extends AbstractController
         $url = $this->generateUrl('transcode_create');
         $form = $this->createForm(CreateTranscodeForm::class, $command, [
             'action' => $url,
+            'file' => $file,
         ]);
 
         $form->handleRequest($request);
