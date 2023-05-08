@@ -63,11 +63,6 @@ final class CreateTranscodeForm extends AbstractType
             'choices' => $this->representationRepository->findAll(),
             'multiple' => true,
             'expanded' => true,
-            //            'choice_attr' => function ($choice, $key, $value) {
-            //                return ['style' => ''];
-            ////                return ['class' => 'ml-4 mr-1'];
-            //            },
-            //            'row_attr' => ['class' => 'asd'],
         ]);
     }
 

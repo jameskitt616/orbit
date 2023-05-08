@@ -9,7 +9,6 @@ use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Model\VideoProperty;
 use FFMpeg\FFMpeg;
-use FFMpeg\FFProbe;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -55,7 +54,7 @@ final class TranscodeService
 
         $ffmpeg = FFMpeg::create($config);
         $sFfmpeg = new SFFMpeg($ffmpeg);
-//        $video = $sFfmpeg->openAdvanced([$transcode->getFilePath()]);
+        //        $video = $sFfmpeg->openAdvanced([$transcode->getFilePath()]);
         $video = $sFfmpeg->open($transcode->getFilePath());
 
         $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $_ENV['STREAM_FILENAME'];
@@ -63,38 +62,37 @@ final class TranscodeService
         $format = $this->getFormat(Format::HEVC->value);
         $format->on('progress', function ($video, $format, $percentage) {
             $percentage = (int) round($percentage);
-//            dump($transcode);
+            //            dump($transcode);
             //dump(sprintf("\rTranscoding...(%s%%) [%s%s]", $percentage, str_repeat('#', $percentage), str_repeat('-', (100 - $percentage))));
         });
 
         $representations = $this->getRepresentations($transcode);
 
-//        shell_exec('screen -dmS $name_of_screen $command');
+        //        shell_exec('screen -dmS $name_of_screen $command');
 
-//        $cmd = 'cp /orbit/videos/beat.mkv /orbit/videos/beat2.mkv';
-//        $outputfile = '/asd';
+        //        $cmd = 'cp /orbit/videos/beat.mkv /orbit/videos/beat2.mkv';
+        //        $outputfile = '/asd';
 
-//        exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
-//        exec(sprintf("%s > %s 2>&1 & echo $!", $cmd, $outputfile),$pidArr);
-//        dump($pidArr);
+        //        exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
+        //        exec(sprintf("%s > %s 2>&1 & echo $!", $cmd, $outputfile),$pidArr);
+        //        dump($pidArr);
 
+        //        $sFfmpeg->getFFProbe()->getMapper()
 
-//        $sFfmpeg->getFFProbe()->getMapper()
+        //        SFFMpeg::create()
+        //        $streams = FFMpeg::create()
+        //            ->open($transcode->getFilePath());
 
-//        SFFMpeg::create()
-//        $streams = FFMpeg::create()
-//            ->open($transcode->getFilePath());
+        //        dump($streams->getStreams()->all());
+        //        dump($streams->getFFProbe());
+        //        $general = $streams->general();
+        //        $video = $streams->videos()->first();
+        //        $audio = $streams->audios()->first();
 
-//        dump($streams->getStreams()->all());
-//        dump($streams->getFFProbe());
-//        $general = $streams->general();
-//        $video = $streams->videos()->first();
-//        $audio = $streams->audios()->first();
-
-//        $ffprobe = FFProbe::create();
-//        dump($ffprobe
-//            ->format($transcode->getFilePath())
-//            ->all());
+        //        $ffprobe = FFProbe::create();
+        //        dump($ffprobe
+        //            ->format($transcode->getFilePath())
+        //            ->all());
 
         $video->hls()
             ->setFormat($format)
@@ -115,14 +113,11 @@ final class TranscodeService
 
     private function getFormat(string $format): StreamFormat
     {
-        switch ($format) {
-            case Format::HEVC->value:
-                return new HEVC();
-            case Format::VP9->value:
-                return new VP9();
-            default:
-                return new X264();
-        }
+        return match ($format) {
+            Format::HEVC->value => new HEVC(),
+            Format::VP9->value => new VP9(),
+            default => new X264(),
+        };
     }
 
     public function getAvailableTracksByFilePathAndVideoProperty(string $filePath, string $videoProperty): array
@@ -141,7 +136,6 @@ final class TranscodeService
                 preg_match('/Stream #\d+:(\d+)/', $line, $matches);
                 $streamNumber = $matches[1];
                 $streams[] = new VideoProperty($streamNumber, $streamName);
-//                $streams[] = [$streamName => $streamNumber];
             }
         }
 
