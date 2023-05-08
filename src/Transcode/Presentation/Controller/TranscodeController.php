@@ -7,9 +7,11 @@ namespace App\Transcode\Presentation\Controller;
 use App\Kernel\Application\CommandBus;
 use App\Security\Application\Service\SecurityService;
 use App\Transcode\Application\Command\CreateTranscode;
+use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Repository\TranscodeRepository;
 use App\Transcode\Presentation\Form\CreateTranscodeForm;
+use App\Transcode\Presentation\Form\SelectSourceForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,14 +43,43 @@ final class TranscodeController extends AbstractController
     {
         return $this->render('transcode/show.html.twig', [
             'transcode' => $transcode,
-            'streamFilename' => $_ENV['STREAM_FILENAME']
+            'streamFilename' => $_ENV['STREAM_FILENAME'],
+        ]);
+    }
+
+    #[Route(path: '/select/source', name: 'transcode_select_source', methods: ['GET', 'POST'])]
+    public function selectSource(Request $request): Response
+    {
+        $url = $this->generateUrl('transcode_select_source');
+        $form = $this->createForm(SelectSourceForm::class, [
+            'action' => $url,
+        ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $session = $request->getSession();
+            $session->set('source_file', $form->getData()['file']);
+
+            return $this->redirectToRoute('transcode_create');
+        }
+
+        return $this->render('transcode/select_source.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route(path: '/create', name: 'transcode_create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
-        $command = new CreateTranscode($this->securityService->getCurrentUser());
+        $session = $request->getSession();
+        /** @var File $file */
+        $file = $session->get('source_file');
+
+        if ($file === null) {
+            return $this->redirectToRoute('transcode_select_source');
+        }
+
+        $command = new CreateTranscode($this->securityService->getCurrentUser(), $file);
         $url = $this->generateUrl('transcode_create');
         $form = $this->createForm(CreateTranscodeForm::class, $command, [
             'action' => $url,
@@ -57,6 +88,7 @@ final class TranscodeController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($form->getData());
+            $session->remove('source_file');
 
             return $this->redirectToRoute('transcode_show', [
                 'transcode' => $command->transcode->getId(),
@@ -65,6 +97,7 @@ final class TranscodeController extends AbstractController
 
         return $this->render('transcode/create.html.twig', [
             'form' => $form->createView(),
+            'file' => $file,
         ]);
     }
 }

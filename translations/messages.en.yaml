@@ -1,6 +1,7 @@
 title: "Orbit"
 
 common.save: "Save"
+common.next: "Next"
 common.cancel: "Cancel"
 common.search: "Search"
 common.clipboard.copy: "Copy to Clipboard"
@@ -33,6 +34,7 @@ system.ram: "RAM"
 
 live.stream: "Stream"
 live.stream.description: "Information and details about the livestream."
+live.stream.source: "Source"
 live.stream.filename: "Filename"
 live.stream.transcoding_progress: "Transcoding progress"
 live.stream.representations: "Representations"

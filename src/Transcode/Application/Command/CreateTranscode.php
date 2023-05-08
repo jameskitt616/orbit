@@ -22,9 +22,10 @@ class CreateTranscode implements Command
     public Collection $representations;
     public ?Transcode $transcode;
 
-    public function __construct(User $currentUser)
+    public function __construct(User $currentUser, File $file)
     {
         $this->currentUser = $currentUser;
+        $this->file = $file;
         $this->format = Format::HEVC->name;
     }
 }
