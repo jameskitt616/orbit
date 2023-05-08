@@ -9,6 +9,8 @@ services:
         SYMFONY_VERSION: ${SYMFONY_VERSION:-}
         STABILITY: ${STABILITY:-stable}
     restart: unless-stopped
+    depends_on:
+      - message_transport
     volumes:
       - ./data/php_socket:/var/run/php
       - /home/james/docker/data/video_data/live:/orbit/transcode
@@ -66,3 +68,12 @@ services:
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
+
+
+  message_transport:
+    image: redis:7.0.11-alpine
+    restart: on-failure
+    volumes:
+      - ./data/redis-data:/data
+    ports:
+      - "6379:6379"

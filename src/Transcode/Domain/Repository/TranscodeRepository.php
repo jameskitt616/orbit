@@ -10,11 +10,11 @@ use App\Transcode\Domain\Model\Transcode;
 interface TranscodeRepository
 {
     /**
-     * @param int $id
+     * @param string $id
      *
      * @return Transcode
      */
-    public function findById(int $id): Transcode;
+    public function findById(string $id): Transcode;
 
     /**
      * @param User $user

@@ -17,7 +17,7 @@ readonly class DoctrineTranscodeRepository implements TranscodeRepository
     {
     }
 
-    public function findById(int $id): Transcode
+    public function findById(string $id): Transcode
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('transcode')

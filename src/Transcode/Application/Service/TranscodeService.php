@@ -49,6 +49,9 @@ final class TranscodeService
             'ffmpeg.threads' => 12, //TODO: maybe configure in admin system settings? -> not sure if this has any impact
         ];
 
+        //TODO: throw exceptions on issues like file does not exist anymore
+        //TODO: or try/catch so can display errors
+
         $ffmpeg = FFMpeg::create($config);
         $sFfmpeg = new SFFMpeg($ffmpeg);
 //        $video = $sFfmpeg->openAdvanced([$transcode->getFilePath()]);
@@ -64,6 +67,16 @@ final class TranscodeService
         });
 
         $representations = $this->getRepresentations($transcode);
+
+//        shell_exec('screen -dmS $name_of_screen $command');
+
+//        $cmd = 'cp /orbit/videos/beat.mkv /orbit/videos/beat2.mkv';
+//        $outputfile = '/asd';
+
+//        exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
+//        exec(sprintf("%s > %s 2>&1 & echo $!", $cmd, $outputfile),$pidArr);
+//        dump($pidArr);
+
 
 //        $sFfmpeg->getFFProbe()->getMapper()
 
