@@ -34,6 +34,7 @@ readonly class DoctrineTranscodeRepository implements TranscodeRepository
         $qb->select('transcode')
             ->from(Transcode::class, 'transcode')
             ->where('transcode.ownedBy = :user')
+            ->orderBy('transcode.createdAt', 'DESC')
             ->setParameter('user', $user);
 
         return $qb->getQuery()->getResult();

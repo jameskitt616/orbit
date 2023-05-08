@@ -47,7 +47,7 @@ RUN apk add --no-cache \
     	supervisor \
 	;
 
-ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
+#ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
 
 RUN set -eux; \
     install-php-extensions \
@@ -117,12 +117,13 @@ RUN chown -R www-data:www-data /orbit/transcode
 RUN yarn install
 RUN yarn encore dev
 
-RUN #mkdir -p /etc/supervisor/conf.d
+#RUN mkdir -p /etc/supervisor/conf.d
 #COPY /etc/supervisord.conf /etc/supervisor/supervisord.conf
 #COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 #COPY --link docker/supervisor/messenger-worker.conf /etc/supervisor/conf.d/
 
 #ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
+#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 #CMD ["/usr/bin/supervisord"]
 
 # Dev image

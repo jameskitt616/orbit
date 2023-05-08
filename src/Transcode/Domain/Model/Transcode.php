@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Transcode\Domain\Model;
 
 use App\Security\Domain\Model\User;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,9 +41,13 @@ class Transcode
     #[ORM\ManyToMany(targetEntity: Representation::class, cascade: ['persist'])]
     private Collection $representations;
 
+    #[ORM\Column(name: 'createdAt', type: 'datetime', nullable: false)]
+    private DateTime $createdAt;
+
     public function __construct(string $fileName, string $filePath, User $ownedBy, string $transcodeFormat, Collection $representations)
     {
         $this->id = Uuid::uuid4()->toString();
+        $this->createdAt = new DateTime();
         $this->fileName = $fileName;
         $this->filePath = $filePath;
         $this->randSubTargetPath = rand();
