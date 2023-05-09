@@ -104,10 +104,10 @@ final class TranscodeService
 
 //        $transcode->getAudioTrackNumber();
 //        $transcode->getSubtitleNumber();
-//        $video->hls()
-//            ->setFormat($format)
-//            ->addRepresentations($representations)
-//            ->save($saveLocation);
+        $video->hls()
+            ->setFormat($format)
+            ->addRepresentations($representations)
+            ->save($saveLocation);
     }
 
     private function getRepresentations(Transcode $transcode): array
