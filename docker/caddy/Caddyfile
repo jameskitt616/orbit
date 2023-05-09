@@ -1,7 +1,6 @@
 {
     # Debug
     {$CADDY_DEBUG}
-    auto_https disable_redirects
 }
 
 {$SERVER_NAME}
@@ -9,6 +8,11 @@
 {$CADDY_EXTRA_CONFIG}
 
 log
+
+route /live/* {
+    root * /srv/app/
+    file_server
+}
 
 route {
     root * /srv/app/public

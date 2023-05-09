@@ -36,6 +36,7 @@ services:
       - ./data/php_socket:/var/run/php
       - ./data/caddy_data:/data
       - ./data/caddy_config:/config
+      - /home/james/docker/data/video_data/live:/orbit/transcode
     ports:
       # HTTP
       - target: 80
