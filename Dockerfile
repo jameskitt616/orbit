@@ -47,8 +47,6 @@ RUN apk add --no-cache \
     	supervisor \
 	;
 
-#ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
-
 RUN set -eux; \
     install-php-extensions \
 		apcu \
@@ -77,6 +75,11 @@ COPY --link docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
 RUN chmod +x /usr/local/bin/docker-healthcheck
 
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["docker-healthcheck"]
+
+RUN mkdir -p /etc/supervisor/conf.d
+RUN rm /etc/supervisord.conf
+COPY --link docker/supervisor/supervisord.conf /etc/supervisor/
+COPY --link docker/supervisor/messenger-worker.conf /etc/supervisor/conf.d/
 
 COPY --link docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
@@ -116,15 +119,6 @@ RUN mkdir /orbit/videos
 RUN chown -R www-data:www-data /orbit/transcode
 RUN yarn install
 RUN yarn encore dev
-
-#RUN mkdir -p /etc/supervisor/conf.d
-#COPY /etc/supervisord.conf /etc/supervisor/supervisord.conf
-#COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-#COPY --link docker/supervisor/messenger-worker.conf /etc/supervisor/conf.d/
-
-#ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
-#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
-#CMD ["/usr/bin/supervisord"]
 
 # Dev image
 FROM app_php AS app_php_dev

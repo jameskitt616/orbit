@@ -25,11 +25,22 @@ readonly class CreateTranscodeHandler
         $currentUser = $command->currentUser;
         $transcode = new Transcode($file->fileName, $file->filePath, $currentUser, $command->format, $command->representations);
 
+        $videoPropertyAudio = $command->videoPropertyAudio;
+        if ($videoPropertyAudio !== null) {
+            $transcode->setAudioTrackNumber((int) $videoPropertyAudio->streamNumber);
+            $transcode->setAudioTrackNumberTitle($videoPropertyAudio->streamName);
+        }
+
+        $videoPropertySubtitle = $command->videoPropertySubtitle;
+        if ($videoPropertySubtitle !== null) {
+            $transcode->setSubtitleNumber((int) $videoPropertySubtitle->streamNumber);
+            $transcode->setSubtitleNumberTitle($videoPropertySubtitle->streamName);
+        }
+
         $this->transcodeRepository->save($transcode);
 
         $command->transcode = $transcode;
 
-        $triggerTranscodingCommand = new TriggerTranscode($transcode->getId());
-        $this->messageBus->dispatch($triggerTranscodingCommand);
+        $this->messageBus->dispatch(new TriggerTranscode($transcode->getId()));
     }
 }

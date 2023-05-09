@@ -31,7 +31,7 @@
                                 {{ 'live.stream.audio_track'|trans }}
                             </div>
                             <div class="mt-1 text-sm leading-6 text-white sm:col-span-2 sm:mt-0">
-                                {{ form_row(form.audioTrackNumber, {
+                                {{ form_row(form.videoPropertyAudio, {
                                     attr: {
                                         'class': 'rounded-md bg-indigo-200 text-black sm:p-1 sm:text-sm sm:leading-6',
                                     }
@@ -43,7 +43,7 @@
                                 {{ 'live.stream.subtitle_track'|trans }}
                             </div>
                             <div class="mt-1 text-sm leading-6 text-white sm:col-span-2 sm:mt-0">
-                                {{ form_row(form.subtitleNumber, {
+                                {{ form_row(form.videoPropertySubtitle, {
                                     attr: {
                                         'class': 'rounded-md bg-indigo-200 text-black sm:p-1 sm:text-sm sm:leading-6',
                                     }
@@ -66,7 +66,7 @@
                             <div class="text-sm font-medium leading-6 text-gray-500">
                                 {{ 'live.stream.representations'|trans }}
                             </div>
-                            <div class="mt-2 text-sm text-gray-500 sm:col-span-2 sm:mt-0">
+                            <div class="mt-2 text-sm text-white sm:col-span-2 sm:mt-0">
                                 {{ form_row(form.representations) }}
                             </div>
                         </div>

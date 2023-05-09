@@ -35,14 +35,14 @@ final class CreateTranscodeForm extends AbstractType
         $audioTracks = $this->transcodeService->getAvailableTracksByFilePathAndVideoProperty($file->filePath, VideoProperty::AUDIO->value);
         $subtitles = $this->transcodeService->getAvailableTracksByFilePathAndVideoProperty($file->filePath, VideoProperty::SUBTITLE->value);
 
-        $builder->add('audioTrackNumber', ChoiceType::class, [
+        $builder->add('videoPropertyAudio', ChoiceType::class, [
             'label' => false,
             'choices' => $audioTracks,
             'choice_label' => 'streamName',
             'choice_value' => 'streamNumber',
         ]);
 
-        $builder->add('subtitleNumber', ChoiceType::class, [
+        $builder->add('videoPropertySubtitle', ChoiceType::class, [
             'label' => false,
             'required' => false,
             'choices' => $subtitles,

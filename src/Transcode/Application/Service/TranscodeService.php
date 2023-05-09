@@ -9,6 +9,7 @@ use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Model\VideoProperty;
 use FFMpeg\FFMpeg;
+use FFMpeg\Format\Audio\Aac;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -54,7 +55,7 @@ final class TranscodeService
 
         $ffmpeg = FFMpeg::create($config);
         $sFfmpeg = new SFFMpeg($ffmpeg);
-        //        $video = $sFfmpeg->openAdvanced([$transcode->getFilePath()]);
+//        $video = $sFfmpeg->openAdvanced([$transcode->getFilePath()]);
         $video = $sFfmpeg->open($transcode->getFilePath());
 
         $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $_ENV['STREAM_FILENAME'];
@@ -94,10 +95,19 @@ final class TranscodeService
         //            ->format($transcode->getFilePath())
         //            ->all());
 
-        $video->hls()
-            ->setFormat($format)
-            ->addRepresentations($representations)
-            ->save($saveLocation);
+
+//        $video
+//            ->map([$transcode->getAudioTrackNumber() . ':a'], new Aac(), $saveLocation)
+//            ->map(['resultv'], $format, $saveLocation)
+//            ->save();
+//        dump($video->getFinalCommand());
+
+//        $transcode->getAudioTrackNumber();
+//        $transcode->getSubtitleNumber();
+//        $video->hls()
+//            ->setFormat($format)
+//            ->addRepresentations($representations)
+//            ->save($saveLocation);
     }
 
     private function getRepresentations(Transcode $transcode): array

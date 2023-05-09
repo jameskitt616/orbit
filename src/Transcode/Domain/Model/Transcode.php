@@ -6,7 +6,6 @@ namespace App\Transcode\Domain\Model;
 
 use App\Security\Domain\Model\User;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -44,6 +43,18 @@ class Transcode
     #[ORM\Column(name: 'createdAt', type: 'datetime', nullable: false)]
     private DateTime $createdAt;
 
+    #[ORM\Column(name: 'audioTrackNumber', type: 'integer', nullable: true)]
+    private ?int $audioTrackNumber;
+
+    #[ORM\Column(name: 'audioTrackNumberTitle', type: 'string', nullable: true)]
+    private ?string $audioTrackNumberTitle;
+
+    #[ORM\Column(name: 'subtitleNumber', type: 'integer', nullable: true)]
+    private ?int $subtitleNumber;
+
+    #[ORM\Column(name: 'subtitleNumberTitle', type: 'string', nullable: true)]
+    private ?string $subtitleNumberTitle;
+
     public function __construct(string $fileName, string $filePath, User $ownedBy, string $transcodeFormat, Collection $representations)
     {
         $this->id = Uuid::uuid4()->toString();
@@ -55,6 +66,10 @@ class Transcode
         $this->transcodingProgress = 0;
         $this->transcodeFormat = $transcodeFormat;
         $this->representations = $representations;
+        $this->audioTrackNumber = null;
+        $this->audioTrackNumberTitle = null;
+        $this->subtitleNumber = null;
+        $this->subtitleNumberTitle = null;
     }
 
     public function getId(): string
@@ -101,5 +116,45 @@ class Transcode
     public function getRepresentations(): array
     {
         return $this->representations->toArray();
+    }
+
+    public function getAudioTrackNumber(): ?int
+    {
+        return $this->audioTrackNumber;
+    }
+
+    public function getSubtitleNumber(): ?int
+    {
+        return $this->subtitleNumber;
+    }
+
+    public function getAudioTrackNumberTitle(): ?string
+    {
+        return $this->audioTrackNumberTitle;
+    }
+
+    public function getSubtitleNumberTitle(): ?string
+    {
+        return $this->subtitleNumberTitle;
+    }
+
+    public function setAudioTrackNumber(?int $audioTrackNumber): void
+    {
+        $this->audioTrackNumber = $audioTrackNumber;
+    }
+
+    public function setAudioTrackNumberTitle(?string $audioTrackNumberTitle): void
+    {
+        $this->audioTrackNumberTitle = $audioTrackNumberTitle;
+    }
+
+    public function setSubtitleNumber(?int $subtitleNumber): void
+    {
+        $this->subtitleNumber = $subtitleNumber;
+    }
+
+    public function setSubtitleNumberTitle(?string $subtitleNumberTitle): void
+    {
+        $this->subtitleNumberTitle = $subtitleNumberTitle;
     }
 }

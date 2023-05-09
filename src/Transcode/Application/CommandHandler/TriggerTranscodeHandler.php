@@ -22,7 +22,6 @@ class TriggerTranscodeHandler extends AsMessageHandler
     public function __invoke(TriggerTranscode $command): void
     {
         $transcode = $this->transcodeRepository->findById($command->id);
-
         $this->transcodeService->transcode($transcode);
     }
 }

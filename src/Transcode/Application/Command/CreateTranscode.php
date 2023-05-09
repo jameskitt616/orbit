@@ -9,6 +9,7 @@ use App\Security\Domain\Model\User;
 use App\Transcode\Domain\Enum\Format;
 use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
+use App\Transcode\Domain\Model\VideoProperty;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,15 +22,15 @@ class CreateTranscode implements Command
     public string $format;
     public Collection $representations;
     public ?Transcode $transcode;
-    public ?int $audioTrackNumber;
-    public ?int $subtitleNumber;
+    public ?VideoProperty $videoPropertyAudio;
+    public ?VideoProperty $videoPropertySubtitle;
 
     public function __construct(User $currentUser, File $file)
     {
         $this->currentUser = $currentUser;
         $this->file = $file;
         $this->format = Format::HEVC->name;
-        $this->audioTrackNumber = null;
-        $this->subtitleNumber = null;
+        $this->videoPropertyAudio = null;
+        $this->videoPropertySubtitle = null;
     }
 }
