@@ -148,11 +148,3 @@ WORKDIR /srv/app
 COPY --from=app_caddy_builder --link /usr/bin/caddy /usr/bin/caddy
 COPY --from=app_php --link /srv/app/public public/
 COPY --link docker/caddy/Caddyfile /etc/caddy/Caddyfile
-
-# Nginx image
-FROM nginx AS app_nginx
-
-WORKDIR /srv/app
-
-COPY --from=app_php --link /srv/app/public public/
-COPY --link docker/nginx/default.conf /etc/nginx/conf.d/default.conf

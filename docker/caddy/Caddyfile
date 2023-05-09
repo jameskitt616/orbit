@@ -9,12 +9,12 @@
 
 log
 
-route /live/* {
-    root * /srv/app/
-    file_server
+handle_path /live* {
+    root * /orbit/transcode
+    file_server browse
 }
 
-route {
+handle {
     root * /srv/app/public
     php_fastcgi unix//var/run/php/php-fpm.sock
     encode zstd gzip
