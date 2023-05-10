@@ -1,22 +1,14 @@
-{
-    # Debug
-    {$CADDY_DEBUG}
-}
+:80 {
+    log
+    handle_path /live* {
+        root * /orbit/transcode
+        file_server browse
+    }
 
-{$SERVER_NAME}
-
-{$CADDY_EXTRA_CONFIG}
-
-log
-
-handle_path /live* {
-    root * /orbit/transcode
-    file_server browse
-}
-
-handle {
-    root * /srv/app/public
-    php_fastcgi unix//var/run/php/php-fpm.sock
-    encode zstd gzip
-    file_server
+    handle {
+        root * /srv/app/public
+        php_fastcgi unix//var/run/php/php-fpm.sock
+        encode zstd gzip
+        file_server
+    }
 }
