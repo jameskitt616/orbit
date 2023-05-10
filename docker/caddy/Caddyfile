@@ -9,18 +9,14 @@
 
 log
 
-:80 {
-    handle_path /live/* {
-        root * /srv/app/public
-        php_fastcgi unix//var/run/php/php-fpm.sock
-        encode zstd gzip
-        file_server
-    }
+handle_path /live* {
+    root * /orbit/transcode
+    file_server browse
+}
 
-    handle {
-        root * /srv/app/public
-        php_fastcgi unix//var/run/php/php-fpm.sock
-        encode zstd gzip
-        file_server
-    }
+handle {
+    root * /srv/app/public
+    php_fastcgi unix//var/run/php/php-fpm.sock
+    encode zstd gzip
+    file_server
 }

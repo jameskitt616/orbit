@@ -6,7 +6,8 @@ namespace App\Transcode\Presentation\Controller;
 
 use App\Kernel\Application\CommandBus;
 use App\Security\Application\Service\SecurityService;
-use App\Transcode\Application\Command\CreateTranscode;
+use App\Transcode\Application\Command\Create;
+use App\Transcode\Application\Command\Delete;
 use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Repository\TranscodeRepository;
@@ -79,7 +80,7 @@ final class TranscodeController extends AbstractController
             return $this->redirectToRoute('transcode_select_source');
         }
 
-        $command = new CreateTranscode($this->securityService->getCurrentUser(), $file);
+        $command = new Create($this->securityService->getCurrentUser(), $file);
         $url = $this->generateUrl('transcode_create');
         $form = $this->createForm(CreateTranscodeForm::class, $command, [
             'action' => $url,
@@ -100,5 +101,14 @@ final class TranscodeController extends AbstractController
             'form' => $form->createView(),
             'file' => $file,
         ]);
+    }
+
+    #[Route(path: '/{transcode}/delete', name: 'transcode_delete', methods: ['GET'])]
+    public function delete(Transcode $transcode): Response
+    {
+        $command = new Delete($transcode);
+        $this->commandBus->handle($command);
+
+        return $this->redirectToRoute('transcode_list');
     }
 }

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Transcode\Application\CommandHandler;
 
-use App\Transcode\Application\Command\CreateTranscode;
-use App\Transcode\Application\Command\TriggerTranscode;
+use App\Transcode\Application\Command\Create;
+use App\Transcode\Application\Command\Trigger;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Repository\TranscodeRepository;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class CreateTranscodeHandler
+readonly class CreateHandler
 {
     public function __construct(
         private TranscodeRepository $transcodeRepository,
@@ -19,7 +19,7 @@ readonly class CreateTranscodeHandler
     {
     }
 
-    public function __invoke(CreateTranscode $command): void
+    public function __invoke(Create $command): void
     {
         $file = $command->file;
         $currentUser = $command->currentUser;
@@ -41,6 +41,6 @@ readonly class CreateTranscodeHandler
 
         $command->transcode = $transcode;
 
-        $this->messageBus->dispatch(new TriggerTranscode($transcode->getId()));
+        $this->messageBus->dispatch(new Trigger($transcode->getId()));
     }
 }

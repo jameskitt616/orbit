@@ -13,7 +13,7 @@ use App\Transcode\Domain\Model\VideoProperty;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateTranscode implements Command
+class Create implements Command
 {
     #[Assert\NotNull]
     public File $file;

@@ -6,7 +6,7 @@ namespace App\Transcode\Application\Command;
 
 use App\Kernel\Application\Command;
 
-class TriggerTranscode implements Command
+class Trigger implements Command
 {
     public string $id;
 

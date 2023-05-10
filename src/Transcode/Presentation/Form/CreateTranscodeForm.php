@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Transcode\Presentation\Form;
 
-use App\Transcode\Application\Command\CreateTranscode;
+use App\Transcode\Application\Command\Create;
 use App\Transcode\Application\Service\TranscodeService;
 use App\Transcode\Domain\Enum\Format;
 use App\Transcode\Domain\Enum\VideoProperty;
@@ -69,7 +69,7 @@ final class CreateTranscodeForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => CreateTranscode::class,
+            'data_class' => Create::class,
             'file' => 'file',
         ]);
     }

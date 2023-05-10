@@ -10,7 +10,7 @@ framework:
             # sync: 'sync://'
 
         routing:
-             'App\Transcode\Application\Command\TriggerTranscode': async
+             'App\Transcode\Application\Command\Trigger': async
 
 # when@test:
 #    framework:
