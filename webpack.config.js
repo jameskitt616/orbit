@@ -27,6 +27,7 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
     .addEntry('transcoding', './assets/js/transcoding.js')
+    .addEntry('settings', './assets/js/settings.js')
 
     .enableSassLoader(function (options) {
     }, {

@@ -6,7 +6,19 @@ let transcoding = {};
 
 transcoding.init = function () {
   $('.copyUrl').click(transcoding.copyUrl);
+  $('#deleteTranscode').click(transcoding.delete);
 };
+
+transcoding.delete = function () {
+
+  let message = $(this).data('message');
+
+  if (confirm(message)) {
+    window.location.href = $(this).data('url');
+  }
+
+  return false;
+}
 
 transcoding.copyUrl = function () {
   let index = $(this).data('index');

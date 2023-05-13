@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="max-w-7xl mt-5 justify-between mx-auto flex">
+        {% include 'settings/nav.html.twig' %}
+        <div class="w-3/4 p-4 m-2 border-l">
+
+            <div class="flex mb-4">
+                <div class="w-2/3">
+                    <div class="px-4 sm:px-0">
+                        <h3 class="text-base font-semibold leading-7 text-gray-500">
+                            {{ 'settings.users'|trans }}
+                        </h3>
+                        <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+                            {{ 'settings.users.description'|trans }}
+                        </p>
+                    </div>
+                </div>
+                <div class="w-1/3 flex justify-end">
+                    <div>
+                        <a href="{{ path('transcode_select_source') }}" title="{{ 'live.stream.create'|trans }}"
+                           class="justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-h-96 overflow-auto border-t border-b py-2 h-96">
+                {% for user in users %}
+                    <div
+                       class="flex p-2 {{ loop.index != 1 ? 'mt-1' }} shadow shadow-white rounded hover:bg-indigo-400">
+                        <div class="w-full flex">
+                            <div class="flex-1">
+                                <p class="text-sm font-semibold mt-2" title="{{ user.username }}">
+                                    {{ user.username }}
+                                </p>
+                            </div>
+                            <div>
+                                <button title="{{ 'common.delete'|trans }}"
+                                        data-url="{{ path('settings_user_delete', {'user': user.id}) }}"
+                                        data-message="{{ 'common.delete.description'|trans }}"
+                                        class="deleteUser justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('settings') }}
+{% endblock %}

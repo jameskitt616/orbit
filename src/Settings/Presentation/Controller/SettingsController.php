@@ -7,6 +7,7 @@ namespace App\Settings\Presentation\Controller;
 use App\Kernel\Application\CommandBus;
 use App\Security\Application\Command\AccountUpdate;
 use App\Security\Application\Service\SecurityService;
+use App\Security\Domain\Repository\UserRepository;
 use App\Settings\Application\Service\SystemInformationService;
 use App\Settings\Presentation\Form\AccountUpdateForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +22,8 @@ class SettingsController extends AbstractController
     public function __construct(
         private readonly SystemInformationService $systemInformationService,
         private readonly SecurityService          $securityService,
-        private readonly CommandBus               $commandBus
+        private readonly CommandBus               $commandBus,
+        private readonly UserRepository           $userRepository,
     )
     {
     }
@@ -33,18 +35,32 @@ class SettingsController extends AbstractController
         $storagePaths = $this->systemInformationService->getStoragePaths();
 
         return $this->render('settings/system_information.html.twig', [
-            'nav' => 'system_information',
             'systemSpecs' => $systemSpecs,
             'storagePaths' => $storagePaths,
-            'currentUser' => $this->securityService->getCurrentUser(),
         ]);
+    }
+
+    #[Route(path: '/users/list', name: 'settings_users_list', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function users(): Response
+    {
+        return $this->render('settings/user_list.html.twig', [
+            'users' => $this->userRepository->findAll(),
+        ]);
+    }
+
+    #[Route(path: '/users/{user}/delete', name: 'settings_user_delete', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function deleteUser(): Response
+    {
+
+        return $this->redirectToRoute('settings_users_list');
     }
 
     #[Route(path: '/account', name: 'settings_account', methods: ['GET', 'POST'])]
     public function account(Request $request): Response
     {
-        $currentUser = $this->securityService->getCurrentUser();
-        $command = new AccountUpdate($currentUser);
+        $command = new AccountUpdate($this->securityService->getCurrentUser());
         $url = $this->generateUrl('settings_account');
         $form = $this->createForm(AccountUpdateForm::class, $command, [
             'action' => $url,
@@ -59,7 +75,6 @@ class SettingsController extends AbstractController
 
         return $this->render('settings/account_update.html.twig', [
             'form' => $form->createView(),
-            'currentUser' => $currentUser,
         ]);
     }
 }
