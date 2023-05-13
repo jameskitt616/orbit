@@ -27,7 +27,7 @@ final class Version20230501151230 extends AbstractMigration
         $this->addSql('CREATE TABLE transcode_representation (transcode_id VARCHAR(255) NOT NULL, representation_id VARCHAR(255) NOT NULL, PRIMARY KEY(transcode_id, representation_id))');
         $this->addSql('CREATE INDEX IDX_BBFD8F24C83A15B4 ON transcode_representation (transcode_id)');
         $this->addSql('CREATE INDEX IDX_BBFD8F2446CE82F4 ON transcode_representation (representation_id)');
-        $this->addSql('CREATE TABLE user_user (id VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(512) NOT NULL, isAdmin BOOLEAN NOT NULL, loginFailureCounter INT NOT NULL, roles JSON NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE user_user (id VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(512) NOT NULL, loginFailureCounter INT NOT NULL, roles JSON NOT NULL, PRIMARY KEY(id))');
         $this->addSql('ALTER TABLE transcode ADD CONSTRAINT FK_522F4C7A752AFD0D FOREIGN KEY (ownedBy_id) REFERENCES user_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE transcode_representation ADD CONSTRAINT FK_BBFD8F24C83A15B4 FOREIGN KEY (transcode_id) REFERENCES transcode (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE transcode_representation ADD CONSTRAINT FK_BBFD8F2446CE82F4 FOREIGN KEY (representation_id) REFERENCES representation (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');

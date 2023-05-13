@@ -26,9 +26,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'password', type: 'string', length: 512, nullable: false)]
     private string $password;
 
-    #[ORM\Column(name: 'isAdmin', type: 'boolean', nullable: false)]
-    private bool $isAdmin;
-
     #[ORM\Column(name: 'loginFailureCounter', type: 'integer', nullable: false)]
     private int $loginFailureCounter;
 
@@ -42,9 +39,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->id = Uuid::uuid4()->toString();
         $this->username = $username;
-        $this->isAdmin = $isAdmin;
         $this->loginFailureCounter = 0;
         $this->roles = ['ROLE_USER'];
+        if ($isAdmin) {
+            $this->roles[] = "ROLE_ADMIN";
+        }
         $this->transcodes = new ArrayCollection();
     }
 
@@ -100,10 +99,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): void
     {
         $this->username = $username;
-    }
-
-    public function isAdmin(): bool
-    {
-        return $this->isAdmin;
     }
 }

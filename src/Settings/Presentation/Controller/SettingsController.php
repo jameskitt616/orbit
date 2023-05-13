@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/settings')]
 class SettingsController extends AbstractController
@@ -45,7 +46,7 @@ class SettingsController extends AbstractController
         $currentUser = $this->securityService->getCurrentUser();
         $command = new AccountUpdate($currentUser);
         $url = $this->generateUrl('settings_account');
-        $form = $this->createForm(AccountUpdateForm::class, $command ,[
+        $form = $this->createForm(AccountUpdateForm::class, $command, [
             'action' => $url,
         ]);
 

@@ -80,38 +80,40 @@
                             </div>
                         </div>
                     </div>
-                    <div class="py-1 px-3">
-                        <div
-                            class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="py-1 px-3">
                             <div
-                                class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
-                                <i class="fas fa-cogs"></i>
-                            </div>
-                            <div class="flex-auto">
-                                <a href="{{ path('settings_account') }}" class="block font-semibold text-gray-900">
-                                    {{ 'settings.system.settings'|trans }}
-                                    <span class="absolute inset-0"></span>
-                                </a>
-                                <p class="mt-1 text-gray-600">{{ 'live.stream.list.description'|trans }}</p>
+                                class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
+                                <div
+                                    class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                                <div class="flex-auto">
+                                    <a href="{{ path('settings_account') }}" class="block font-semibold text-gray-900">
+                                        {{ 'settings.system.settings'|trans }}
+                                        <span class="absolute inset-0"></span>
+                                    </a>
+                                    <p class="mt-1 text-gray-600">{{ 'live.stream.list.description'|trans }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="py-1 px-3">
-                        <div
-                            class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
+                        <div class="py-1 px-3">
                             <div
-                                class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="flex-auto">
-                                <a href="{{ path('settings_account') }}" class="block font-semibold text-gray-900">
-                                    {{ 'settings.users'|trans }}
-                                    <span class="absolute inset-0"></span>
-                                </a>
-                                <p class="mt-1 text-gray-600">{{ 'live.stream.list.description'|trans }}</p>
+                                class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
+                                <div
+                                    class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="flex-auto">
+                                    <a href="{{ path('settings_account') }}" class="block font-semibold text-gray-900">
+                                        {{ 'settings.users'|trans }}
+                                        <span class="absolute inset-0"></span>
+                                    </a>
+                                    <p class="mt-1 text-gray-600">{{ 'live.stream.list.description'|trans }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <div class="py-1 px-3">
                         <div
                             class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">

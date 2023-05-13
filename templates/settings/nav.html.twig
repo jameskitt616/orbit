@@ -6,7 +6,7 @@
                 {{ 'settings.system.information'|trans }}
             </a>
         </div>
-        {% if currentUser.isAdmin == true %}
+        {% if is_granted('ROLE_ADMIN') %}
             <div class="border-b pb-2 mb-1">
                 <a href="{{ path('settings_system_information') }}">
                     {{ 'settings.system.settings'|trans }}
