@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Security\Domain\Model;
 
 use App\Transcode\Domain\Model\Transcode;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -44,6 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isAdmin = $isAdmin;
         $this->loginFailureCounter = 0;
         $this->roles = ['ROLE_USER'];
+        $this->transcodes = new ArrayCollection();
     }
 
     public function getId(): string
@@ -93,5 +95,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->isAdmin;
     }
 }

@@ -19,7 +19,7 @@
             class="rounded bg-white sm:mx-auto sm:w-full sm:max-w-sm p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
             <div class="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img src="{{ asset('build/images/OrbitLogo_500.png') }}" class="mx-auto h-20 w-auto" alt="Orbit Logo">
-                <h2 class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">{{ 'login.sign_in'|trans }}</h2>
+                <h2 class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">{{ 'security.sign_in.message'|trans }}</h2>
             </div>
 
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -30,7 +30,7 @@
                         </div>
                     {% endif %}
                     <div>
-                        <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                        <label for="username" class="block text-sm font-medium leading-6 text-gray-900">{{ 'security.username'|trans }}</label>
                         <div class="mt-2">
                             <input id="username" name="username" type="text" autocomplete="username" required autofocus
                                    value="{{ last_username }}"
@@ -41,7 +41,7 @@
                     <div>
                         <div class="flex items-center justify-between">
                             <label for="password"
-                                   class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                                   class="block text-sm font-medium leading-6 text-gray-900">{{ 'security.password'|trans }}</label>
                         </div>
                         <div class="mt-2">
                             <input id="password" name="password" type="password" autocomplete="current-password"

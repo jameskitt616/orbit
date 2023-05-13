@@ -6,19 +6,21 @@
                 {{ 'settings.system.information'|trans }}
             </a>
         </div>
-        <div class="border-b pb-2 mb-1">
-            <a href="{{ path('settings_system_information') }}">
-                System Settings
-            </a>
-        </div>
-        <div class="border-b pb-2 mb-1">
-            <a href="{{ path('settings_system_information') }}">
-                Users
-            </a>
-        </div>
+        {% if currentUser.isAdmin == true %}
+            <div class="border-b pb-2 mb-1">
+                <a href="{{ path('settings_system_information') }}">
+                    {{ 'settings.system.settings'|trans }}
+                </a>
+            </div>
+            <div class="border-b pb-2 mb-1">
+                <a href="{{ path('settings_system_information') }}">
+                    {{ 'settings.users'|trans }}
+                </a>
+            </div>
+        {% endif %}
         <div>
-            <a href="{{ path('settings_system_information') }}">
-                Account Settings
+            <a href="{{ path('settings_account') }}">
+                {{ 'settings.account'|trans }}
             </a>
         </div>
     </div>

@@ -11,14 +11,21 @@ common.new_tab: "Open in new Tab"
 
 brands.github: "Github"
 
-login.sign_in: "Sign in to your account"
-login.sign_up: "Create new admin account"
-login.log_out: "Sign Out"
+security.username: "Username"
+security.password: "Password"
+security.sign_in.message: "Sign in to your account"
+security.sign_up: "Create new admin account"
+security.log_out: "Sign Out"
+security.account.update: "Update Account"
+security.account.update.description: "Update your Account Data."
 
 nav.live: "Live"
 nav.settings: "Settings"
 
 settings.system.information: "System Information"
+settings.system.settings: "System Settings"
+settings.users: "Users"
+settings.account: "Account Settings"
 
 total: "Total"
 free: "Free"
