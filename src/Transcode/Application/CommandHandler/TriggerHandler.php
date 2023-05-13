@@ -23,5 +23,8 @@ class TriggerHandler extends AsMessageHandler
     {
         $transcode = $this->transcodeRepository->findById($command->id);
         $this->transcodeService->transcode($transcode);
+
+        $transcode->setTranscodingProgress(100);
+        $this->transcodeRepository->save($transcode);
     }
 }

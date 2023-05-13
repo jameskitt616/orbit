@@ -9,28 +9,12 @@ use App\Transcode\Domain\Model\Transcode;
 
 interface TranscodeRepository
 {
-    /**
-     * @param string $id
-     *
-     * @return Transcode
-     */
     public function findById(string $id): Transcode;
 
-    /**
-     * @param User $user
-     *
-     * @return array
-     */
+    /** @return Transcode[] */
     public function findAllByUser(User $user): array;
 
-
-    /**
-     * @param Transcode $transcode
-     */
     public function save(Transcode $transcode): void;
 
-    /**
-     * @param Transcode $transcode
-     */
     public function delete(Transcode $transcode): void;
 }

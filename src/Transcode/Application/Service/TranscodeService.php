@@ -8,8 +8,8 @@ use App\Transcode\Domain\Enum\Format;
 use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Model\VideoProperty;
+use App\Transcode\Domain\Repository\TranscodeRepository;
 use FFMpeg\FFMpeg;
-use FFMpeg\Format\Audio\Aac;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -20,8 +20,14 @@ use Streaming\Format\VP9;
 use Streaming\Format\X264;
 use Streaming\Representation;
 
-final class TranscodeService
+final readonly class TranscodeService
 {
+    public function __construct(
+        private TranscodeRepository $transcodeRepository,
+    )
+    {
+    }
+
     public function listAvailableVideos(): array
     {
         $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($_ENV['VIDEO_PATH']));
@@ -55,18 +61,19 @@ final class TranscodeService
 
         $ffmpeg = FFMpeg::create($config);
         $sFfmpeg = new SFFMpeg($ffmpeg);
-//        $video = $sFfmpeg->openAdvanced([$transcode->getFilePath()]);
+        //        $video = $sFfmpeg->openAdvanced([$transcode->getFilePath()]);
         $video = $sFfmpeg->open($transcode->getFilePath());
 
         $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $_ENV['STREAM_FILENAME'];
 
         $format = $this->getFormat(Format::HEVC->value);
-        $format->on('progress', function ($video, $format, $percentage) {
+        $format->on('progress', function ($video, $format, $percentage) use ($transcode) {
             $percentage = (int) round($percentage);
-            //            dump($transcode);
-            //dump(sprintf("\rTranscoding...(%s%%) [%s%s]", $percentage, str_repeat('#', $percentage), str_repeat('-', (100 - $percentage))));
+            $transcode->setTranscodingProgress($percentage);
+            $this->transcodeRepository->save($transcode);
         });
 
+        //        dump($video->filters()->custom('[0:v]'));
         $representations = $this->getRepresentations($transcode);
 
         //        shell_exec('screen -dmS $name_of_screen $command');
@@ -95,19 +102,33 @@ final class TranscodeService
         //            ->format($transcode->getFilePath())
         //            ->all());
 
+        //        $video
+        //            ->map([$transcode->getAudioTrackNumber() . ':a'], new Aac(), $saveLocation)
+        //            ->map(['resultv'], $format, $saveLocation)
+        //            ->save();
+        //        dump($video->getFinalCommand());
 
-//        $video
-//            ->map([$transcode->getAudioTrackNumber() . ':a'], new Aac(), $saveLocation)
-//            ->map(['resultv'], $format, $saveLocation)
-//            ->save();
-//        dump($video->getFinalCommand());
-
-//        $transcode->getAudioTrackNumber();
-//        $transcode->getSubtitleNumber();
+        //        $transcode->getAudioTrackNumber();
+        //        $transcode->getSubtitleNumber();
         $video->hls()
             ->setFormat($format)
             ->addRepresentations($representations)
             ->save($saveLocation);
+
+        //        $inputFile = escapeshellarg($transcode->getFilePath());
+        //        $saveLocation = escapeshellarg($saveLocation);
+        //        $command = "ffmpeg -i /orbit/videos/biscuits.mp4 -map 0:0 -map 0:1 -c:v h264 -c:a mp3 /orbit/transcode/1832637644/out.mp4 >/dev/null 2>&1 & echo $!";
+        //        $command = "ffmpeg -i $inputFile -c:v libx264 -c:a mp3 -map 0:v:0 -map 0:a:1 -hls_time 10 -hls_list_size 0 $saveLocation.m3u8";
+        //        $command = "ffmpeg -i $inputFile -c:v libx264 -c:a aac -map 0:v:0 -map 0:a:1 -hls_time 10 -hls_list_size 0 $saveLocation.m3u8";
+        //        $command = "ffmpeg -i input_file.mp4 -c:v libx264 -preset slow -crf 22 -c:a copy $saveLocation >/dev/null 2>&1 & echo $!";
+        //        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath());
+        //        $output = shell_exec($command);
+        //        $pid = (int)$output;
+        //
+        //        do {
+        //            $status = shell_exec("ps aux | grep $pid");
+        //            $status = explode("\n", $status);
+        //        } while(count($status) > 2);
     }
 
     private function getRepresentations(Transcode $transcode): array
