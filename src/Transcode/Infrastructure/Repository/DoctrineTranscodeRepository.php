@@ -40,9 +40,10 @@ readonly class DoctrineTranscodeRepository implements TranscodeRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function refresh(Transcode $transcode): void
+    public function save(Transcode $transcode): void
     {
-        $this->em->refresh($transcode);
+        $this->em->persist($transcode);
+        $this->em->flush();
     }
 
     public function delete(Transcode $transcode): void
