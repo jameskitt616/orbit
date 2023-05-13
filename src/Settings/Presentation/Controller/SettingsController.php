@@ -6,7 +6,9 @@ namespace App\Settings\Presentation\Controller;
 
 use App\Kernel\Application\CommandBus;
 use App\Security\Application\Command\AccountUpdate;
+use App\Security\Application\Command\DeleteUser;
 use App\Security\Application\Service\SecurityService;
+use App\Security\Domain\Model\User;
 use App\Security\Domain\Repository\UserRepository;
 use App\Settings\Application\Service\SystemInformationService;
 use App\Settings\Presentation\Form\AccountUpdateForm;
@@ -51,8 +53,10 @@ class SettingsController extends AbstractController
 
     #[Route(path: '/users/{user}/delete', name: 'settings_user_delete', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function deleteUser(): Response
+    public function deleteUser(User $user): Response
     {
+        $command = new DeleteUser($user, $this->securityService->getCurrentUser());
+        $this->commandBus->handle($command);
 
         return $this->redirectToRoute('settings_users_list');
     }

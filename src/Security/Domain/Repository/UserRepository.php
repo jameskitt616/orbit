@@ -8,28 +8,14 @@ use App\Security\Domain\Model\User;
 
 interface UserRepository
 {
-    /**
-     * @param int $id
-     *
-     * @return User
-     */
     public function findById(int $id): User;
 
-    /**
-     * @param string $username
-     *
-     * @return User|null
-     */
     public function findByUsername(string $username): ?User;
 
-    /**
-     * @return array
-     */
+    /** @return User[] */
     public function findAll(): array;
 
-
-    /**
-     * @param User $user
-     */
     public function save(User $user): void;
+
+    public function delete(User $user): void;
 }
