@@ -17,8 +17,6 @@ readonly class DeleteHandler
 
     public function __invoke(Delete $command): void
     {
-        //TODO: stop ongoing transcode before deleting the directory and the transcode entity
-
         $transcode = $command->transcode;
 
         $randSubTargetPath = $transcode->getRandSubTargetPath();
