@@ -34,6 +34,7 @@ system.load_average: "Sys Load avg. (1m, 5m, 15m)"
 system.ram: "RAM"
 
 live.stream: "Stream"
+live.stream.list.description: "List of the currently available Streams."
 live.stream.description: "Information and details about the Stream."
 live.stream.no_available: "No available Streams found."
 live.stream.source: "Source"
