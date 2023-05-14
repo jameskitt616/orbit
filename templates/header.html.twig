@@ -26,24 +26,26 @@
                 </button>
                 <div
                     class="hidden group-hover:block absolute -left-8 top-full z-10 w-screen max-w-md overflow-hidden rounded-lg bg-indigo-400 shadow-lg ring-1 ring-gray-900/5">
-                    <div class="py-2 px-3">
-                        <div
-                            class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
+                    <div class="py-2">
+                        <div class="py-1 px-3">
                             <div
-                                class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
-                                <i class="fas fa-tower-broadcast"></i>
-                            </div>
-                            <div class="flex-auto">
-                                <a href="{{ path('transcode_list') }}" class="block font-semibold text-gray-900">
-                                    {{ 'live.streams'|trans }}
-                                    <span class="absolute inset-0"></span>
-                                </a>
-                                <p class="mt-1 text-gray-600">{{ 'live.stream.list.description'|trans }}</p>
+                                class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
+                                <div
+                                    class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
+                                    <i class="fas fa-tower-broadcast"></i>
+                                </div>
+                                <div class="flex-auto">
+                                    <a href="{{ path('transcode_list') }}" class="block font-semibold text-gray-900">
+                                        {{ 'live.streams'|trans }}
+                                        <span class="absolute inset-0"></span>
+                                    </a>
+                                    <p class="mt-1 text-gray-600">{{ 'live.stream.list.description'|trans }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 divide-x divide-gray-900/5 bg-indigo-400 border-t mt-1">
+                    <div class="grid grid-cols-2 divide-x divide-gray-900/5 bg-indigo-400 border-t">
                         <a href="{{ path('transcode_select_source') }}"
                            class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-500">
                             <i class="fas fa-plus text-white"></i>
@@ -64,84 +66,86 @@
                 </button>
                 <div
                     class="hidden group-hover:block absolute -left-8 top-full z-10 w-screen max-w-md overflow-hidden rounded-lg bg-indigo-400 shadow-lg ring-1 ring-gray-900/5">
-                    <div class="py-2 px-3">
-                        <div
-                            class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
-                            <div
-                                class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
-                                <i class="fas fa-info"></i>
-                            </div>
-                            <div class="flex-auto">
-                                <a href="{{ path('settings_system_information') }}" class="block font-semibold text-gray-900">
-                                    {{ 'settings.system.information'|trans }}
-                                    <span class="absolute inset-0"></span>
-                                </a>
-                                <p class="mt-1 text-gray-600">{{ 'settings.system.information.description'|trans }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    {% if is_granted('ROLE_ADMIN') %}
+                    <div class="py-2">
                         <div class="py-1 px-3">
                             <div
                                 class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
                                 <div
                                     class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
-                                    <i class="fas fa-cogs"></i>
+                                    <i class="fas fa-info"></i>
+                                </div>
+                                <div class="flex-auto">
+                                    <a href="{{ path('settings_system_information') }}" class="block font-semibold text-gray-900">
+                                        {{ 'settings.system.information'|trans }}
+                                        <span class="absolute inset-0"></span>
+                                    </a>
+                                    <p class="mt-1 text-gray-600">{{ 'settings.system.information.description'|trans }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% if is_granted('ROLE_ADMIN') %}
+{#                            <div class="py-1 px-3">#}
+{#                                <div#}
+{#                                    class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">#}
+{#                                    <div#}
+{#                                        class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">#}
+{#                                        <i class="fas fa-cogs"></i>#}
+{#                                    </div>#}
+{#                                    <div class="flex-auto">#}
+{#                                        <a href="{{ path('settings_account') }}" class="block font-semibold text-gray-900">#}
+{#                                            {{ 'settings.system.settings'|trans }}#}
+{#                                            <span class="absolute inset-0"></span>#}
+{#                                        </a>#}
+{#                                        <p class="mt-1 text-gray-600">{{ 'live.stream.list.description'|trans }}</p>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+                            <div class="py-1 px-3">
+                                <div
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
+                                    <div
+                                        class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <a href="{{ path('settings_users_list') }}" class="block font-semibold text-gray-900">
+                                            {{ 'settings.users'|trans }}
+                                            <span class="absolute inset-0"></span>
+                                        </a>
+                                        <p class="mt-1 text-gray-600">{{ 'settings.users.description'|trans }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="py-1 px-3">
+                            <div
+                                class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
+                                <div
+                                    class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
+                                    <i class="fas fa-user"></i>
                                 </div>
                                 <div class="flex-auto">
                                     <a href="{{ path('settings_account') }}" class="block font-semibold text-gray-900">
-                                        {{ 'settings.system.settings'|trans }}
+                                        {{ 'settings.account'|trans }}
                                         <span class="absolute inset-0"></span>
                                     </a>
-                                    <p class="mt-1 text-gray-600">{{ 'live.stream.list.description'|trans }}</p>
+                                    <p class="mt-1 text-gray-600">{{ 'security.account.update.description'|trans }}</p>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="py-1 px-3">
-                            <div
-                                class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
-                                <div
-                                    class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <div class="flex-auto">
-                                    <a href="{{ path('settings_users_list') }}" class="block font-semibold text-gray-900">
-                                        {{ 'settings.users'|trans }}
-                                        <span class="absolute inset-0"></span>
-                                    </a>
-                                    <p class="mt-1 text-gray-600">{{ 'settings.users.description'|trans }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                    <div class="py-1 px-3">
-                        <div
-                            class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
-                            <div
-                                class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="flex-auto">
-                                <a href="{{ path('settings_account') }}" class="block font-semibold text-gray-900">
-                                    {{ 'settings.account'|trans }}
-                                    <span class="absolute inset-0"></span>
-                                </a>
-                                <p class="mt-1 text-gray-600">{{ 'security.account.update.description'|trans }}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 divide-x divide-gray-900/5 bg-indigo-400 border-t mt-1">
-                        <a href="{{ path('settings_account') }}"
+                    <div class="grid grid-cols-2 divide-x divide-gray-900/5 bg-indigo-400 border-t">
+                        <a href="{{ path('settings_user_create') }}"
                            class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-500">
                             <i class="fas fa-plus text-white"></i>
                             {{ 'settings.users.create'|trans }}
                         </a>
-                        <a href="#"
-                           class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-500">
-                            <i class="fas fa-chevron-down text-white"></i>
-                            {{ 'live.stream.create'|trans }}
-                        </a>
+{#                        <a href="#"#}
+{#                           class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-500">#}
+{#                            <i class="fas fa-chevron-down text-white"></i>#}
+{#                            {{ 'live.stream.create'|trans }}#}
+{#                        </a>#}
                     </div>
                 </div>
             </div>
