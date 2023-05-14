@@ -8,12 +8,14 @@ use App\Kernel\Application\CommandBus;
 use App\Security\Application\Service\SecurityService;
 use App\Transcode\Application\Command\Create;
 use App\Transcode\Application\Command\Delete;
+use App\Transcode\Application\Service\TranscodeService;
 use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Repository\TranscodeRepository;
 use App\Transcode\Presentation\Form\CreateTranscodeForm;
 use App\Transcode\Presentation\Form\SelectSourceForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,6 +27,7 @@ final class TranscodeController extends AbstractController
         private readonly CommandBus          $commandBus,
         private readonly SecurityService     $securityService,
         private readonly TranscodeRepository $transcodeRepository,
+        private readonly TranscodeService    $transcodeService,
     )
     {
     }
@@ -46,6 +49,12 @@ final class TranscodeController extends AbstractController
             'transcode' => $transcode,
             'streamFilename' => $_ENV['STREAM_FILENAME'],
         ]);
+    }
+
+    #[Route(path: '/load/source/files', name: 'transcode_load_source_files', methods: ['GET'])]
+    public function loadSourceFiles(): Response
+    {
+        return new JsonResponse($this->transcodeService->loadSourceFiles($_ENV['VIDEO_PATH']));
     }
 
     #[Route(path: '/select/source', name: 'transcode_select_source', methods: ['GET', 'POST'])]

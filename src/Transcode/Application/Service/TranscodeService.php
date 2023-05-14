@@ -46,6 +46,62 @@ final readonly class TranscodeService
         return $files;
     }
 
+    public function loadSourceFiles($directory): array
+    {
+        //TODO: add additional checks if file is not a video source
+        $files = [];
+        $items = scandir($directory);
+        foreach ($items as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+            $path = $directory . DIRECTORY_SEPARATOR . $item;
+            if (is_dir($path)) {
+                $files[] = [
+                    'id' => uniqid(),
+                    'text' => $item,
+                    'children' => $this->loadSourceFiles($path)
+                ];
+            } else {
+                $files[] = [
+                    'id' => uniqid(),
+                    'text' => $item,
+                ];
+            }
+        }
+        return $files;
+    }
+
+    //TODO: set non video files to disabled
+//    private function getVideoFiles($directory)
+//    {
+//        $videoExtensions = ['mp4', 'mov', 'avi', 'wmv', 'mkv']; // Add more video extensions as needed
+//        $files = [];
+//        $items = scandir($directory);
+//        foreach ($items as $item) {
+//            if ($item == '.' || $item == '..') {
+//                continue;
+//            }
+//            $path = $directory . DIRECTORY_SEPARATOR . $item;
+//            if (is_dir($path)) {
+//                $files[] = [
+//                    'id' => uniqid(),
+//                    'text' => $item,
+//                    'children' => $this->getVideoFiles($path)
+//                ];
+//            } else {
+//                $extension = pathinfo($item, PATHINFO_EXTENSION);
+//                if (in_array(strtolower($extension), $videoExtensions)) {
+//                    $files[] = [
+//                        'id' => uniqid(),
+//                        'text' => $item,
+//                    ];
+//                }
+//            }
+//        }
+//        return $files;
+//    }
+
     public function transcode(Transcode $transcode): void
     {
         //TODO: expose config? also check if it has any impact
