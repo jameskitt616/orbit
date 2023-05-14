@@ -9,6 +9,7 @@ common.delete.description: "Are you sure you want to delete this? This action is
 common.clipboard.copy: "Copy to Clipboard"
 common.clipboard.copied: "Copied to Clipboard!"
 common.new_tab: "Open in new Tab"
+common.update_available: "Update available!"
 
 brands.github: "Github"
 
@@ -19,7 +20,7 @@ security.sign_in.message: "Sign in to your account"
 security.sign_up.message: "Create a new account"
 security.sign_in: "Sign In"
 security.sign_up: "Sign Up"
-security.log_out: "Sign Out"
+security.sign_out: "Sign Out"
 security.account.update: "Update Account"
 security.account.update.description: "Update your Account data"
 

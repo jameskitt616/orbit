@@ -2,18 +2,12 @@
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-2 lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1">
             <a href="{{ path('default_entry') }}" class="-m-1.5 p-1.5">
-                <span class="sr-only">Orbit</span>
                 <img src="{{ asset('build/images/OrbitLogo_500.png') }}" class="h-14" alt="Orbit Logo">
             </a>
         </div>
         <div class="flex lg:hidden">
             <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
-                <span class="sr-only">Open main menu</span>
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                     aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-                </svg>
+                <i class="fa-solid fa-bars"></i>
             </button>
         </div>
 
@@ -51,11 +45,11 @@
                             <i class="fas fa-plus text-white"></i>
                             {{ 'live.stream.create'|trans }}
                         </a>
-{#                        <a href="#"#}
-{#                           class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-500">#}
-{#                            <i class="fas fa-chevron-down text-white"></i>#}
-{#                            {{ 'live.stream.create'|trans }}#}
-{#                        </a>#}
+                        {#<a href="#" #}
+                        {#   class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-500"> #}
+                        {#    <i class="fas fa-chevron-down text-white"></i> #}
+                        {#    {{ 'live.stream.create'|trans }} #}
+                        {#</a> #}
                     </div>
                 </div>
             </div>
@@ -75,7 +69,8 @@
                                     <i class="fas fa-info"></i>
                                 </div>
                                 <div class="flex-auto">
-                                    <a href="{{ path('settings_system_information') }}" class="block font-semibold text-gray-900">
+                                    <a href="{{ path('settings_system_information') }}"
+                                       class="block font-semibold text-gray-900">
                                         {{ 'settings.system.information'|trans }}
                                         <span class="absolute inset-0"></span>
                                     </a>
@@ -84,22 +79,22 @@
                             </div>
                         </div>
                         {% if is_granted('ROLE_ADMIN') %}
-{#                            <div class="py-1 px-3">#}
-{#                                <div#}
-{#                                    class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">#}
-{#                                    <div#}
-{#                                        class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900">#}
-{#                                        <i class="fas fa-cogs"></i>#}
-{#                                    </div>#}
-{#                                    <div class="flex-auto">#}
-{#                                        <a href="{{ path('settings_account') }}" class="block font-semibold text-gray-900">#}
-{#                                            {{ 'settings.system.settings'|trans }}#}
-{#                                            <span class="absolute inset-0"></span>#}
-{#                                        </a>#}
-{#                                        <p class="mt-1 text-gray-600">{{ 'live.stream.list.description'|trans }}</p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
+                            {#<div class="py-1 px-3"> #}
+                            {#    <div #}
+                            {#        class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500"> #}
+                            {#        <div #}
+                            {#            class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white text-gray-900"> #}
+                            {#            <i class="fas fa-cogs"></i> #}
+                            {#        </div> #}
+                            {#        <div class="flex-auto"> #}
+                            {#            <a href="{{ path('settings_account') }}" class="block font-semibold text-gray-900"> #}
+                            {#                {{ 'settings.system.settings'|trans }} #}
+                            {#                <span class="absolute inset-0"></span> #}
+                            {#            </a> #}
+                            {#            <p class="mt-1 text-gray-600">{{ 'live.stream.list.description'|trans }}</p> #}
+                            {#        </div> #}
+                            {#    </div> #}
+                            {#</div> #}
                             <div class="py-1 px-3">
                                 <div
                                     class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm leading-6 bg-indigo-300 hover:bg-indigo-500">
@@ -108,7 +103,8 @@
                                         <i class="fas fa-users"></i>
                                     </div>
                                     <div class="flex-auto">
-                                        <a href="{{ path('settings_users_list') }}" class="block font-semibold text-gray-900">
+                                        <a href="{{ path('settings_users_list') }}"
+                                           class="block font-semibold text-gray-900">
                                             {{ 'settings.users'|trans }}
                                             <span class="absolute inset-0"></span>
                                         </a>
@@ -141,11 +137,11 @@
                             <i class="fas fa-plus text-white"></i>
                             {{ 'settings.users.create'|trans }}
                         </a>
-{#                        <a href="#"#}
-{#                           class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-500">#}
-{#                            <i class="fas fa-chevron-down text-white"></i>#}
-{#                            {{ 'live.stream.create'|trans }}#}
-{#                        </a>#}
+                        {#<a href="#" #}
+                        {#   class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-500"> #}
+                        {#    <i class="fas fa-chevron-down text-white"></i> #}
+                        {#    {{ 'live.stream.create'|trans }} #}
+                        {#</a> #}
                     </div>
                 </div>
             </div>
@@ -155,10 +151,10 @@
 
 
         <div class="hidden lg:flex lg:flex-1 lg:justify-end text-sm font-semibold">
-            {#            <a class="leading-6 text-red-500 mr-3 animate-bounce" href=""> #}
-            {#                Update available! #}
-            {#            </a> #}
-            <a href="{{ path('logout') }}" class="leading-6 text-white">{{ 'security.log_out'|trans }}
+            {#<a class="leading-6 text-red-500 mr-3 animate-bounce" href=""> #}
+            {#    {{ 'common.update_available'|trans }} #}
+            {#</a> #}
+            <a href="{{ path('logout') }}" class="leading-6 text-white">{{ 'security.sign_out'|trans }}
                 <i class="fas fa-arrow-right"></i>
             </a>
         </div>
@@ -170,19 +166,17 @@
         <!-- Background backdrop, show/hide based on slide-over state. -->
         <div class="fixed inset-0 z-10"></div>
         <div
-            class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+            class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
+            style="background-color: rgb(15 23 42);">
             <div class="flex items-center justify-between">
-                <a href="#" class="-m-1.5 p-1.5">
-                    <span class="sr-only">Your Company</span>
-                    <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                         alt="">
+                <a href="{{ path('default_entry') }}" class="-m-1.5 p-1.5">
+                    <img src="{{ asset('build/images/OrbitLogo_500.png') }}" class="h-14" alt="Orbit Logo">
                 </a>
-                <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
-                    <span class="sr-only">Close menu</span>
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                         aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
+                {#<a class="leading-6 text-red-500 mr-3 animate-bounce" href=""> #}
+                {#    {{ 'common.update_available'|trans }} #}
+                {#</a> #}
+                <button type="button" class="-m-2.5 rounded-md p-2.5 text-white">
+                    <i class="fa-solid fa-xmark fa-lg"></i>
                 </button>
             </div>
             <div class="mt-6 flow-root">
@@ -190,7 +184,7 @@
                     <div class="space-y-2 py-6">
                         <div class="-mx-3">
                             <button type="button"
-                                    class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 hover:bg-gray-50"
+                                    class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 bg-indigo-500 hover:bg-indigo-400"
                                     aria-controls="disclosure-1" aria-expanded="false">
                                 {{ 'nav.live'|trans }} <i class="fas fa-chevron-down"></i>
                                 <!--
@@ -201,60 +195,46 @@
                             </button>
                             <!-- 'Live' sub-menu, show/hide based on menu state. -->
                             <div class="mt-2 space-y-2" id="disclosure-1">
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Transcodes</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Engagement</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Security</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Integrations</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Automations</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Watch
-                                    demo</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Contact
-                                    sales</a>
+                                <a href="{{ path('transcode_list') }}"
+                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 ml-5 text-gray-900 bg-indigo-500 hover:bg-indigo-400">
+                                    {{ 'live.streams'|trans }}
+                                </a>
                             </div>
                         </div>
                         <div class="-mx-3">
                             <button type="button"
-                                    class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 hover:bg-gray-50"
+                                    class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 bg-indigo-500 hover:bg-indigo-400"
                                     aria-controls="disclosure-1" aria-expanded="false">
                                 {{ 'nav.settings'|trans }} <i class="fas fa-chevron-down"></i>
-                                <!--
-                                  Expand/collapse icon, toggle classes based on menu open state.
-
-                                  Open: "rotate-180", Closed: ""
-                                -->
                             </button>
-                            <!-- 'Settings' sub-menu, show/hide based on menu state. -->
                             <div class="mt-2 space-y-2" id="disclosure-1">
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Transcodes</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Engagement</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Security</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Integrations</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Automations</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Watch
-                                    demo</a>
-                                <a href="#"
-                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Contact
-                                    sales</a>
+                                <a href="{{ path('settings_system_information') }}"
+                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 ml-5 text-gray-900 bg-indigo-500 hover:bg-indigo-400">
+                                    {{ 'settings.system.information'|trans }}
+                                </a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('settings_account') }}"
+                                       class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 ml-5 text-gray-900 bg-indigo-500 hover:bg-indigo-400">
+                                        {{ 'settings.system.settings'|trans }}
+                                    </a>
+                                    <a href="{{ path('settings_users_list') }}"
+                                       class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 ml-5 text-gray-900 bg-indigo-500 hover:bg-indigo-400">
+                                        {{ 'settings.users'|trans }}
+                                    </a>
+                                {% endif %}
+                                <a href="{{ path('settings_account') }}"
+                                   class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 ml-5 text-gray-900 bg-indigo-500 hover:bg-indigo-400">
+                                    {{ 'settings.account'|trans }}
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="py-6">
-                        <a href="{{ path('logout') }}"
-                           class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Sign
-                            Out</a>
+                    <div class="-mx-3 py-6">
+                        <button type="button" onclick="window.location='{{ path('logout') }}';"
+                                class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 bg-indigo-500 hover:bg-indigo-400"
+                                aria-controls="disclosure-1" aria-expanded="false">
+                            {{ 'security.sign_out'|trans }} <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
