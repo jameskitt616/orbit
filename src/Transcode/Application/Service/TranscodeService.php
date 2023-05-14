@@ -28,24 +28,6 @@ final readonly class TranscodeService
     {
     }
 
-    public function listAvailableVideos(): array
-    {
-        $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($_ENV['VIDEO_PATH']));
-        $files = [];
-
-        /** @var SplFileInfo $file */
-        foreach ($rii as $file) {
-            //TODO: add additional checks if file is not a video source
-            if ($file->isDir()) {
-                continue;
-            }
-
-            $files[] = new File($file->getFilename(), $file->getPathname(), $file->getSize());
-        }
-
-        return $files;
-    }
-
     public function loadSourceFiles($directory): array
     {
         $files = [];
@@ -62,6 +44,7 @@ final readonly class TranscodeService
                     'id' => uniqid(),
                     'text' => " $item",
                     'type' => 'folder',
+//                    'data' => $path,
                     'children' => $this->loadSourceFiles($path),
                     'icon' => 'fas fa-folder-open',
                     'li_attr' => [

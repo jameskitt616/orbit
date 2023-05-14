@@ -14,6 +14,7 @@ use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Repository\TranscodeRepository;
 use App\Transcode\Presentation\Form\CreateTranscodeForm;
 use App\Transcode\Presentation\Form\SelectSourceForm;
+use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,7 +69,7 @@ final class TranscodeController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $session = $request->getSession();
-            $session->set('source_file', $form->getData()['file']);
+            $session->set('source_file', $form->getData()['filePath']);
 
             return $this->redirectToRoute('transcode_create');
         }
@@ -82,12 +83,14 @@ final class TranscodeController extends AbstractController
     public function create(Request $request): Response
     {
         $session = $request->getSession();
-        /** @var File $file */
-        $file = $session->get('source_file');
+        $filePath = $session->get('source_file');
 
-        if ($file === null) {
+        if ($filePath === null) {
             return $this->redirectToRoute('transcode_select_source');
         }
+
+        $splFileInfo = new SplFileInfo($filePath);
+        $file = new File($splFileInfo->getFilename(), $splFileInfo->getPathname(), $splFileInfo->getSize());
 
         $command = new Create($this->securityService->getCurrentUser(), $file);
         $url = $this->generateUrl('transcode_create');

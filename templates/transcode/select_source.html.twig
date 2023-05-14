@@ -22,13 +22,12 @@
                                 {{ 'live.stream.source'|trans }}
                             </div>
                             <div class="mt-1 text-sm leading-6 text-white sm:col-span-2 sm:mt-0">
-                                {{ form_row(form.file, {
+                                {{ form_row(form.filePath, {
                                     attr: {
-                                        'class': 'hidden rounded-md bg-indigo-200 text-black sm:p-1 sm:text-sm sm:leading-6',
+                                        'class': 'hidden',
                                     }
                                 }) }}
 
-{#                                <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />#}
                                 <form id="fileTreeSearchForm">
                                     <div class="flex border-b pb-1 mb-2">
                                         <div class="flex-1 pr-1">
@@ -45,8 +44,6 @@
                                     </div>
                                 </form>
                                 <div id="fileTree" data-url="{{ path('transcode_load_source_files') }}"></div>
-
-
                             </div>
                         </div>
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
