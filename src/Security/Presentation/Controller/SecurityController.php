@@ -39,7 +39,8 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('login');
         }
 
-        $command = new RegisterUser(true);
+        $command = new RegisterUser();
+        $command->isAdmin = true;
         $url = $this->generateUrl('register_admin');
         $form = $this->createForm(RegisterUserForm::class, $command, [
             'action' => $url,

@@ -14,9 +14,4 @@ class RegisterUser implements Command
     #[Assert\NotNull]
     public string $password;
     public bool $isAdmin;
-
-    public function __construct(bool $isAdmin)
-    {
-        $this->isAdmin = $isAdmin;
-    }
 }

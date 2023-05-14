@@ -26,9 +26,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'password', type: 'string', length: 512, nullable: false)]
     private string $password;
 
-    #[ORM\Column(name: 'loginFailureCounter', type: 'integer', nullable: false)]
-    private int $loginFailureCounter;
-
     #[ORM\Column(name: 'roles', type: 'json', nullable: false)]
     private array $roles;
 
@@ -39,7 +36,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->id = Uuid::uuid4()->toString();
         $this->username = $username;
-        $this->loginFailureCounter = 0;
         $this->roles = ['ROLE_USER'];
         if ($isAdmin) {
             $this->roles[] = "ROLE_ADMIN";
@@ -55,11 +51,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUsername(): string
     {
         return $this->username;
-    }
-
-    public function getLoginFailureCounter(): int
-    {
-        return $this->loginFailureCounter;
     }
 
     public function getRoles(): array
@@ -80,11 +71,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPassword(): string
     {
         return $this->password;
-    }
-
-    public function resetFailureCounter(): void
-    {
-        $this->loginFailureCounter = 0;
     }
 
     public function eraseCredentials()

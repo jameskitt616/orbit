@@ -58,7 +58,6 @@ class LoginFormAuthenticator extends AbstractAuthenticator implements Authentica
     {
         /** @var User $user */
         $user = $token->getUser();
-        $user->resetFailureCounter();
         $this->userRepository->save($user);
 
         $route = $this->router->generate('default_entry');
