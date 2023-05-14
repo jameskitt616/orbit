@@ -28,21 +28,11 @@
                                     }
                                 }) }}
 
-                                <form id="fileTreeSearchForm">
-                                    <div class="flex border-b pb-1 mb-2">
-                                        <div class="flex-1 pr-1">
-                                            <label for="fileTreeSearch"></label>
-                                            <input type="search" id="fileTreeSearch" placeholder="Search for File"
-                                                   class="justify-center rounded-md bg-indigo-600 px-3 py-1.5 w-full text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500"/>
-                                        </div>
-                                        <div>
-                                            <button type="submit" form="fileTreeSearchForm"
-                                                    class="justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                                {{ 'common.search'|trans }}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
+                                <div class="border-b mb-2 pb-1">
+                                    <label for="fileTreeSearch"></label>
+                                    <input type="search" id="fileTreeSearch" placeholder="{{ 'common.search.for.file'|trans }}" form="fileTreeSearchForm"
+                                           class="justify-center rounded-md bg-indigo-600 px-3 py-1.5 w-full text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500"/>
+                                </div>
                                 <div id="fileTree" data-url="{{ path('transcode_load_source_files') }}"></div>
                             </div>
                         </div>

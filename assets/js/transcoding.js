@@ -10,14 +10,6 @@ transcoding.init = function () {
   $('.copyUrl').click(transcoding.copyUrl);
   $('#deleteTranscode').click(transcoding.delete);
   transcoding.fileTree();
-  $('#fileTreeSearchForm').submit(transcoding.submitSearchFileTreeForm);
-};
-
-transcoding.submitSearchFileTreeForm = function (e) {
-  e.preventDefault();
-  $("#fileTree").jstree(true).search($('#fileTreeSearch').val());
-
-  return false;
 };
 
 transcoding.fileTree = function () {
@@ -48,6 +40,12 @@ transcoding.fileTree = function () {
     //   }
     console.log("The selected nodes are:");
     console.log(data.selected);
+  });
+
+  let fileTreeSearch = $('#fileTreeSearch');
+  fileTreeSearch.on('input',function(e){
+    $("#fileTree").jstree(true).search(fileTreeSearch.val());
+    console.log(fileTreeSearch.val())
   });
 }
 
