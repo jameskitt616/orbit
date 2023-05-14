@@ -48,9 +48,10 @@ final readonly class TranscodeService
 
     public function loadSourceFiles($directory): array
     {
-        //TODO: add additional checks if file is not a video source
         $files = [];
         $items = scandir($directory);
+        //$videoExtensions = ['mp4', 'mov', 'avi', 'wmv', 'mkv', 'flv', 'webm'];
+
         foreach ($items as $item) {
             if ($item == '.' || $item == '..') {
                 continue;
@@ -59,48 +60,37 @@ final readonly class TranscodeService
             if (is_dir($path)) {
                 $files[] = [
                     'id' => uniqid(),
-                    'text' => $item,
-                    'children' => $this->loadSourceFiles($path)
+                    'text' => " $item",
+                    'type' => 'folder',
+                    'children' => $this->loadSourceFiles($path),
+                    'icon' => 'fas fa-folder-open',
+                    'li_attr' => [
+                        'class' => 'bg-indigo-700 hover:bg-indigo-600 rounded cursor-pointer my-1 p-1 pl-2',
+                    ],
+                    'a_attr' => [
+                        'class' => 'text-white',
+                    ],
                 ];
             } else {
+                //$extension = pathinfo($item, PATHINFO_EXTENSION);
+                //$isVideo = in_array(strtolower($extension), $videoExtensions);
                 $files[] = [
                     'id' => uniqid(),
-                    'text' => $item,
+                    'text' => " $item",
+                    'icon' => 'fas fa-file',
+                    'data' => $path,
+                    'li_attr' => [
+                        'class' => 'bg-indigo-500 hover:bg-indigo-400 rounded cursor-pointer my-1 p-1 pl-2',
+                    ],
+                    'a_attr' => [
+                        'class' => 'text-white',
+                    ],
                 ];
             }
         }
+
         return $files;
     }
-
-    //TODO: set non video files to disabled
-//    private function getVideoFiles($directory)
-//    {
-//        $videoExtensions = ['mp4', 'mov', 'avi', 'wmv', 'mkv']; // Add more video extensions as needed
-//        $files = [];
-//        $items = scandir($directory);
-//        foreach ($items as $item) {
-//            if ($item == '.' || $item == '..') {
-//                continue;
-//            }
-//            $path = $directory . DIRECTORY_SEPARATOR . $item;
-//            if (is_dir($path)) {
-//                $files[] = [
-//                    'id' => uniqid(),
-//                    'text' => $item,
-//                    'children' => $this->getVideoFiles($path)
-//                ];
-//            } else {
-//                $extension = pathinfo($item, PATHINFO_EXTENSION);
-//                if (in_array(strtolower($extension), $videoExtensions)) {
-//                    $files[] = [
-//                        'id' => uniqid(),
-//                        'text' => $item,
-//                    ];
-//                }
-//            }
-//        }
-//        return $files;
-//    }
 
     public function transcode(Transcode $transcode): void
     {

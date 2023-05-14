@@ -5,7 +5,6 @@
         {% include 'transcode/nav.html.twig' %}
         <div class="w-3/4 p-4 m-2 border-l">
 
-
             {{ form_start(form) }}
             <div>
                 <div class="px-4 sm:px-0">
@@ -25,15 +24,25 @@
                             <div class="mt-1 text-sm leading-6 text-white sm:col-span-2 sm:mt-0">
                                 {{ form_row(form.file, {
                                     attr: {
-                                        'class': 'rounded-md bg-indigo-200 text-black sm:p-1 sm:text-sm sm:leading-6',
+                                        'class': 'hidden rounded-md bg-indigo-200 text-black sm:p-1 sm:text-sm sm:leading-6',
                                     }
                                 }) }}
 
-
+{#                                <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />#}
                                 <form id="fileTreeSearchForm">
-                                    <label for="fileTreeSearch"></label>
-                                    <input type="search" id="fileTreeSearch"/>
-                                    <button type="submit">{{ 'common.search'|trans }}</button>
+                                    <div class="flex border-b pb-1 mb-2">
+                                        <div class="flex-1 pr-1">
+                                            <label for="fileTreeSearch"></label>
+                                            <input type="search" id="fileTreeSearch" placeholder="Search for File"
+                                                   class="justify-center rounded-md bg-indigo-600 px-3 py-1.5 w-full text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500"/>
+                                        </div>
+                                        <div>
+                                            <button type="submit" form="fileTreeSearchForm"
+                                                    class="justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                                {{ 'common.search'|trans }}
+                                            </button>
+                                        </div>
+                                    </div>
                                 </form>
                                 <div id="fileTree" data-url="{{ path('transcode_load_source_files') }}"></div>
 
