@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb0dc39c9aff267efcdd3b9a290a9abd",
+    "content-hash": "0d0265acb594ce1ccab64f0452789fdc",
     "packages": [
         {
             "name": "aminyazdanpanah/php-ffmpeg-video-streaming",
@@ -1660,6 +1660,97 @@
                 }
             ],
             "time": "2023-01-30T10:40:19+00:00"
+        },
+        {
+            "name": "jameskitt616/php-f-fmpeg-video-streaming",
+            "version": "0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jameskitt616/PHP-FFmpeg-video-streaming.git",
+                "reference": "80d51ad7baabd93fc27ea42f58124d97a981e7dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jameskitt616/PHP-FFmpeg-video-streaming/zipball/80d51ad7baabd93fc27ea42f58124d97a981e7dc",
+                "reference": "80d51ad7baabd93fc27ea42f58124d97a981e7dc",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0",
+                "php-ffmpeg/php-ffmpeg": "^0.15 || 0.16 || 0.17 || 0.18 || 0.19 || 1.0",
+                "symfony/filesystem": "^4.0 || ^5.0 || ^6.0"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "^3.0@dev",
+                "google/cloud-storage": "dev-main",
+                "microsoft/azure-storage-blob": "dev-master",
+                "phpunit/phpunit": "^8.4"
+            },
+            "suggest": {
+                "aminyazdanpanah/handling-file-uploads": "aminyazdanpanah/handling-file-uploads is suggested for uploading and validating a new video.",
+                "aminyazdanpanah/php-shaka": "aminyazdanpanah/php-shaka is suggested for using DRM and encryption",
+                "aws/aws-sdk-php": "Allow sending stream content to AWS services like S3",
+                "google/cloud-storage": "Allow sending stream content to Google services like Google Storage",
+                "microsoft/azure-storage-blob": "Allow sending stream content to Google services like Google Storage"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Streaming\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Amin Yazdanpanah",
+                    "email": "contact@aminyazdanpanah.com",
+                    "homepage": "https://www.aminyazdanpanah.com"
+                },
+                {
+                    "name": "jameskitt616",
+                    "email": "contact.opsec@simplelogin.com",
+                    "homepage": "https://jameskitt616.one/contact"
+                }
+            ],
+            "description": "📼 PHP FFMpeg - Video Streaming - DASH, HLS",
+            "homepage": "https://github.com/jameskitt616/PHP-FFmpeg-video-streaming",
+            "keywords": [
+                "DRM",
+                "MPD",
+                "adaptive-http-streaming",
+                "amazons3",
+                "clearkey",
+                "cloud",
+                "clouds",
+                "dash",
+                "dynamic-adaptive-streaming-over-http",
+                "encoding",
+                "encryption",
+                "google-cloud-storage",
+                "hls",
+                "http-liv-streaming",
+                "key-rotation",
+                "live-streaming",
+                "m3u8",
+                "microsoft-azure",
+                "mp4",
+                "mpeg-dash",
+                "s3",
+                "streaming",
+                "video",
+                "video-streaming"
+            ],
+            "support": {
+                "issues": "https://github.com/jameskitt616/PHP-FFmpeg-video-streaming/issues",
+                "source": "https://github.com/jameskitt616/PHP-FFmpeg-video-streaming/tree/0.1.2"
+            },
+            "time": "2023-05-15T18:30:06+00:00"
         },
         {
             "name": "laminas/laminas-code",

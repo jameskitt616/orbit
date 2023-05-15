@@ -97,8 +97,12 @@ final readonly class TranscodeService
 
         $representations = $this->getRepresentations($transcode);
 
+        $audioTracks = $video->hls()->getAudioTracks();
+        dump($audioTracks);
+
         $video->hls()
             ->setFormat($format)
+            ->setAudioTracks($audioTracks[1])
             ->addRepresentations($representations)
             ->save($saveLocation);
 
