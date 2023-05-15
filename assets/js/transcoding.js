@@ -42,17 +42,16 @@ transcoding.fileTree = function () {
       currentSelected.removeClass('bg-indigo-500 hover:bg-indigo-300');
       currentSelected.addClass('bg-indigo-300 hover:bg-indigo-200');
 
-      // currentSelected.find('.jstree-anchor').click();
+      currentSelected.find('.jstree-anchor')[0].click();
     }
 
     return false;
   });
 
 
-
   fileTree.on('select_node.jstree', function (e, data) {
-    var customData = data.node.data.file_path;
-    console.log(customData);
+    var filePath = data.node.data.file_path;
+    $('.filePath').val(filePath);
   });
 
   let fileTreeSearch = $('#fileTreeSearch');
