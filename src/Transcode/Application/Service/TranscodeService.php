@@ -40,7 +40,6 @@ final readonly class TranscodeService
                     'id' => uniqid(),
                     'text' => " $item",
                     'type' => 'folder',
-                    //'data' => $path, //TODO: add custom data
                     'children' => $this->loadSourceFiles($path),
                     'icon' => 'fas fa-folder-open',
                     'li_attr' => [
@@ -57,8 +56,9 @@ final readonly class TranscodeService
                     'id' => uniqid(),
                     'text' => " $item",
                     'icon' => 'fas fa-file',
-//                    'data' => ['file_path' => $path],
-//                    'attr' => ['file_path' => $path],
+                    'data' => [
+                        'file_path' => "$path",
+                    ],
                     'li_attr' => [
                         'class' => 'selectableFile bg-indigo-500 hover:bg-indigo-400 rounded cursor-pointer my-1 p-1 pl-2',
                     ],

@@ -34,27 +34,26 @@ transcoding.fileTree = function () {
 
     let currentSelected = $(this);
     if (currentSelected.hasClass('selectableFile')) {
+
       let previousSelected = $('.jstree-node.bg-indigo-300');
       previousSelected.removeClass('bg-indigo-300');
       previousSelected.addClass('bg-indigo-500 hover:bg-indigo-300');
 
       currentSelected.removeClass('bg-indigo-500 hover:bg-indigo-300');
       currentSelected.addClass('bg-indigo-300 hover:bg-indigo-200');
+
+      // currentSelected.find('.jstree-anchor').click();
     }
 
     return false;
   });
 
-  //TODO: probably not needed?
-  // fileTree.on("changed.jstree", function (e, data) {
-  //   //   if (data.node.type === 'folder') {
-  //   //     return false;
-  //   //   }
-  //   // console.log("The selected nodes are:");
-  //   // console.log(data.selected);
-  //   console.log(data.node.data);
-  // });
 
+
+  fileTree.on('select_node.jstree', function (e, data) {
+    var customData = data.node.data.file_path;
+    console.log(customData);
+  });
 
   let fileTreeSearch = $('#fileTreeSearch');
   fileTreeSearch.on('input', function (e) {
