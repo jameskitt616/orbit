@@ -26,26 +26,39 @@ transcoding.fileTree = function () {
         'url': url,
         'dataType': 'json'
       }
-    }
+    },
   });
 
   fileTree.on('click', '.jstree-node', function (e) {
     fileTree.jstree(true).toggle_node(e.target);
+
+    let currentSelected = $(this);
+    if (currentSelected.hasClass('selectableFile')) {
+      let previousSelected = $('.jstree-node.bg-indigo-300');
+      previousSelected.removeClass('bg-indigo-300');
+      previousSelected.addClass('bg-indigo-500 hover:bg-indigo-300');
+
+      currentSelected.removeClass('bg-indigo-500 hover:bg-indigo-300');
+      currentSelected.addClass('bg-indigo-300 hover:bg-indigo-200');
+    }
+
     return false;
   });
 
-  fileTree.on("changed.jstree", function (e, data) {
-    //   if (data.node.type === 'folder') {
-    //     return false;
-    //   }
-    console.log("The selected nodes are:");
-    console.log(data.selected);
-  });
+  //TODO: probably not needed?
+  // fileTree.on("changed.jstree", function (e, data) {
+  //   //   if (data.node.type === 'folder') {
+  //   //     return false;
+  //   //   }
+  //   // console.log("The selected nodes are:");
+  //   // console.log(data.selected);
+  //   console.log(data.node.data);
+  // });
+
 
   let fileTreeSearch = $('#fileTreeSearch');
-  fileTreeSearch.on('input',function(e){
+  fileTreeSearch.on('input', function (e) {
     $("#fileTree").jstree(true).search(fileTreeSearch.val());
-    console.log(fileTreeSearch.val())
   });
 }
 

@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace App\Transcode\Application\Service;
 
 use App\Transcode\Domain\Enum\Format;
-use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Model\VideoProperty;
 use App\Transcode\Domain\Repository\TranscodeRepository;
 use FFMpeg\FFMpeg;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use SplFileInfo;
 use Streaming\FFMpeg as SFFMpeg;
 use Streaming\Format\HEVC;
 use Streaming\Format\StreamFormat;
@@ -44,7 +40,7 @@ final readonly class TranscodeService
                     'id' => uniqid(),
                     'text' => " $item",
                     'type' => 'folder',
-//                    'data' => $path,
+                    //'data' => $path, //TODO: add custom data
                     'children' => $this->loadSourceFiles($path),
                     'icon' => 'fas fa-folder-open',
                     'li_attr' => [
@@ -61,9 +57,10 @@ final readonly class TranscodeService
                     'id' => uniqid(),
                     'text' => " $item",
                     'icon' => 'fas fa-file',
-                    'data' => $path,
+//                    'data' => ['file_path' => $path],
+//                    'attr' => ['file_path' => $path],
                     'li_attr' => [
-                        'class' => 'bg-indigo-500 hover:bg-indigo-400 rounded cursor-pointer my-1 p-1 pl-2',
+                        'class' => 'selectableFile bg-indigo-500 hover:bg-indigo-400 rounded cursor-pointer my-1 p-1 pl-2',
                     ],
                     'a_attr' => [
                         'class' => 'text-white',
