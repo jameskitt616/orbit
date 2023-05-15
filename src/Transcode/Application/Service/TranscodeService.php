@@ -82,12 +82,8 @@ final readonly class TranscodeService
             'ffmpeg.threads' => 12, //TODO: maybe configure in admin system settings? -> not sure if this has any impact
         ];
 
-        //TODO: throw exceptions on issues like file does not exist anymore
-        //TODO: or try/catch so can display errors
-
         $ffmpeg = FFMpeg::create($config);
         $sFfmpeg = new SFFMpeg($ffmpeg);
-        //        $video = $sFfmpeg->openAdvanced([$transcode->getFilePath()]);
         $video = $sFfmpeg->open($transcode->getFilePath());
 
         $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $_ENV['STREAM_FILENAME'];
@@ -99,43 +95,8 @@ final readonly class TranscodeService
             $this->transcodeRepository->save($transcode);
         });
 
-        //        dump($video->filters()->custom('[0:v]'));
         $representations = $this->getRepresentations($transcode);
 
-        //        shell_exec('screen -dmS $name_of_screen $command');
-
-        //        $cmd = 'cp /orbit/videos/beat.mkv /orbit/videos/beat2.mkv';
-        //        $outputfile = '/asd';
-
-        //        exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
-        //        exec(sprintf("%s > %s 2>&1 & echo $!", $cmd, $outputfile),$pidArr);
-        //        dump($pidArr);
-
-        //        $sFfmpeg->getFFProbe()->getMapper()
-
-        //        SFFMpeg::create()
-        //        $streams = FFMpeg::create()
-        //            ->open($transcode->getFilePath());
-
-        //        dump($streams->getStreams()->all());
-        //        dump($streams->getFFProbe());
-        //        $general = $streams->general();
-        //        $video = $streams->videos()->first();
-        //        $audio = $streams->audios()->first();
-
-        //        $ffprobe = FFProbe::create();
-        //        dump($ffprobe
-        //            ->format($transcode->getFilePath())
-        //            ->all());
-
-        //        $video
-        //            ->map([$transcode->getAudioTrackNumber() . ':a'], new Aac(), $saveLocation)
-        //            ->map(['resultv'], $format, $saveLocation)
-        //            ->save();
-        //        dump($video->getFinalCommand());
-
-        //        $transcode->getAudioTrackNumber();
-        //        $transcode->getSubtitleNumber();
         $video->hls()
             ->setFormat($format)
             ->addRepresentations($representations)
