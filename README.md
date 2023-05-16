@@ -44,16 +44,7 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 - [ ] Providing estimated time of arrival (ETA) for transcoding processes.
 - [ ] Enabling the ability to start transcoding from a specific timestamp.
 
-# Docs
-
-1. [Build options](docs/build.md)
-2. [Using Symfony Docker with an existing project](docs/existing-project.md)
-3. [Support for extra services](docs/extra-services.md)
-4. [Deploying in production](docs/production.md)
-5. [Debugging with Xdebug](docs/xdebug.md)
-6. [TLS Certificates](docs/tls.md)
-7. [Using a Makefile](docs/makefile.md)
-8. [Troubleshooting](docs/troubleshooting.md)
+> **_NOTE:_** If there is a significant demand for it, I may consider learning Rust, C++, or another suitable programming language to develop a program or application for controlling the Orbit system within VR. This would allow users to have conveniently manage the Streams without needing to leave the VR environment.
 
 # License
 
