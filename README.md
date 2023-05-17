@@ -1,3 +1,5 @@
+> **_NOTE:_** This program is under ongoing development, not ready to use. Ignore the rest of the Readme
+
 <img src="https://github.com/jameskitt616/orbit/blob/main/assets/images/OrbitLogo_500.png?raw=true" alt="Orbit" width="100"/>
 
 # Orbit
@@ -44,7 +46,7 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 - [ ] Providing estimated time of arrival (ETA) for transcoding processes.
 - [ ] Enabling the ability to start transcoding from a specific timestamp.
 
-> **_NOTE:_** If there is a significant demand for it, I may consider learning Rust, C++, or another suitable programming language to develop a program or application for controlling the Orbit system within VR. This would allow users to have conveniently manage the Streams without needing to leave the VR environment.
+> **_NOTE:_** If there is a significant demand for it, I may consider learning Rust, C++, or another suitable programming language to develop a program or application for controlling the Orbit system from within VR. This would allow users to conveniently manage Streams without needing to leave the VR environment.
 
 # License
 
