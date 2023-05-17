@@ -1,10 +1,19 @@
-> **_NOTE:_** This program is under ongoing development, not ready to use. Ignore the rest of the Readme
+> ## **_NOTE:_** This program is under ongoing development, not ready to use. Ignore the rest of the Readme
 
 <img src="./assets/images/OrbitLogo_500.png" alt="Orbit" width="100"/>
 
 # Orbit
 
 A [Docker](https://www.docker.com/) and [PHP](https://www.php.net/)-[Symfony](https://symfony.com) based application, using [FFmpeg](https://ffmpeg.org/) to transcode video files.
+
+# Contents
+
+ - [Project description](#project-description)
+ - [Installation](#installation)
+ - [Features](#features)
+ - [Planned Features](#planned-features)
+ - [License](#license)
+ - [Credits](#credits)
 
 # Project description
 The objective of this project is to develop an optimized video transcoding and streaming system. This system will be capable of handling video files of different formats and sizes, converting them into a specific format, and generating .m3u8 stream files to facilitate seamless internet streaming.
@@ -19,7 +28,7 @@ To facilitate management of the transcoding and streaming process, the system pr
 
 In summary, the goal of this project is to deliver an efficient solution for transcoding and streaming video files.
 
-# Getting Started
+# Installation
 
 1. If not already done, [install Docker and Docker Compose (v2.10+)](https://docs.docker.com/engine/install/)
 2. Copy and configure your docker compose file `curl https://raw.githubusercontent.com/jameskitt616/orbit/main/docker-compose.yml`
