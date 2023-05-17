@@ -86,6 +86,7 @@ final readonly class TranscodeService
         $sFfmpeg = new SFFMpeg($ffmpeg);
         $video = $sFfmpeg->open($transcode->getFilePath());
 
+//        $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath();
         $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $_ENV['STREAM_FILENAME'];
 
         $format = $this->getFormat(Format::HEVC->value);
@@ -97,17 +98,19 @@ final readonly class TranscodeService
 
         $representations = $this->getRepresentations($transcode);
 
-        $audioTracks = $video->hls()->getAudioTracks();
-        dump($audioTracks);
+//        $audioTracks = $video->hls()->getAudioTracks();
+//        dump($audioTracks);
+        dump($saveLocation);
 
         $video->hls()
             ->setFormat($format)
-            ->setAudioTracks($audioTracks[1])
+//            ->setAudioTracks($audioTracks[1])
             ->addRepresentations($representations)
             ->save($saveLocation);
 
         //        $inputFile = escapeshellarg($transcode->getFilePath());
         //        $saveLocation = escapeshellarg($saveLocation);
+        //        $command = "ffmpeg' '-y' '-i' 'video.mkv' '-c:v' 'libx265' '-c:a' 'aac' '-keyint_min' '25' '-g' '250' '-sc_threshold' '40' '-hls_list_size' '0' '-hls_time' '10' '-hls_allow_cache' '1' '-hls_segment_type' 'mpegts' '-hls_fmp4_init_filename' 'stream_%v_1080p_init.mp4' '-hls_segment_filename' '/orbit/transcode/1188814234/stream_%v_1080p_%04d.ts' '-master_pl_name' 'master.m3u8' '-s:v:0' '1920x1080' '-b:v:0' '4096k' '-b:a:0' 'k' '-b:a:1' 'k' '-f' 'hls' '-var_stream_map' 'a:0,agroup:audio,language:ger,default:yes a:1,agroup:audio,language:eng v:0,agroup:audio' '-map' '0:v:0' '-map' '0:a:0' '-map' '0:a:1' '-strict' '-2' '-threads' '12' '/orbit/transcode/1188814234/stream_%v_1080p.m3u8";
         //        $command = "ffmpeg -i /orbit/videos/biscuits.mp4 -map 0:0 -map 0:1 -c:v h264 -c:a mp3 /orbit/transcode/1832637644/out.mp4 >/dev/null 2>&1 & echo $!";
         //        $command = "ffmpeg -i $inputFile -c:v libx264 -c:a mp3 -map 0:v:0 -map 0:a:1 -hls_time 10 -hls_list_size 0 $saveLocation.m3u8";
         //        $command = "ffmpeg -i $inputFile -c:v libx264 -c:a aac -map 0:v:0 -map 0:a:1 -hls_time 10 -hls_list_size 0 $saveLocation.m3u8";
