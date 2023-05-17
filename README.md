@@ -39,7 +39,7 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 
 ## Planned Features
 
-- [ ] Selecing Audio Tracks (currently being worked on)
+- [ ] Selecting Audio Tracks (currently being worked on)
 - [ ] Locking streams behind API keys, allowing for multiple configurable keys per stream.
 - [ ] Enabling users to upload video files through a user-friendly web interface (Web-UI).
 - [ ] Optimizing the system for mobile view and enabling installation via Browser Web Progressive App (WPA).
