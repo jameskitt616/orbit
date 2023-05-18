@@ -14,19 +14,19 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push app_php image
         run: |
-          docker buildx build --push -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_php:latest -f Dockerfile .
+          docker buildx build --push -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ github.event.repository.name }}_php:main -f Dockerfile .
 
       - name: Build and push app_caddy image
         run: |
-          docker buildx build --push -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_caddy:latest -f Dockerfile --target app_caddy
+          docker buildx build --push -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ github.event.repository.name }}_caddy:main -f Dockerfile --target app_caddy
