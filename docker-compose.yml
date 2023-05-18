@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   php:
-    image: ghcr.io/jameskitt616/orbit_php:latest
+    image: ghcr.io/jameskitt616/orbit_php:main
     restart: unless-stopped
     depends_on:
       - message_transport
@@ -21,7 +21,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-orbit}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-orbit}?serverVersion=${POSTGRES_VERSION:-15}&charset=${POSTGRES_CHARSET:-utf8}
 
   caddy:
-    image: ghcr.io/jameskitt616/orbit_caddy:latest
+    image: ghcr.io/jameskitt616/orbit_caddy:main
     depends_on:
       - php
     environment:
