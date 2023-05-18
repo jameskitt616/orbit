@@ -12,6 +12,7 @@ A [Docker](https://www.docker.com/) and [PHP](https://www.php.net/)-[Symfony](ht
  - [Installation](#installation)
  - [Features](#features)
  - [Planned Features](#planned-features)
+ - [Screenshots](#screenshots)
  - [License](#license)
  - [Credits](#credits)
 
@@ -57,6 +58,13 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 - [ ] Enabling the ability to start transcoding from a specific timestamp.
 
 > **_NOTE:_** If there is a significant demand for it, I may consider learning Rust, C++, or another suitable programming language to develop a program or application for controlling the Orbit system from within VR. This would allow users to conveniently manage Streams without needing to leave the VR environment.
+
+# Screenshots
+
+![Transcode List](docker/screenshots/transcode_list.png)
+![File picker](docker/screenshots/filepicker.png)
+![Transcode Settings](docker/screenshots/transcode_settings.png)
+![Stream](docker/screenshots/stream.png)
 
 # License
 
