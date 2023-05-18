@@ -25,8 +25,8 @@ jobs:
 
       - name: Build and push app_php image
         run: |
-          docker buildx build --push -t ghcr.io/${{ github.repository_owner }}/${{ github.repository_name }}_php:latest -f Dockerfile .
+          docker buildx build --push -t ghcr.io/${{ github.repository_owner }}/${{ github.repository_name }}/orbit_php:latest -f Dockerfile .
 
       - name: Build and push app_caddy image
         run: |
-          docker buildx build --push -t ghcr.io/${{ github.repository_owner }}/${{ github.repository_name }}_caddy:latest -f Dockerfile --target app_caddy
+          docker buildx build --push -t ghcr.io/${{ github.repository_owner }}/${{ github.repository_name }}/orbit_caddy:latest -f Dockerfile --target app_caddy
