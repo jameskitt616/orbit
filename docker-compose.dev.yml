@@ -2,26 +2,31 @@ version: "3.4"
 
 services:
   php:
-    image: ghcr.io/jameskitt616/orbit_php:latest
+    build:
+      context: .
+      target: app_php
+      args:
+        SYMFONY_VERSION: ${SYMFONY_VERSION:-}
+        STABILITY: ${STABILITY:-stable}
     restart: unless-stopped
     depends_on:
       - message_transport
     volumes:
       - ./data/php_socket:/var/run/php
-      - ./data/live/transcode:/orbit/transcode
-      # Set this to the path where to find your video files 
-      - /path/to/videos:/orbit/videos
+      - /home/james/docker/data/video_data/live:/orbit/transcode
+      - /home/james/Videos/test:/orbit/videos
     healthcheck:
       interval: 10s
       timeout: 3s
       retries: 3
       start_period: 30s
     environment:
-      #TODO: You should definitely change the password in production
       DATABASE_URL: postgresql://${POSTGRES_USER:-orbit}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-orbit}?serverVersion=${POSTGRES_VERSION:-15}&charset=${POSTGRES_CHARSET:-utf8}
 
   caddy:
-    image: ghcr.io/jameskitt616/orbit_caddy:latest
+    build:
+      context: .
+      target: app_caddy
     depends_on:
       - php
     environment:
@@ -31,26 +36,27 @@ services:
       - ./data/php_socket:/var/run/php
       - ./data/caddy_data:/data
       - ./data/caddy_config:/config
-      - ./data/live/transcode:/orbit/transcode
+      - /home/james/docker/data/video_data/live:/orbit/transcode
     ports:
       - "80:80"
   
+  ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-15}-alpine
-    restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-orbit}
-      #TODO: You should definitely change the password in production
+      # You should definitely change the password in production
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
       POSTGRES_USER: ${POSTGRES_USER:-orbit}
     ports:
       - "5433:5432"
     volumes:
       - ./data/database_data:/var/lib/postgresql/data:rw
+  ###< doctrine/doctrine-bundle ###
 
   message_transport:
-    image: redis:${REDIS_VERSION:-7.0.11}-alpine
-    restart: unless-stopped
+    image: redis:7.0.11-alpine
+    restart: on-failure
     volumes:
       - ./data/redis-data:/data
     ports:
