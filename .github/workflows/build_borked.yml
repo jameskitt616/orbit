@@ -41,8 +41,8 @@ jobs:
 
       - name: Build and push app_php image
         run: |
-          docker buildx build --push -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ github.event.repository.name }}_php:latest -f Dockerfile --target app_php
+          docker buildx build --push -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ github.event.repository.name }}_php:latest -f Dockerfile . --target app_php
 
       - name: Build and push app_caddy image
         run: |
-          docker buildx build --push -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ github.event.repository.name }}_caddy:latest -f Dockerfile --target app_caddy
+          docker buildx build --push -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ github.event.repository.name }}_caddy:latest -f Dockerfile . --target app_caddy
