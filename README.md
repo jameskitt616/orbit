@@ -4,39 +4,53 @@
 
 # Orbit
 
-A [Docker](https://www.docker.com/) and [PHP](https://www.php.net/)-[Symfony](https://symfony.com) based application, using [FFmpeg](https://ffmpeg.org/) to transcode video files.
+A [Docker](https://www.docker.com/) and [PHP](https://www.php.net/)-[Symfony](https://symfony.com) based application,
+using [FFmpeg](https://ffmpeg.org/) to transcode video files.
 
 # Contents
 
- - [Project description](#project-description)
- - [Installation](#installation)
- - [Features](#features)
- - [Planned Features](#planned-features)
- - [Screenshots](#screenshots)
- - [License](#license)
- - [Credits](#credits)
+- [Project description](#project-description)
+- [Installation](#installation)
+- [Features](#features)
+- [Planned Features](#planned-features)
+- [Screenshots](#screenshots)
+- [License](#license)
+- [Credits](#credits)
 
 # Project description
-The objective of this project is to develop an optimized video transcoding and streaming system. This system will be capable of handling video files of different formats and sizes, converting them into a specific format, and generating .m3u8 stream files to facilitate seamless internet streaming.
 
-The system has been designed to allow concurrent processing of multiple video files. It utilizes a combination of open-source tools and custom scripts to handle the transcoding processes efficiently.
+The objective of this project is to develop an optimized video transcoding and streaming system. This system will be
+capable of handling video files of different formats and sizes, converting them into a specific format, and generating
+.m3u8 stream files to facilitate seamless internet streaming.
 
-The workflow of the system begins with users uploading video files to a designated server directory. In the future, this process can be accomplished through a user-friendly web interface. Users can browse the uploaded files and select the ones they want to transcode. An interactive form is available to guide users through the selection of the file, desired video qualities, audio track, and format.
+The system has been designed to allow concurrent processing of multiple video files. It utilizes a combination of
+open-source tools and custom scripts to handle the transcoding processes efficiently.
 
-Upon detection of a new file, the system automatically initiates the transcoding process. Please note that the current system is limited to processing 20 concurrent transcoding processes. Any additional processes beyond this limit will be queued and processed subsequently.
+The workflow of the system begins with users uploading video files to a designated server directory. In the future, this
+process can be accomplished through a user-friendly web interface. Users can browse the uploaded files and select the
+ones they want to transcode. An interactive form is available to guide users through the selection of the file, desired
+video qualities, audio track, and format.
 
-To facilitate management of the transcoding and streaming process, the system provides a user-friendly web-based interface. Additionally, users can access various settings to customize their experience.
+Upon detection of a new file, the system automatically initiates the transcoding process. Please note that the current
+system is limited to processing 20 concurrent transcoding processes. Any additional processes beyond this limit will be
+queued and processed subsequently.
+
+To facilitate management of the transcoding and streaming process, the system provides a user-friendly web-based
+interface. Additionally, users can access various settings to customize their experience.
 
 In summary, the goal of this project is to deliver an efficient solution for transcoding and streaming video files.
 
 # Installation
 
 1. If not already done, [install Docker and Docker Compose (v2.10+)](https://docs.docker.com/engine/install/)
-2. Copy and configure your docker compose file `curl https://raw.githubusercontent.com/jameskitt616/orbit/main/docker-compose.yml`
-3. Run `docker compose up` (the logs will be displayed in the current shell)
-4. Open `http://localhost` or `http://<ip-of-your-server>` in your favorite web browser (make sure to properly configure the firewall of your server)
-5. Run `docker compose up -d` to run the Docker containers in detached deamon mode.
-6. Don't forget to setup some reverse proxy (just like Caddy or Nginx) with SSL/TLS Certificates
+2. Copy and configure your docker compose
+   file `curl -L -o docker-compose.yml https://raw.githubusercontent.com/jameskitt616/orbit/main/docker-compose.prod.yml`
+3. Update the passwords and storage paths in the docker compose file
+4. Run `docker compose up` (the logs will be displayed in the current shell)
+5. Open `http://localhost` or `http://<ip-of-your-server>` in your favorite web browser (make sure to properly configure
+   the firewall of your server)
+6. Run `docker compose up -d` to run the Docker containers in detached daemon mode
+7. Don't forget to setup some reverse proxy (just like Caddy or Nginx) with SSL/TLS Certificates
 
 # Features
 
@@ -57,7 +71,9 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 - [ ] Providing estimated time of arrival (ETA) for transcoding processes.
 - [ ] Enabling the ability to start transcoding from a specific timestamp.
 
-> **_NOTE:_** If there is a significant demand for it, I may consider learning Rust, C++, or another suitable programming language to develop a program or application for controlling the Orbit system from within VR. This would allow users to conveniently manage Streams without needing to leave the VR environment.
+> **_NOTE:_** If there is a significant demand for it, I may consider learning Rust, C++, or another suitable
+> programming language to develop a program or application for controlling the Orbit system from within VR. This would
+> allow users to conveniently manage Streams without needing to leave the VR environment.
 
 # Screenshots
 
@@ -73,7 +89,9 @@ Orbit is available under the MIT License.
 # Credits
 
 Created by [jameskitt616](https://jameskitt616.one/).
+
 ### Special thanks to:
+
 * [Symfony](https://github.com/symfony/symfony)
 * [symfony-docker](https://github.com/dunglas/symfony-docker)
 * [PHP-FFmpeg-video-streaming](https://github.com/hadronepoch/PHP-FFmpeg-video-streaming)

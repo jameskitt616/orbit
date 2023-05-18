@@ -2,31 +2,31 @@ version: "3.4"
 
 services:
   php:
-    build:
-      context: .
-      target: app_php
-      args:
-        SYMFONY_VERSION: ${SYMFONY_VERSION:-}
-        STABILITY: ${STABILITY:-stable}
+    image: ghcr.io/jameskitt616/orbit_php:main
     restart: unless-stopped
     depends_on:
       - message_transport
     volumes:
       - ./data/php_socket:/var/run/php
-      - /home/james/docker/data/video_data/live:/orbit/transcode
-      - /home/james/Videos/test:/orbit/videos
+      - ./data/live/transcode:/orbit/transcode
+      # Set this to the path where to find your video files 
+      - /path/to/videos:/orbit/videos
     healthcheck:
       interval: 10s
       timeout: 3s
       retries: 3
       start_period: 30s
     environment:
+      #TODO: You should definitely change the password in production
       DATABASE_URL: postgresql://${POSTGRES_USER:-orbit}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-orbit}?serverVersion=${POSTGRES_VERSION:-15}&charset=${POSTGRES_CHARSET:-utf8}
+      # dev and prod (for production set to prod)
+      APP_ENV: prod
+      # 0 and 1 (for production set to 0)
+      APP_DEBUG: 0
+      PHP_DATE_TIMEZONE: ${PHP_DATE_TIMEZONE:-UTC}
 
   caddy:
-    build:
-      context: .
-      target: app_caddy
+    image: ghcr.io/jameskitt616/orbit_caddy:main
     depends_on:
       - php
     environment:
@@ -36,27 +36,26 @@ services:
       - ./data/php_socket:/var/run/php
       - ./data/caddy_data:/data
       - ./data/caddy_config:/config
-      - /home/james/docker/data/video_data/live:/orbit/transcode
+      - ./data/live/transcode:/orbit/transcode
     ports:
       - "80:80"
   
-  ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-15}-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-orbit}
-      # You should definitely change the password in production
+      #TODO: You should definitely change the password in production
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
       POSTGRES_USER: ${POSTGRES_USER:-orbit}
     ports:
       - "5433:5432"
     volumes:
       - ./data/database_data:/var/lib/postgresql/data:rw
-  ###< doctrine/doctrine-bundle ###
 
   message_transport:
-    image: redis:7.0.11-alpine
-    restart: on-failure
+    image: redis:${REDIS_VERSION:-7.0.11}-alpine
+    restart: unless-stopped
     volumes:
       - ./data/redis-data:/data
     ports:
