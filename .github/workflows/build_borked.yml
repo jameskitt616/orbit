@@ -1,4 +1,4 @@
-name: Build and Push Docker Images (not working)
+name: Build Images (not working)
 
 on:
   push:
