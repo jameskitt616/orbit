@@ -78,7 +78,7 @@ final readonly class TranscodeService
         $config = [
             'ffmpeg.binaries' => '/usr/bin/ffmpeg',
             'ffprobe.binaries' => '/usr/bin/ffprobe',
-            'timeout' => 18000, //TODO: probably increase timeout to max length of movie. default 5h?
+            'timeout' => 0,
             'ffmpeg.threads' => 12, //TODO: maybe configure in admin system settings? -> not sure if this has any impact
         ];
 
@@ -97,19 +97,25 @@ final readonly class TranscodeService
 
         $representations = $this->getRepresentations($transcode);
 
-        $video->hls()
-            ->setFormat($format)
-            ->addRepresentations($representations)
-            ->save($saveLocation);
+//        $video->hls()
+//            ->setFormat($format)
+//            ->addRepresentations($representations)
+//            ->save($saveLocation);
 
-        //        $inputFile = escapeshellarg($transcode->getFilePath());
-        //        $saveLocation = escapeshellarg($saveLocation);
+                $inputFile = escapeshellarg($transcode->getFilePath());
+                $saveLocation1 = $saveLocation . '_%v_1080p.m3u8';
+                $saveLocation2 = $saveLocation . '_%v_1080p_%04d.ts';
+//                $saveLocation = escapeshellarg($saveLocation);
+//                dump($inputFile, $saveLocation);
+                $command = "ffmpeg -y -i $inputFile -c:v libx265 -c:a aac -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename stream_%v_1080p_init.mp4 -hls_segment_filename $saveLocation2 -master_pl_name master.m3u8 -s:v:0 1920x1080 -b:v:0 4096k -f hls -strict -2 -threads 12 $saveLocation1";
+//                $command = "ffmpeg -y -i $inputFile -c:v libx265 -c:a aac -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename stream_%v_1080p_init.mp4 -hls_segment_filename '$saveLocation%v_1080p_%04d.ts' -master_pl_name master.m3u8 -s:v:0 1920x1080 -b:v:0 4096k -f hls -strict -2 -threads 12 '$saveLocation%v_1080p.m3u8'";
         //        $command = "ffmpeg -i /orbit/videos/biscuits.mp4 -map 0:0 -map 0:1 -c:v h264 -c:a mp3 /orbit/transcode/1832637644/out.mp4 >/dev/null 2>&1 & echo $!";
         //        $command = "ffmpeg -i $inputFile -c:v libx264 -c:a mp3 -map 0:v:0 -map 0:a:1 -hls_time 10 -hls_list_size 0 $saveLocation.m3u8";
         //        $command = "ffmpeg -i $inputFile -c:v libx264 -c:a aac -map 0:v:0 -map 0:a:1 -hls_time 10 -hls_list_size 0 $saveLocation.m3u8";
         //        $command = "ffmpeg -i input_file.mp4 -c:v libx264 -preset slow -crf 22 -c:a copy $saveLocation >/dev/null 2>&1 & echo $!";
-        //        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath());
-        //        $output = shell_exec($command);
+                shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath());
+                $output = shell_exec($command);
+                dump($output);
         //        $pid = (int)$output;
         //
         //        do {
