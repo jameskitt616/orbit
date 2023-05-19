@@ -11,6 +11,7 @@ using [FFmpeg](https://ffmpeg.org/) to transcode video files.
 
 - [Project description](#project-description)
 - [Installation](#installation)
+- [Updating](#updating)
 - [Features](#features)
 - [Planned Features](#planned-features)
 - [Screenshots](#screenshots)
@@ -50,7 +51,13 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 5. Open `http://localhost` or `http://<ip-of-your-server>` in your favorite web browser (make sure to properly configure
    the firewall of your server)
 6. Run `docker compose up -d` to run the Docker containers in detached daemon mode
-7. Don't forget to setup some reverse proxy (just like Caddy or Nginx) with SSL/TLS Certificates
+7. Run `chmod 707 -R data/live/transcode/` as *root* in the directory containing your Docker Compose file
+8. Don't forget to set up some reverse proxy (just like Caddy or Nginx) with SSL/TLS Certificates
+
+# Updating
+1. Run `docker compose pull && docker compose up -d && docker image prune -f`
+
+> **_NOTE:_** `docker image prune -f` removes unused Docker images from your local machine. The -f flag forces the deletion without confirmation prompts.
 
 # Features
 

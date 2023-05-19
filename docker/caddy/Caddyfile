@@ -1,5 +1,6 @@
 :80 {
     log
+
     handle_path /live* {
         root * /orbit/transcode
         file_server browse
@@ -10,5 +11,6 @@
         php_fastcgi unix//var/run/php/php-fpm.sock
         encode zstd gzip
         file_server
+        header X-Forwarded-Proto {scheme}
     }
 }
