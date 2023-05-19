@@ -115,10 +115,10 @@ RUN set -eux; \
 		chmod +x bin/console; sync; \
     fi
 
-RUN mkdir -p /orbit/transcode
-RUN mkdir /orbit/videos
-#RUN chown -R www-data:www-data /orbit/transcode
-RUN chmod -R 707 /orbit/transcode
+#RUN mkdir -p /orbit/transcode
+#RUN mkdir /orbit/videos
+##RUN chown -R www-data:www-data /orbit/transcode
+#RUN chmod -R 707 /orbit/transcode
 RUN yarn install
 RUN yarn encore dev
 
