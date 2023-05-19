@@ -4,9 +4,11 @@ framework:
         # failure_transport: failed
 
         transports:
-            # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_CONSUMER_NAME)%'
-             async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    queue_name: 'messenger_queue'
+                    name: '%env(MESSENGER_CONSUMER_NAME)%'
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 
