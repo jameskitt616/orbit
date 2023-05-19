@@ -1,6 +1,31 @@
 #!/bin/sh
 set -e
 
+HOST_PATH="$HOST_PATH_ENV"
+
+#	mkdir -p /orbit/transcode
+#	mkdir /orbit/videos
+#	chmod -R 707 /orbit/transcode
+#	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX /orbit/transcode
+#	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX /orbit/transcode
+
+# Check if the path exists on the host
+if [ -d "$HOST_PATH" ]; then
+    echo "Path $HOST_PATH exists on the host"
+else
+    echo "Path $HOST_PATH does not exist on the host"
+fi
+
+# Check if the path has read, write, and execute permissions
+if [ -r "$HOST_PATH" ] && [ -w "$HOST_PATH" ] && [ -x "$HOST_PATH" ]; then
+    echo "Correct permissions are set for $HOST_PATH"
+else
+    echo "Incorrect permissions for $HOST_PATH. Adjusting permissions..."
+    chmod 777 "$HOST_PATH"
+fi
+
+
+
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
 	set -- php-fpm "$@"
@@ -60,12 +85,6 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 			bin/console doctrine:migrations:migrate --no-interaction
 		fi
 	fi
-
-#	mkdir -p /orbit/transcode
-#	mkdir /orbit/videos
-#	chmod -R 707 /orbit/transcode
-#	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX /orbit/transcode
-#	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX /orbit/transcode
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
