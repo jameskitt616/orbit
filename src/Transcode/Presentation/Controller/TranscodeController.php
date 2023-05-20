@@ -123,4 +123,13 @@ final class TranscodeController extends AbstractController
 
         return $this->redirectToRoute('transcode_list');
     }
+
+    //TODO: temp debug method
+    #[Route(path: '/show/{transcode}/go', name: 'transcode_go', methods: ['GET'])]
+    public function go(Transcode $transcode): Response
+    {
+        $this->transcodeService->transcode($transcode);
+
+        return $this->redirectToRoute('transcode_list');
+    }
 }

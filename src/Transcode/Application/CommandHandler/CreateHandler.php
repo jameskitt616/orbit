@@ -41,6 +41,6 @@ readonly class CreateHandler
 
         $command->transcode = $transcode;
 
-        $this->messageBus->dispatch(new Trigger($transcode->getId()));
+//        $this->messageBus->dispatch(new Trigger($transcode->getId()));
     }
 }
