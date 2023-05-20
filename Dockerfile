@@ -117,6 +117,7 @@ RUN set -eux; \
 
 RUN mkdir -p /orbit/transcode
 RUN mkdir /orbit/videos
+RUN chmod 707 /orbit/transcode
 RUN yarn install
 RUN yarn encore dev
 
