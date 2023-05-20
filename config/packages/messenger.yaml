@@ -5,10 +5,10 @@ framework:
 
         transports:
             async:
-                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                dsn: "%env(MESSENGER_TRANSPORT_DSN)%?stream=transcode_queue"
                 options:
-                    queue_name: 'messenger_queue'
-                    name: '%env(MESSENGER_CONSUMER_NAME)%'
+                    stream: transcode_queue
+                    consumer: '%env(MESSENGER_CONSUMER_NAME)%'
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 
