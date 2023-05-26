@@ -5,10 +5,17 @@ framework:
 
         transports:
             async:
-                dsn: "%env(MESSENGER_TRANSPORT_DSN)%?stream=transcode_queue"
-                options:
-                    stream: transcode_queue
-                    consumer: '%env(MESSENGER_CONSUMER_NAME)%'
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+#            async: 'in-memory://'
+#            async:
+#                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+#                options:
+#                    table_name: messenger_messages
+#            async:
+#                dsn: "%env(MESSENGER_TRANSPORT_DSN)%?stream=transcode_queue"
+#                options:
+#                    stream: transcode_queue
+#                    consumer: '%env(MESSENGER_CONSUMER_NAME)%'
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 

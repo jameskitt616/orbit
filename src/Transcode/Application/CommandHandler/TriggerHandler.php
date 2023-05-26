@@ -9,14 +9,15 @@ use App\Transcode\Application\Service\TranscodeService;
 use App\Transcode\Domain\Repository\TranscodeRepository;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class TriggerHandler extends AsMessageHandler
+//class TriggerHandler extends AsMessageHandler
+readonly class TriggerHandler
 {
     public function __construct(
-        private readonly TranscodeRepository $transcodeRepository,
-        private readonly TranscodeService    $transcodeService,
+        private TranscodeRepository $transcodeRepository,
+        private TranscodeService    $transcodeService,
     )
     {
-        parent::__construct();
+//        parent::__construct();
     }
 
     public function __invoke(Trigger $command): void

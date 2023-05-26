@@ -6,6 +6,7 @@ services:
     restart: unless-stopped
     depends_on:
       - message_transport
+      - rabbitmq
     volumes:
       - ./data/php_socket:/var/run/php
       - ./data/live/transcode:/orbit/transcode
@@ -60,3 +61,12 @@ services:
       - ./data/redis-data:/data
     ports:
       - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - 5671:5672
+      - 15671:15672

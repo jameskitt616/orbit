@@ -10,7 +10,9 @@ services:
         STABILITY: ${STABILITY:-stable}
     restart: unless-stopped
     depends_on:
+      - database
       - message_transport
+      - rabbitmq
     volumes:
       - ./data/php_socket:/var/run/php
       - /home/james/docker/data/video_data/live:/orbit/transcode
@@ -66,3 +68,12 @@ services:
       - ./data/redis-data:/data
     ports:
       - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - 5671:5672
+      - 15671:15672

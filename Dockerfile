@@ -54,6 +54,7 @@ RUN set -eux; \
 		opcache \
 		zip \
 		redis \
+		amqp \
     ;
 
 ###> recipes ###
