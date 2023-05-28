@@ -5,7 +5,7 @@ framework:
 
         transports:
             async:
-                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                dsn: '%env(RABBITMQ_URL)%'
 #            async: 'in-memory://'
 #            async:
 #                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
