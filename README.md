@@ -16,7 +16,7 @@ using [FFmpeg](https://ffmpeg.org/) to transcode video files.
 - [Planned Features](#planned-features)
 - [Screenshots](#screenshots)
 - [License](#license)
-- [Credits](#credits)
+- [Credits and Special Thanks](#credits)
 
 # Project description
 
@@ -55,6 +55,8 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 8. Don't forget to set up some reverse proxy (just like Caddy or Nginx) with SSL/TLS Certificates
 
 # Updating
+> **_NOTE:_** Please remember to periodically check the [Docker Compose file](https://raw.githubusercontent.com/jameskitt616/orbit/main/docker-compose.prod.yml) or the README of this project for any changes. This is especially important if you encounter issues after an update.
+
 1. Run `docker compose pull && docker compose up -d && docker image prune -f`
 
 > **_NOTE:_** `docker image prune -f` removes unused Docker images from your local machine. The -f flag forces the deletion without confirmation prompts.
@@ -70,13 +72,17 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 
 ## Planned Features
 
-- [ ] Selecting Audio Tracks (currently being worked on)
-- [ ] Locking streams behind API keys, allowing for multiple configurable keys per stream.
+- [ ] Select Audio Tracks
+- [ ] Select Subtitles
 - [ ] Enabling users to upload video files through a user-friendly web interface (Web-UI).
 - [ ] Optimizing the system for mobile view and enabling installation via Browser Web Progressive App (WPA).
 - [ ] Offering the ability to configure custom representations, specifying bitrate and quality settings.
 - [ ] Providing estimated time of arrival (ETA) for transcoding processes.
 - [ ] Enabling the ability to start transcoding from a specific timestamp.
+- [ ] Perform file transcoding without utilizing the HLS live feature, which means direct playback is not supported.
+- [ ] Provide a method to download a video file from a given URL.
+
+Generally, this project is still under development, and there will be ongoing work on various smaller fixes, features, and updates, which may not be explicitly mentioned above.
 
 > **_NOTE:_** If there is a significant demand for it, I may consider learning Rust, C++, or another suitable
 > programming language to develop a program or application for controlling the Orbit system from within VR. This would
@@ -104,3 +110,6 @@ Created by [jameskitt616](https://jameskitt616.one/).
 * [PHP-FFmpeg-video-streaming](https://github.com/hadronepoch/PHP-FFmpeg-video-streaming)
 * [jsTree](https://github.com/vakata/jstree)
 * [FFmpeg](https://ffmpeg.org)
+* [tailwindcss](https://tailwindcss.com/)
+* [Font Awesome](https://fontawesome.com/)
+* [RabbitMQ](https://www.rabbitmq.com/)

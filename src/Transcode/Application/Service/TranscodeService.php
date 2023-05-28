@@ -78,7 +78,7 @@ final readonly class TranscodeService
             'ffmpeg.binaries' => '/usr/bin/ffmpeg',
             'ffprobe.binaries' => '/usr/bin/ffprobe',
             'timeout' => 0,
-            'ffmpeg.threads' => 7, //TODO: maybe configure in admin system settings? -> not sure if this has any impact
+            'ffmpeg.threads' => 12, //TODO: make configurable in admin system settings
         ];
 
         $ffmpeg = FFMpeg::create($config);

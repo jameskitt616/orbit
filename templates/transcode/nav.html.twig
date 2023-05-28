@@ -3,11 +3,9 @@
         <div class="border-b pb-2 mb-1">
             <a href="{{ path('transcode_list') }}">
                 {{ 'live.streams'|trans }}
-                {#                //TODO: check if this is actually is true. put message into translation file #}
             </a>
             <div class="tooltip"
-                 data-message="Livestreams do not work like conventional Livestreams, it's more like live transcoding and being
-                    able to watch while it's transcoding.">
+                 data-message="{{ 'live.stream.nav.description'|trans }}.">
                 <i class="fas fa-circle-info"></i>
             </div>
         </div>

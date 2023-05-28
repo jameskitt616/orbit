@@ -71,34 +71,23 @@ transcoding.delete = function () {
   return false;
 }
 
-transcoding.copyUrl = function() {
-
-  navigator.permissions.query({ name: "write-on-clipboard" }).then((result) => {
-    if (result.state === "granted" || result.state === "prompt") {
-      console.log("Write access granted!");
-    }
-  });
+transcoding.copyUrl = function () {
 
   let index = $(this).data('index');
   let tooltipTextCopyUrl = $('.tooltipTextCopyUrl_' + index);
   let url = $(this).data('url');
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    // navigator.clipboard.writeText(url);
     navigator.clipboard.writeText(url).then(() => {
-      console.log('Content copied to clipboard');
-      /* Resolved - text copied to clipboard successfully */
-    },() => {
+      tooltipTextCopyUrl.show();
+      setTimeout(function () {
+        tooltipTextCopyUrl.fadeOut();
+      }, 1000);
+    }, () => {
       console.error('Failed to copy');
-      /* Rejected - text failed to copy to the clipboard */
     });
-    tooltipTextCopyUrl.show();
-    setTimeout(function() {
-      tooltipTextCopyUrl.fadeOut();
-    }, 1000);
   } else {
-    // Handle the case when clipboard API is not available
-    console.error('Clipboard API is not supported');
+    console.error('Clipboard API is not supported, falling back to legacy method.');
 
     fallbackCopyTextToClipboard(url);
   }
@@ -117,21 +106,13 @@ function fallbackCopyTextToClipboard(text) {
     var successful = document.execCommand('copy');
     var msg = successful ? 'successful' : 'unsuccessful';
     console.log('Fallback: Copying text command was ' + msg);
+    tooltipTextCopyUrl.show();
+    setTimeout(function () {
+      tooltipTextCopyUrl.fadeOut();
+    }, 1000);
   } catch (err) {
     console.error('Fallback: Oops, unable to copy', err);
   }
 
   document.body.removeChild(textArea);
 }
-
-
-// transcoding.copyUrl = function () {
-//   let index = $(this).data('index');
-//   let tooltipTextCopyUrl = $('.tooltipTextCopyUrl_' + index);
-//   let url = $(this).data('url');
-//   navigator.clipboard.writeText(url);
-//   tooltipTextCopyUrl.show();
-//   setTimeout(function () {
-//     tooltipTextCopyUrl.fadeOut();
-//   }, 1000);
-// }
