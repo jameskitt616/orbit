@@ -1,5 +1,3 @@
-> ## **_NOTE:_** This program is under ongoing development, not ready to use. Ignore the rest of the Readme
-
 <img src="./assets/images/OrbitLogo_500.png" alt="Orbit" width="100"/>
 
 # Orbit
