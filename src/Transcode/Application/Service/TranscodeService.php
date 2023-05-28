@@ -87,7 +87,7 @@ final readonly class TranscodeService
 
         $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $_ENV['STREAM_FILENAME'];
 
-        $format = $this->getFormat(Format::HEVC->value);
+        $format = $this->getFormat(Format::x264->value);
         $format->on('progress', function ($video, $format, $percentage) use ($transcode) {
             $percentage = (int) round($percentage);
             $transcode->setTranscodingProgress($percentage);
@@ -96,24 +96,19 @@ final readonly class TranscodeService
 
         $representations = $this->getRepresentations($transcode);
 
-//        $video->hls()
-//            ->setFormat($format)
-//            ->addRepresentations($representations)
-//            ->save($saveLocation);
+        $video->hls()
+            ->setFormat($format)
+            ->addRepresentations($representations)
+            ->save($saveLocation);
 
-        $inputFile = escapeshellarg($transcode->getFilePath());
-        $saveLocation1 = $saveLocation . '_%v_1080p.m3u8';
-        $saveLocation2 = $saveLocation . '_%v_1080p_%04d.ts';
-        $saveLocation = escapeshellarg($saveLocation);
-        dump($inputFile, $saveLocation);
-        $command = "ffmpeg -y -i $inputFile -c:v libx265 -c:a mp3 -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename stream_%v_1080p_init.mp4 -hls_segment_filename $saveLocation2 -master_pl_name master.m3u8 -s:v:0 1920x1080 -b:v:0 4096k -f hls -strict -2 -threads 12 $saveLocation1";
-        //$command = "ffmpeg -y -i $inputFile -c:v libx265 -c:a aac -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename stream_%v_1080p_init.mp4 -hls_segment_filename '$saveLocation%v_1080p_%04d.ts' -master_pl_name master.m3u8 -s:v:0 1920x1080 -b:v:0 4096k -f hls -strict -2 -threads 12 '$saveLocation%v_1080p.m3u8'";
-        //$command = "ffmpeg -i /orbit/videos/biscuits.mp4 -map 0:0 -map 0:1 -c:v h264 -c:a mp3 /orbit/transcode/1832637644/out.mp4 >/dev/null 2>&1 & echo $!";
-        //$command = "ffmpeg -i $inputFile -c:v libx264 -c:a mp3 -map 0:v:0 -map 0:a:1 -hls_time 10 -hls_list_size 0 $saveLocation.m3u8";
-        //$command = "ffmpeg -i $inputFile -c:v libx264 -c:a aac -map 0:v:0 -map 0:a:1 -hls_time 10 -hls_list_size 0 $saveLocation.m3u8";
+        //$inputFile = escapeshellarg($transcode->getFilePath());
+        //$saveLocation1 = $saveLocation . '_%v_1080p.m3u8';
+        //$saveLocation2 = $saveLocation . '_%v_1080p_%04d.ts';
+        //$saveLocation = escapeshellarg($saveLocation);
+        //$command = "ffmpeg -y -i $inputFile -c:v libx264 -c:a mp3 -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename stream_%v_1080p_init.mp4 -hls_segment_filename $saveLocation2 -master_pl_name master.m3u8 -s:v:0 1920x1080 -b:v:0 4096k -f hls -strict -2 -threads 12 $saveLocation1";
         //$command = "ffmpeg -i input_file.mp4 -c:v libx264 -preset slow -crf 22 -c:a copy $saveLocation >/dev/null 2>&1 & echo $!";
-        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath());
-        $output = shell_exec($command);
+        //shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath());
+        //$output = shell_exec($command);
         //dump($output);
         //$pid = (int)$output;
         //
@@ -136,10 +131,13 @@ final readonly class TranscodeService
 
     private function getFormat(string $format): StreamFormat
     {
+        //The default option is libmp3lame since the majority, if not all, VRChat video players are only compatible with mp3 files.
+        $defaultAudioCodec = 'libmp3lame';
+
         return match ($format) {
-            Format::HEVC->value => new HEVC(),
-            Format::VP9->value => new VP9(),
-            default => new X264(),
+            Format::HEVC->value => new HEVC('libx265', $defaultAudioCodec),
+            Format::VP9->value => new VP9('libvpx-vp9', $defaultAudioCodec),
+            default => new X264('libx264', $defaultAudioCodec),
         };
     }
 
