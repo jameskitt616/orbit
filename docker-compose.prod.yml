@@ -5,7 +5,6 @@ services:
     image: ghcr.io/jameskitt616/orbit_php:latest
     restart: unless-stopped
     depends_on:
-      - message_transport
       - rabbitmq
     volumes:
       - ./data/php_socket:/var/run/php
@@ -53,14 +52,6 @@ services:
       - "5433:5432"
     volumes:
       - ./data/database_data:/var/lib/postgresql/data:rw
-
-  message_transport:
-    image: redis:${REDIS_VERSION:-7.0.11}-alpine
-    restart: unless-stopped
-    volumes:
-      - ./data/redis-data:/data
-    ports:
-      - "6379:6379"
 
   rabbitmq:
     image: rabbitmq:3.11-management
