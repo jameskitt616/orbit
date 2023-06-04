@@ -29,7 +29,7 @@ class Create implements Command
     {
         $this->currentUser = $currentUser;
         $this->file = $file;
-        $this->format = Format::HEVC->name;
+        $this->format = Format::x264->name;
         $this->videoPropertyAudio = null;
         $this->videoPropertySubtitle = null;
     }
