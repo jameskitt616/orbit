@@ -101,9 +101,9 @@ final readonly class TranscodeService
 
         $cpuThreads = '4';
         $defaultAudioCodec = 'libmp3lame';
-        //        $defaultAudioCodec = 'mp3';
+        //$defaultAudioCodec = 'mp3';
 
-        $videoCodec = $this->getVideoCodec(Format::x264->value);
+        $videoCodec = $this->getVideoCodec($transcode->getTranscodeFormat());
 
         //TODO: create ffmpeg driver for this hls logic
         $inputFile = escapeshellarg($transcode->getFilePath());
@@ -112,46 +112,64 @@ final readonly class TranscodeService
         $m3u8IndexFileLocation = escapeshellarg($saveLocation . '_1080p.m3u8');
         $tsFileLocation = escapeshellarg($saveLocation . '_1080p_%04d.ts');
         $hlsMp4InitName = escapeshellarg($saveLocation . '_1080p_init.mp4');
-//        $hlsMp4InitName = escapeshellarg('stream_%v_1080p_init.mp4');
+        //$hlsMp4InitName = escapeshellarg('stream_%v_1080p_init.mp4');
 
-//        https://stackoverflow.com/a/75453664 -> try avi container?
+        //https://stackoverflow.com/a/75453664 -> try avi container?
         $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -s:v:0 1920x1080 -b:v:0 4096k -f hls -strict -2 -threads $cpuThreads $m3u8IndexFileLocation";
-//        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -s:v:0 1920x1080 -b:v:0 4096k -f hls -strict -2 -threads $cpuThreads $m3u8IndexFileLocation >/dev/null 2>&1 & echo $!";
-        //        $command = "ffmpeg -i input_file.mp4 -c:v libx264 -preset slow -crf 22 -c:a copy $saveLocation >/dev/null 2>&1 & echo $!";
         shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath());
-        //        $output = shell_exec($command);
-        //        $output = exec($command);
-        //        dump($output);
-        //        $pid = (int) $output;
 
-        exec("$command 2>&1", $output, $returnStatus);
+        $this->executeCommand($command);
+    }
 
-//        $output = exec($command, $outputArray);
-        dump($output, $returnStatus);
-//        dump($output);
-//        dump($outputArray);
-//        $pid = (int) $outputArray[0];
+    private function executeCommand($command): void
+    {
+        $descriptors = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
 
+        $process = proc_open($command, $descriptors, $pipes);
 
-//        Try 'ps --help <simple|list|output|threads|misc|all>'
-//    or 'ps --help <s|l|o|t|m|a>'
+        if (is_resource($process)) {
+            fclose($pipes[0]);
 
-        //TODO: check the correct ps command and maybe need to install `apk add --no-cache procps`
-//        $statusCommand = "ps -p $pid -o all";
-////        $statusCommand = "ps -p $pid -o pid,stat";
-//        $statusOutput = shell_exec($statusCommand);
-//        dump($statusOutput);
+            stream_set_blocking($pipes[1], false);
+            stream_set_blocking($pipes[2], false);
 
-        //        $index = 0;
-        //
-        //        do {
-        //            $status = shell_exec("ps aux | grep $pid");
-        //            $status = explode("\n", $status);
-        //            dump($status);
-        //            --$index;
-        //            sleep(1);
-        //        } while ($index > 1);
-        //        } while(count($status) > 2);
+            while (true) {
+                $output = stream_get_contents($pipes[1]);
+                $error = stream_get_contents($pipes[2]);
+
+                dump($pipes, $output, $error);
+
+                if (feof($pipes[1]) && feof($pipes[2])) {
+                    break;
+                }
+
+                if (!empty($output)) {
+                    //                    echo $output;
+                }
+
+                if (!empty($error)) {
+                    //                    echo $error;
+                }
+
+                //TODO: set transcoding process by getting total video length and using transcoded length
+                //TODO: set transcoding speed e.g. speed=1.62x
+                //$percentage = (int) round($percentage);
+                //$transcode->setTranscodingProgress($percentage);
+                //$this->transcodeRepository->save($transcode);
+
+                usleep(100000);
+            }
+
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+
+            // Process the exit code if needed
+            //$exitCode = proc_close($process);
+        }
     }
 
     private function getRepresentations(Transcode $transcode): array
