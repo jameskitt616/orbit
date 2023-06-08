@@ -99,9 +99,8 @@ final readonly class TranscodeService
         //            ->addRepresentations($representations)
         //            ->save($saveLocation);
 
-        $cpuThreads = '4';
+        $cpuThreads = '8';
         $defaultAudioCodec = 'libmp3lame';
-        //$defaultAudioCodec = 'mp3';
 
         $videoCodec = $this->getVideoCodec($transcode->getTranscodeFormat());
 
@@ -115,7 +114,17 @@ final readonly class TranscodeService
         //$hlsMp4InitName = escapeshellarg('stream_%v_1080p_init.mp4');
 
         //https://stackoverflow.com/a/75453664 -> try avi container?
-        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -s:v:0 1920x1080 -b:v:0 4096k -f hls -strict -2 -threads $cpuThreads $m3u8IndexFileLocation";
+
+        //In this example, the -s:v:0 1280x720 command tells ffmpeg to resize the first video stream to a width of 1280 pixels and let it automatically calculate the height to maintain the aspect ratio. So, if the input video has a resolution of 1920x1080, ffmpeg will downscale it to 1280x720 while preserving the aspect ratio.
+
+        $audioTrackNumber = $transcode->getAudioTrackNumber();
+        --$audioTrackNumber;
+        $audioTrack = "-map 0:a:$audioTrackNumber";
+
+        $resolution = "-s:v:0 1920x1080"; //if not specified it keeps original resolution
+        $bitrate = "-b:v:0 4096k";
+
+        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $resolution $bitrate -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation";
         shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath());
 
         $this->executeCommand($command);
@@ -132,6 +141,7 @@ final readonly class TranscodeService
         $process = proc_open($command, $descriptors, $pipes);
 
         if (is_resource($process)) {
+            dump($command);
             fclose($pipes[0]);
 
             stream_set_blocking($pipes[1], false);
@@ -141,25 +151,16 @@ final readonly class TranscodeService
                 $output = stream_get_contents($pipes[1]);
                 $error = stream_get_contents($pipes[2]);
 
-                dump($pipes, $output, $error);
-
                 if (feof($pipes[1]) && feof($pipes[2])) {
                     break;
                 }
 
-                if (!empty($output)) {
-                    //                    echo $output;
-                }
-
                 if (!empty($error)) {
-                    //                    echo $error;
+                    dump($error);
+                    //TODO: parse and show in UI. maybe in terminal like looking window
                 }
 
-                //TODO: set transcoding process by getting total video length and using transcoded length
-                //TODO: set transcoding speed e.g. speed=1.62x
-                //$percentage = (int) round($percentage);
-                //$transcode->setTranscodingProgress($percentage);
-                //$this->transcodeRepository->save($transcode);
+//                $this->extractInfoFromCommand($error, $transcode);
 
                 usleep(100000);
             }
@@ -170,6 +171,25 @@ final readonly class TranscodeService
             // Process the exit code if needed
             //$exitCode = proc_close($process);
         }
+    }
+
+    private function extractInfoFromCommand(string $output, Transcode $transcode)
+    {
+        if (!str_contains($output, 'speed=')) {
+            return;
+        }
+
+        preg_match('/time=([\d:.]+)/', $output, $matches);
+        $time = $matches[1];
+
+        preg_match('/speed=([\d.]+)x/', $output, $matches);
+        $speed = $matches[1];
+
+        //TODO: set transcoding process by getting total video length and using transcoded length
+        //TODO: set transcoding speed e.g. speed=1.62x
+        //$percentage = (int) round($percentage);
+        //$transcode->setTranscodingProgress($percentage);
+        //$this->transcodeRepository->save($transcode);
     }
 
     private function getRepresentations(Transcode $transcode): array
@@ -204,7 +224,7 @@ final readonly class TranscodeService
         };
     }
 
-    public function getAvailableTracksByFilePathAndVideoProperty(string $filePath, string $videoProperty): array
+    public function getAvailableTracksByFilePathAndVideoProperty(string $filePath, string $property): array
     {
         $filePath = escapeshellarg($filePath);
         $output = shell_exec("ffmpeg -i $filePath 2>&1");
@@ -212,10 +232,10 @@ final readonly class TranscodeService
         $streams = [];
 
         foreach ($lines as $line) {
-            if (str_contains($line, "$videoProperty:")) {
+            if (str_contains($line, "$property:")) {
                 preg_match('/\((\w+)\)/', $line, $matches);
                 $languageCode = strtoupper($matches[1]);
-                $attributes = explode("$videoProperty: ", $line)[1];
+                $attributes = explode("$property: ", $line)[1];
                 $streamName = $languageCode . ' - ' . $attributes;
                 preg_match('/Stream #\d+:(\d+)/', $line, $matches);
                 $streamNumber = $matches[1];
