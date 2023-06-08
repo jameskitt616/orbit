@@ -6,7 +6,6 @@ namespace App\Transcode\Domain\Model;
 
 use App\Security\Domain\Model\User;
 use DateTime;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
@@ -37,8 +36,9 @@ class Transcode
     #[ORM\Column(name: 'transcodingProgress', type: 'integer', nullable: false)]
     private int $transcodingProgress;
 
-    #[ORM\ManyToMany(targetEntity: Representation::class, cascade: ['persist'])]
-    private Collection $representations;
+    #[ORM\ManyToOne(targetEntity: Representation::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'representation_id', referencedColumnName: 'id', nullable: true)]
+    private ?Representation $representation;
 
     #[ORM\Column(name: 'createdAt', type: 'datetime', nullable: false)]
     private DateTime $createdAt;
@@ -55,7 +55,7 @@ class Transcode
     #[ORM\Column(name: 'subtitleNumberTitle', type: 'string', nullable: true)]
     private ?string $subtitleNumberTitle;
 
-    public function __construct(string $fileName, string $filePath, User $ownedBy, string $transcodeFormat, Collection $representations)
+    public function __construct(string $fileName, string $filePath, User $ownedBy, string $transcodeFormat, Representation $representation)
     {
         $this->id = Uuid::uuid4()->toString();
         $this->createdAt = new DateTime();
@@ -65,7 +65,7 @@ class Transcode
         $this->ownedBy = $ownedBy;
         $this->transcodingProgress = 0;
         $this->transcodeFormat = $transcodeFormat;
-        $this->representations = $representations;
+        $this->representation = $representation;
         $this->audioTrackNumber = null;
         $this->audioTrackNumberTitle = null;
         $this->subtitleNumber = null;
@@ -112,10 +112,9 @@ class Transcode
         return $this->transcodeFormat;
     }
 
-    /** @return Representation[] */
-    public function getRepresentations(): array
+    public function getRepresentation(): ?Representation
     {
-        return $this->representations->toArray();
+        return $this->representation;
     }
 
     public function getAudioTrackNumber(): ?int

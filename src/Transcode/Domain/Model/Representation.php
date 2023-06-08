@@ -66,6 +66,16 @@ class Representation
         return $this->resolutionWidth;
     }
 
+    public function getResolution(): string
+    {
+        return $this->resolutionHeight . 'x' . $this->resolutionWidth;
+    }
+
+    public function getResolutionColon(): string
+    {
+        return $this->resolutionHeight . ':' . $this->resolutionWidth;
+    }
+
     public function setResolutionWidth(int $resolutionWidth): void
     {
         $this->resolutionWidth = $resolutionWidth;

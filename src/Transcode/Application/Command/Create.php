@@ -8,9 +8,9 @@ use App\Kernel\Application\Command;
 use App\Security\Domain\Model\User;
 use App\Transcode\Domain\Enum\Format;
 use App\Transcode\Domain\Model\File;
+use App\Transcode\Domain\Model\Representation;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Model\VideoProperty;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Create implements Command
@@ -20,7 +20,7 @@ class Create implements Command
     public User $currentUser;
     #[Assert\NotNull]
     public string $format;
-    public Collection $representations;
+    public ?Representation $representation;
     public ?Transcode $transcode;
     public ?VideoProperty $videoPropertyAudio;
     public ?VideoProperty $videoPropertySubtitle;

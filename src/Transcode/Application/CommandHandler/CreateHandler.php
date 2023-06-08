@@ -23,7 +23,7 @@ readonly class CreateHandler
     {
         $file = $command->file;
         $currentUser = $command->currentUser;
-        $transcode = new Transcode($file->fileName, $file->filePath, $currentUser, $command->format, $command->representations);
+        $transcode = new Transcode($file->fileName, $file->filePath, $currentUser, $command->format, $command->representation);
 
         $videoPropertyAudio = $command->videoPropertyAudio;
         if ($videoPropertyAudio !== null) {

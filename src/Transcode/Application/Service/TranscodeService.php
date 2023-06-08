@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Transcode\Application\Service;
 
 use App\Transcode\Domain\Enum\Format;
+use App\Transcode\Domain\Model\Representation as Representation;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Model\VideoProperty;
 use App\Transcode\Domain\Repository\TranscodeRepository;
@@ -12,7 +13,8 @@ use Streaming\Format\HEVC;
 use Streaming\Format\StreamFormat;
 use Streaming\Format\VP9;
 use Streaming\Format\X264;
-use Streaming\Representation;
+
+//use Streaming\Representation;
 
 final readonly class TranscodeService
 {
@@ -70,64 +72,53 @@ final readonly class TranscodeService
         return $files;
     }
 
+    //TODO: refactor and cleanup this function after getting it working properly
     public function hlsTranscode(Transcode $transcode): void
     {
-        //        $config = [
-        //            'ffmpeg.binaries' => '/usr/bin/ffmpeg',
-        //            'ffprobe.binaries' => '/usr/bin/ffprobe',
-        //            'timeout' => 0,
-        //            'ffmpeg.threads' => 12, //TODO: make configurable in admin system settings
-        //        ];
-        //
-        //        $ffmpeg = FFMpeg::create($config);
-        //        $sFfmpeg = new SFFMpeg($ffmpeg);
-        //        $video = $sFfmpeg->open($transcode->getFilePath());
-        //
         $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $_ENV['STREAM_FILENAME'];
 
-        //        $format = $this->getFormat(Format::x264->value);
-        //        $format->on('progress', function ($video, $format, $percentage) use ($transcode) {
-        //            $percentage = (int) round($percentage);
-        //            $transcode->setTranscodingProgress($percentage);
-        //            $this->transcodeRepository->save($transcode);
-        //        });
-
-        //        $representations = $this->getRepresentations($transcode);
-
-        //        $video->hls()
-        //            ->setFormat($format)
-        //            ->addRepresentations($representations)
-        //            ->save($saveLocation);
-
+        //TODO: make configurable
         $cpuThreads = '8';
         $defaultAudioCodec = 'libmp3lame';
 
         $videoCodec = $this->getVideoCodec($transcode->getTranscodeFormat());
 
+        $representation = $transcode->getRepresentation();
+        //TODO: find better solution for this
+        $representationWidth = $representation !== null ? $representation->getResolutionWidth() : 'default';
+
         //TODO: create ffmpeg driver for this hls logic
         $inputFile = escapeshellarg($transcode->getFilePath());
         $indexFileName = escapeshellarg($_ENV['STREAM_FILENAME'] . '.m3u8');
-        //TODO: replace resolution with input representations
-        $m3u8IndexFileLocation = escapeshellarg($saveLocation . '_1080p.m3u8');
-        $tsFileLocation = escapeshellarg($saveLocation . '_1080p_%04d.ts');
-        $hlsMp4InitName = escapeshellarg($saveLocation . '_1080p_init.mp4');
-        //$hlsMp4InitName = escapeshellarg('stream_%v_1080p_init.mp4');
-
-        //https://stackoverflow.com/a/75453664 -> try avi container?
-
-        //In this example, the -s:v:0 1280x720 command tells ffmpeg to resize the first video stream to a width of 1280 pixels and let it automatically calculate the height to maintain the aspect ratio. So, if the input video has a resolution of 1920x1080, ffmpeg will downscale it to 1280x720 while preserving the aspect ratio.
+        $m3u8IndexFileLocation = escapeshellarg($saveLocation . "_$representationWidth\p.m3u8");
+        $tsFileLocation = escapeshellarg($saveLocation . "_$representationWidth\p_%04d.ts");
+        $hlsMp4InitName = escapeshellarg($saveLocation . "_$representationWidth\p_init.mp4");
 
         $audioTrackNumber = $transcode->getAudioTrackNumber();
         --$audioTrackNumber;
         $audioTrack = "-map 0:a:$audioTrackNumber";
 
-        $resolution = "-s:v:0 1920x1080"; //if not specified it keeps original resolution
-        $bitrate = "-b:v:0 4096k";
+        $representationCommand = $this->createRepresentation($representation);
 
-        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $resolution $bitrate -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation";
+        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation";
         shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath());
 
         $this->executeCommand($command);
+    }
+
+    private function createRepresentation(?Representation $representation): string
+    {
+        $representationCommand = '';
+
+        $resolution = $representation->getResolution();
+        $resolutionColon = $representation->getResolutionColon();
+        $bitrate = $representation->getKiloBiteRate();
+
+        $fixAspectRatio = "SRC -vf 'scale=$resolutionColon:force_original_aspect_ratio=decrease,pad=$resolutionColon:(ow-iw)/2:(oh-ih)/2,setsar=1' DEST";
+
+        $representationCommand .= "-s:v:0 $resolution -b:v:0 $bitrate\k $fixAspectRatio";
+
+        return $representationCommand;
     }
 
     private function executeCommand($command): void
@@ -160,7 +151,7 @@ final readonly class TranscodeService
                     //TODO: parse and show in UI. maybe in terminal like looking window
                 }
 
-//                $this->extractInfoFromCommand($error, $transcode);
+                //                $this->extractInfoFromCommand($error, $transcode);
 
                 usleep(100000);
             }
@@ -192,16 +183,16 @@ final readonly class TranscodeService
         //$this->transcodeRepository->save($transcode);
     }
 
-    private function getRepresentations(Transcode $transcode): array
-    {
-        $representations = [];
-        foreach ($transcode->getRepresentations() as $representation) {
-            $representations[] = (new Representation)->setKiloBitrate($representation->getKiloBiteRate())
-                ->setResize($representation->getResolutionWidth(), $representation->getResolutionHeight());
-        }
-
-        return $representations;
-    }
+    //    private function getRepresentations(Transcode $transcode): array
+    //    {
+    //        $representations = [];
+    //        foreach ($transcode->getRepresentations() as $representation) {
+    //            $representations[] = (new Representation)->setKiloBitrate($representation->getKiloBiteRate())
+    //                ->setResize($representation->getResolutionWidth(), $representation->getResolutionHeight());
+    //        }
+    //
+    //        return $representations;
+    //    }
 
     private function getVideoCodec(string $format): string
     {

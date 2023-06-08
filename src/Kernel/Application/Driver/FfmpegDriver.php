@@ -64,7 +64,7 @@ final readonly class FfmpegDriver
     private function getRepresentations(Transcode $transcode): array
     {
         $representations = [];
-        foreach ($transcode->getRepresentations() as $representation) {
+        foreach ($transcode->getRepresentation() as $representation) {
             $representations[] = (new Representation)->setKiloBitrate($representation->getKiloBiteRate())
                 ->setResize($representation->getResolutionWidth(), $representation->getResolutionHeight());
         }

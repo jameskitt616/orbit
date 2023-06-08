@@ -36,7 +36,6 @@
                                         'class': 'rounded-md bg-indigo-200 text-black sm:p-1 sm:text-sm sm:leading-6',
                                     }
                                 }) }}
-                                (Not implemented yet! Has no effect)
                             </div>
                         </div>
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -66,10 +65,14 @@
                         </div>
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <div class="text-sm font-medium leading-6 text-gray-500">
-                                {{ 'live.stream.representations'|trans }}
+                                {{ 'live.stream.representation'|trans }}
                             </div>
                             <div class="mt-2 text-sm text-white sm:col-span-2 sm:mt-0">
-                                {{ form_row(form.representations) }}
+                                {{ form_row(form.representation, {
+                                    attr: {
+                                        'class': 'rounded-md bg-indigo-200 text-black sm:p-1 sm:text-sm sm:leading-6',
+                                    }
+                                }) }}
                             </div>
                         </div>
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

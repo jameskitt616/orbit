@@ -56,13 +56,13 @@ final class CreateTranscodeForm extends AbstractType
             'choices' => Format::getFormats(),
         ]);
 
-        $builder->add('representations', EntityType::class, [
+        $builder->add('representation', EntityType::class, [
             'label' => false,
+            'required' => false,
             'class' => Representation::class,
             'choice_label' => 'name',
             'choices' => $this->representationRepository->findAll(),
-            'multiple' => true,
-            'expanded' => true,
+            'placeholder' => $this->translator->trans('live.stream.keep_original_resolution'),
         ]);
     }
 
