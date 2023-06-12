@@ -28,8 +28,6 @@ final class Version20230608141525 extends AbstractMigration
         $this->addSql('ALTER TABLE transcode ADD representation_id VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE transcode ADD CONSTRAINT FK_522F4C7A46CE82F4 FOREIGN KEY (representation_id) REFERENCES representation (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_522F4C7A46CE82F4 ON transcode (representation_id)');
-        $this->addSql('ALTER TABLE user_user DROP isadmin');
-        $this->addSql('ALTER TABLE user_user DROP loginfailurecounter');
     }
 
     public function down(Schema $schema): void
