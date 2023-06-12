@@ -59,7 +59,7 @@
                             <div class="mt-2 text-sm text-gray-500 sm:col-span-2 sm:mt-0">
                                 <ul role="list" class="divide-y divide-gray-100 rounded-md border border-gray-200">
                                     {% set representation = transcode.representation %}
-                                    {% set streamUrl = app.request.getSchemeAndHttpHost ~ '/live/' ~ transcode.randSubTargetPath ~ '/' ~ streamFilename ~ '_' ~ representation.resolutionHeight ~ 'p.m3u8' %}
+                                    {% set streamUrl = app.request.getSchemeAndHttpHost ~ '/live/' ~ transcode.randSubTargetPath ~ '/' ~ streamFilename ~ '_' ~ (representation is not null ? representation.resolutionHeight : 'original') ~ 'p.m3u8' %}
                                     {% set streamUrlFolder = app.request.getSchemeAndHttpHost ~ '/live/' ~ transcode.randSubTargetPath %}
                                     <li class="flex items-center justify-between py-2 pl-2 pr-3 text-sm leading-6">
                                         <div class="flex w-0 flex-1 items-center">
@@ -104,10 +104,12 @@
                                 {% set backgroundColors = ['bg-red-50', 'bg-yellow-50', 'bg-green-50', 'bg-blue-50', 'bg-indigo-50', 'bg-purple-50', 'bg-pink-50'] %}
                                 {% set testColors = ['text-red-700', 'text-yellow-800', 'text-green-700', 'text-blue-700', 'text-indigo-700', 'text-purple-700', 'text-pink-700'] %}
                                 {% set ringColors = ['ring-red-600', 'ring-yellow-800', 'ring-green-700', 'ring-blue-700', 'ring-indigo-700', 'ring-purple-700', 'ring-pink-700'] %}
-                                <span
-                                    class="inline-flex items-center rounded-md {{ backgroundColors[0] }} px-2 py-1 text-xs font-medium {{ testColors[0] }} ring-1 ring-inset {{ ringColors[0] }}/10">
-                                    {{ representation.resolutionHeight }}p
-                                </span>
+                                {% if representation is not null %}
+                                    <span
+                                        class="inline-flex items-center rounded-md {{ backgroundColors[0] }} px-2 py-1 text-xs font-medium {{ testColors[0] }} ring-1 ring-inset {{ ringColors[0] }}/10">
+                                        {{ representation.resolutionHeight }}p
+                                    </span>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

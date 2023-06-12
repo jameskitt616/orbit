@@ -70,7 +70,7 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 
 ## Planned Features
 
-- [ ] Select Audio Tracks
+- [x] Select Audio Tracks (currently being worked on)
 - [ ] Select Subtitles
 - [ ] Enabling users to upload video files through a user-friendly web interface (Web-UI).
 - [ ] Optimizing the system for mobile view and enabling installation via Browser Web Progressive App (WPA).

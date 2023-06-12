@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace App\Transcode\Application\Service;
 
 use App\Transcode\Domain\Enum\Format;
-use App\Transcode\Domain\Model\Representation as Representation;
+use App\Transcode\Domain\Model\Representation;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Model\VideoProperty;
 use App\Transcode\Domain\Repository\TranscodeRepository;
+use DateTime;
 use Streaming\Format\HEVC;
 use Streaming\Format\StreamFormat;
 use Streaming\Format\VP9;
 use Streaming\Format\X264;
-
-//use Streaming\Representation;
 
 final readonly class TranscodeService
 {
@@ -75,7 +74,11 @@ final readonly class TranscodeService
     //TODO: refactor and cleanup this function after getting it working properly
     public function hlsTranscode(Transcode $transcode): void
     {
-        $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/' . $_ENV['STREAM_FILENAME'];
+        $randSubTargetPath = $transcode->getRandSubTargetPath();
+        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath);
+
+        $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath . '/' . $_ENV['STREAM_FILENAME'];
+        $progressLocation = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath . '/transcode_progress.txt';
 
         //TODO: make configurable
         $cpuThreads = '8';
@@ -84,31 +87,35 @@ final readonly class TranscodeService
         $videoCodec = $this->getVideoCodec($transcode->getTranscodeFormat());
 
         $representation = $transcode->getRepresentation();
-        //TODO: find better solution for this
-        $representationWidth = $representation !== null ? $representation->getResolutionWidth() : 'default';
+        //TODO: if null -> extract resolution from ffmpeg command directly -> also extract video file length
+        $representationWidth = $representation !== null ? $representation->getResolutionWidth() : 'original';
 
         //TODO: create ffmpeg driver for this hls logic
         $inputFile = escapeshellarg($transcode->getFilePath());
+        $progressLocation = escapeshellarg($progressLocation);
         $indexFileName = escapeshellarg($_ENV['STREAM_FILENAME'] . '.m3u8');
-        $m3u8IndexFileLocation = escapeshellarg($saveLocation . "_$representationWidth\p.m3u8");
-        $tsFileLocation = escapeshellarg($saveLocation . "_$representationWidth\p_%04d.ts");
-        $hlsMp4InitName = escapeshellarg($saveLocation . "_$representationWidth\p_init.mp4");
+        $m3u8IndexFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p.m3u8');
+        $tsFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p_%04d.ts');
+        $hlsMp4InitName = escapeshellarg($saveLocation . "_$representationWidth" . 'p_init.mp4');
 
         $audioTrackNumber = $transcode->getAudioTrackNumber();
         --$audioTrackNumber;
         $audioTrack = "-map 0:a:$audioTrackNumber";
 
-        $representationCommand = $this->createRepresentation($representation);
+        $representationCommand = $this->createRepresentationCommand($representation);
 
-        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation";
-        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath());
+        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation -progress $progressLocation -f null -";
 
-        $this->executeCommand($command);
+        $this->executeCommand($command, $transcode);
     }
 
-    private function createRepresentation(?Representation $representation): string
+    private function createRepresentationCommand(?Representation $representation): string
     {
         $representationCommand = '';
+
+        if ($representation === null) {
+            return $representationCommand;
+        }
 
         $resolution = $representation->getResolution();
         $resolutionColon = $representation->getResolutionColon();
@@ -121,7 +128,7 @@ final readonly class TranscodeService
         return $representationCommand;
     }
 
-    private function executeCommand($command): void
+    private function executeCommand(string $command, Transcode $transcode): void
     {
         $descriptors = [
             0 => ['pipe', 'r'],
@@ -132,7 +139,7 @@ final readonly class TranscodeService
         $process = proc_open($command, $descriptors, $pipes);
 
         if (is_resource($process)) {
-            dump($command);
+//            dump($command);
             fclose($pipes[0]);
 
             stream_set_blocking($pipes[1], false);
@@ -147,11 +154,11 @@ final readonly class TranscodeService
                 }
 
                 if (!empty($error)) {
-                    dump($error);
+//                    dump($error);
                     //TODO: parse and show in UI. maybe in terminal like looking window
                 }
 
-                //                $this->extractInfoFromCommand($error, $transcode);
+                $this->updateTranscodeStatus($transcode);
 
                 usleep(100000);
             }
@@ -164,23 +171,33 @@ final readonly class TranscodeService
         }
     }
 
-    private function extractInfoFromCommand(string $output, Transcode $transcode)
+    private function updateTranscodeStatus(Transcode $transcode): void
     {
-        if (!str_contains($output, 'speed=')) {
-            return;
+        $progressLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/transcode_progress.txt';
+        $progress = shell_exec("tail $progressLocation");
+
+        if (preg_match('/out_time_ms=(\d+)/', $progress, $matches)) {
+            $outTimeUs = $matches[1];
+        } else {
+            $outTimeUs = null;
         }
 
-        preg_match('/time=([\d:.]+)/', $output, $matches);
-        $time = $matches[1];
+        if (preg_match('/speed=(.*?)x\n/', $progress, $matches)) {
+            $speed = $matches[1];
+        } else {
+            $speed = null;
+        }
 
-        preg_match('/speed=([\d.]+)x/', $output, $matches);
-        $speed = $matches[1];
+        if ($outTimeUs !== null) {
+            $currentTimeSeconds = $outTimeUs / 1000000;
+            $videoTotalLengthSeconds = 1149; //TODO: get actual video length
 
-        //TODO: set transcoding process by getting total video length and using transcoded length
+            $percentage = (int) round(($currentTimeSeconds / $videoTotalLengthSeconds) * 100);
+            $transcode->setTranscodingProgress($percentage);
+            $this->transcodeRepository->save($transcode);
+        }
+
         //TODO: set transcoding speed e.g. speed=1.62x
-        //$percentage = (int) round($percentage);
-        //$transcode->setTranscodingProgress($percentage);
-        //$this->transcodeRepository->save($transcode);
     }
 
     //    private function getRepresentations(Transcode $transcode): array

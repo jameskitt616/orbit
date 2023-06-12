@@ -55,7 +55,7 @@ class Transcode
     #[ORM\Column(name: 'subtitleNumberTitle', type: 'string', nullable: true)]
     private ?string $subtitleNumberTitle;
 
-    public function __construct(string $fileName, string $filePath, User $ownedBy, string $transcodeFormat, Representation $representation)
+    public function __construct(string $fileName, string $filePath, User $ownedBy, string $transcodeFormat, ?Representation $representation)
     {
         $this->id = Uuid::uuid4()->toString();
         $this->createdAt = new DateTime();

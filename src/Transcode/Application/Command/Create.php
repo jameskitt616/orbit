@@ -32,5 +32,6 @@ class Create implements Command
         $this->format = Format::x264->name;
         $this->videoPropertyAudio = null;
         $this->videoPropertySubtitle = null;
+        $this->representation = null;
     }
 }
