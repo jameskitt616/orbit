@@ -104,7 +104,7 @@ final readonly class TranscodeService
 
         $representationCommand = $this->createRepresentationCommand($representation);
 
-        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation -progress $progressLocation -f null -";
+        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_playlist_type vod -hls_allow_cache 0 -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation -progress $progressLocation -f null -";
 
         $this->executeCommand($command, $transcode);
     }
