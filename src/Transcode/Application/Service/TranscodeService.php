@@ -75,7 +75,7 @@ final readonly class TranscodeService
     public function hlsTranscode(Transcode $transcode): void
     {
         $randSubTargetPath = $transcode->getRandSubTargetPath();
-        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath);
+//        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath);
 
         $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath . '/' . $_ENV['STREAM_FILENAME'];
         $progressLocation = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath . '/transcode_progress.txt';
@@ -97,24 +97,66 @@ final readonly class TranscodeService
         $m3u8IndexFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p.m3u8');
         $tsFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p_%04d.ts');
         $hlsMp4InitName = escapeshellarg($saveLocation . "_$representationWidth" . 'p_init.mp4');
+        $publishUrl = escapeshellarg("rtsp://rtsp_server:8554/$randSubTargetPath");
 
         $audioTrackNumber = $transcode->getAudioTrackNumber();
         --$audioTrackNumber;
         $audioTrack = "-map 0:a:$audioTrackNumber";
 
+        dump($representation);
         $representationCommand = $this->createRepresentationCommand($representation);
 
-        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation -progress $progressLocation -f null -";
+        $command = "ffmpeg -re -i $inputFile $representationCommand -rtsp_transport tcp -f rtsp $publishUrl -f null -";
+//        $command = "ffmpeg -re -i $inputFile -b:v:0 10k -rtsp_transport tcp -f rtsp $publishUrl -f null -";
+//        $command = "ffmpeg -re -i $inputFile -c copy $representationCommand $audioTrack -f rtsp $publishUrl -f null -";
+        dump($command);
+
+//        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation -progress $progressLocation -f null -";
 
         $this->executeCommand($command, $transcode);
     }
 
+//    public function hlsTranscode(Transcode $transcode): void
+//    {
+//        $randSubTargetPath = $transcode->getRandSubTargetPath();
+//        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath);
+//
+//        $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath . '/' . $_ENV['STREAM_FILENAME'];
+//        $progressLocation = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath . '/transcode_progress.txt';
+//
+//        //TODO: make configurable
+//        $cpuThreads = '8';
+//        $defaultAudioCodec = 'libmp3lame';
+//
+//        $videoCodec = $this->getVideoCodec($transcode->getTranscodeFormat());
+//
+//        $representation = $transcode->getRepresentation();
+//        //TODO: if null -> extract resolution from ffmpeg command directly -> also extract video file length
+//        $representationWidth = $representation !== null ? $representation->getResolutionWidth() : 'original';
+//
+//        //TODO: create ffmpeg driver for this hls logic
+//        $inputFile = escapeshellarg($transcode->getFilePath());
+//        $progressLocation = escapeshellarg($progressLocation);
+//        $indexFileName = escapeshellarg($_ENV['STREAM_FILENAME'] . '.m3u8');
+//        $m3u8IndexFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p.m3u8');
+//        $tsFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p_%04d.ts');
+//        $hlsMp4InitName = escapeshellarg($saveLocation . "_$representationWidth" . 'p_init.mp4');
+//
+//        $audioTrackNumber = $transcode->getAudioTrackNumber();
+//        --$audioTrackNumber;
+//        $audioTrack = "-map 0:a:$audioTrackNumber";
+//
+//        $representationCommand = $this->createRepresentationCommand($representation);
+//
+//        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation -progress $progressLocation -f null -";
+//
+//        $this->executeCommand($command, $transcode);
+//    }
+
     private function createRepresentationCommand(?Representation $representation): string
     {
-        $representationCommand = '';
-
         if ($representation === null) {
-            return $representationCommand;
+            return '-c copy';
         }
 
         $resolution = $representation->getResolution();
@@ -123,9 +165,8 @@ final readonly class TranscodeService
 
         $fixAspectRatio = "SRC -vf 'scale=$resolutionColon:force_original_aspect_ratio=decrease,pad=$resolutionColon:(ow-iw)/2:(oh-ih)/2,setsar=1' DEST";
 
-        $representationCommand .= "-s:v:0 $resolution -b:v:0 $bitrate\k $fixAspectRatio";
-
-        return $representationCommand;
+        return "-s:v:0 $resolution -b:v:0 $bitrate" . 'k';
+//        return "-s:v:0 $resolution -b:v:0 $bitrate" . "k $fixAspectRatio";
     }
 
     private function executeCommand(string $command, Transcode $transcode): void
@@ -139,7 +180,6 @@ final readonly class TranscodeService
         $process = proc_open($command, $descriptors, $pipes);
 
         if (is_resource($process)) {
-//            dump($command);
             fclose($pipes[0]);
 
             stream_set_blocking($pipes[1], false);

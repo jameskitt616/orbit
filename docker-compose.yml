@@ -22,6 +22,7 @@ services:
       timeout: 3s
       retries: 3
       start_period: 30s
+      test: 1s
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-orbit}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-orbit}?serverVersion=${POSTGRES_VERSION:-15}&charset=${POSTGRES_CHARSET:-utf8}
       # dev and prod (for production set to prod)
@@ -77,3 +78,15 @@ services:
     ports:
       - "5671:5672"
       - "15671:15672"
+        
+  rtsp_server:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    restart: unless-stopped
+    ports:
+      - "8554:8554"
+      - "1935:1935"
+      - "8888:8888"
+      - "8889:8889"
+      - "8890:8890"
+    environment:
+      - MTX_PROTOCOLS=tcp

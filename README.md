@@ -70,21 +70,15 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 
 ## Planned Features
 
-- [x] Select Audio Tracks (currently being worked on)
+- [x] Select Audio Tracks
 - [ ] Select Subtitles
 - [ ] Enabling users to upload video files through a user-friendly web interface (Web-UI).
 - [ ] Optimizing the system for mobile view and enabling installation via Browser Web Progressive App (WPA).
 - [ ] Offering the ability to configure custom representations, specifying bitrate and quality settings.
-- [ ] Providing estimated time of arrival (ETA) for transcoding processes.
-- [ ] Enabling the ability to start transcoding from a specific timestamp.
-- [ ] Perform file transcoding without utilizing the HLS live feature, which means direct playback is not supported.
+- [ ] Enabling the ability to start streaming from a specific timestamp.
 - [ ] Provide a method to download a video file from a given URL.
 
 Generally, this project is still under development, and there will be ongoing work on various smaller fixes, features, and updates, which may not be explicitly mentioned above.
-
-> **_NOTE:_** If there is a significant demand for it, I may consider learning Rust, C++, or another suitable
-> programming language to develop a program or application for controlling the Orbit system from within VR. This would
-> allow users to conveniently manage Streams without needing to leave the VR environment.
 
 # Screenshots
 
@@ -111,3 +105,4 @@ Created by [jameskitt616](https://jameskitt616.one/).
 * [tailwindcss](https://tailwindcss.com/)
 * [Font Awesome](https://fontawesome.com/)
 * [RabbitMQ](https://www.rabbitmq.com/)
+* [Mediamtx](https://github.com/bluenviron/mediamtx)
