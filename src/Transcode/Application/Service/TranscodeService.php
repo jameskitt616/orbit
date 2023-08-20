@@ -82,7 +82,7 @@ final readonly class TranscodeService
 
         //TODO: make configurable
         $cpuThreads = '8';
-        $defaultAudioCodec = 'libmp3lame';
+        $audioCodec = 'libmp3lame';
 
         $videoCodec = $this->getVideoCodec($transcode->getTranscodeFormat());
 
@@ -103,15 +103,22 @@ final readonly class TranscodeService
         --$audioTrackNumber;
         $audioTrack = "-map 0:a:$audioTrackNumber";
 
-        dump($representation);
         $representationCommand = $this->createRepresentationCommand($representation);
 
-        $command = "ffmpeg -re -i $inputFile $representationCommand -rtsp_transport tcp -f rtsp $publishUrl -f null -";
-//        $command = "ffmpeg -re -i $inputFile -b:v:0 10k -rtsp_transport tcp -f rtsp $publishUrl -f null -";
+//        $command = "ffmpeg -re -i $inputFile -c:v $videoCodec -c:a $audioCodec $audioTrack $representationCommand -rtsp_transport tcp -f rtsp $publishUrl -f null -";
+        $command = "ffmpeg -re -i $inputFile";
+        $command .= " -c:v $videoCodec -c:a $audioCodec";
+        $command .= " $audioTrack";
+        $command .= " $representationCommand";
+        $command .= " -rtsp_transport tcp -f rtsp $publishUrl -f null -";
+
+
+
+//        $command = "ffmpeg -re -i $inputFile $audioTrack $representationCommand -rtsp_transport tcp -f rtsp $publishUrl -f null -";
 //        $command = "ffmpeg -re -i $inputFile -c copy $representationCommand $audioTrack -f rtsp $publishUrl -f null -";
         dump($command);
 
-//        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $defaultAudioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation -progress $progressLocation -f null -";
+//        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $audioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation -progress $progressLocation -f null -";
 
         $this->executeCommand($command, $transcode);
     }
@@ -165,7 +172,7 @@ final readonly class TranscodeService
 
         $fixAspectRatio = "SRC -vf 'scale=$resolutionColon:force_original_aspect_ratio=decrease,pad=$resolutionColon:(ow-iw)/2:(oh-ih)/2,setsar=1' DEST";
 
-        return "-s:v:0 $resolution -b:v:0 $bitrate" . 'k';
+        return "-map 0:v:0 -s:v:0 $resolution -b:v:0 $bitrate" . 'k';
 //        return "-s:v:0 $resolution -b:v:0 $bitrate" . "k $fixAspectRatio";
     }
 
