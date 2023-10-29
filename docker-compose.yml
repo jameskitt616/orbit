@@ -15,7 +15,7 @@ services:
       - rabbitmq
     volumes:
       - ./data/php_socket:/var/run/php
-      - /home/james/docker/data/video_data/live:/orbit/transcode
+      #- /home/james/docker/data/video_data/live:/orbit/transcode
       - /home/james/Videos/test:/orbit/videos
     healthcheck:
       interval: 10s
@@ -44,7 +44,7 @@ services:
       - ./data/php_socket:/var/run/php
       - ./data/caddy_data:/data
       - ./data/caddy_config:/config
-      - /home/james/docker/data/video_data/live:/orbit/transcode
+      #- /home/james/docker/data/video_data/live:/orbit/transcode
     ports:
       - "80:80"
   

@@ -98,6 +98,7 @@ final readonly class TranscodeService
         $tsFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p_%04d.ts');
         $hlsMp4InitName = escapeshellarg($saveLocation . "_$representationWidth" . 'p_init.mp4');
         $publishUrl = escapeshellarg("rtsp://rtsp_server:8554/$randSubTargetPath");
+        dump($publishUrl);
 
         $audioTrackNumber = $transcode->getAudioTrackNumber();
         --$audioTrackNumber;
@@ -163,7 +164,8 @@ final readonly class TranscodeService
     private function createRepresentationCommand(?Representation $representation): string
     {
         if ($representation === null) {
-            return '-c copy';
+            return '-map 0:v:0';
+//            return '-c copy'; //TODO: copy just copies all the original audio/video over, we dont want that.
         }
 
         $resolution = $representation->getResolution();
@@ -172,6 +174,7 @@ final readonly class TranscodeService
 
         $fixAspectRatio = "SRC -vf 'scale=$resolutionColon:force_original_aspect_ratio=decrease,pad=$resolutionColon:(ow-iw)/2:(oh-ih)/2,setsar=1' DEST";
 
+        //TODO: this is flawed, it ignores the original aspect ratio
         return "-map 0:v:0 -s:v:0 $resolution -b:v:0 $bitrate" . 'k';
 //        return "-s:v:0 $resolution -b:v:0 $bitrate" . "k $fixAspectRatio";
     }
@@ -224,9 +227,9 @@ final readonly class TranscodeService
         $progress = shell_exec("tail $progressLocation");
 
         if (preg_match('/out_time_ms=(\d+)/', $progress, $matches)) {
-            $outTimeUs = $matches[1];
+            $outTimeMs = $matches[1];
         } else {
-            $outTimeUs = null;
+            $outTimeMs = null;
         }
 
         if (preg_match('/speed=(.*?)x\n/', $progress, $matches)) {
@@ -235,8 +238,8 @@ final readonly class TranscodeService
             $speed = null;
         }
 
-        if ($outTimeUs !== null) {
-            $currentTimeSeconds = $outTimeUs / 1000000;
+        if ($outTimeMs !== null) {
+            $currentTimeSeconds = $outTimeMs / 1000000;
             $videoTotalLengthSeconds = 1149; //TODO: get actual video length
 
             $percentage = (int) round(($currentTimeSeconds / $videoTotalLengthSeconds) * 100);
@@ -269,7 +272,7 @@ final readonly class TranscodeService
 
     private function getFormat(string $format): StreamFormat
     {
-        //The default option is libmp3lame since the majority, if not all, VRChat video players are only compatible with mp3 files.
+        //The default option is libmp3lame since the majority, if not all, VRChat video players are only compatible with mp3 codec.
         $defaultAudioCodec = 'libmp3lame';
 
         return match ($format) {
