@@ -72,7 +72,7 @@ final readonly class TranscodeService
     }
 
     //TODO: refactor and cleanup this function after getting it working properly
-    public function hlsTranscode(Transcode $transcode): void
+    public function transcode(Transcode $transcode): void
     {
         $randSubTargetPath = $transcode->getRandSubTargetPath();
 //        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath);
@@ -111,7 +111,8 @@ final readonly class TranscodeService
         $command .= " -c:v $videoCodec -c:a $audioCodec";
         $command .= " $audioTrack";
         $command .= " $representationCommand";
-        $command .= " -rtsp_transport tcp -f rtsp $publishUrl -f null -";
+        $command .= " -rtsp_transport tcp -f rtsp $publishUrl";
+//        $command .= " -rtsp_transport tcp -f rtsp $publishUrl -f null -";
 
 
 
@@ -165,7 +166,7 @@ final readonly class TranscodeService
     {
         if ($representation === null) {
             return '-map 0:v:0';
-//            return '-c copy'; //TODO: copy just copies all the original audio/video over, we dont want that.
+//            return '-c copy'; //TODO: copies all the original audio/video over, we dont want that.
         }
 
         $resolution = $representation->getResolution();
@@ -181,45 +182,62 @@ final readonly class TranscodeService
 
     private function executeCommand(string $command, Transcode $transcode): void
     {
-        $descriptors = [
-            0 => ['pipe', 'r'],
-            1 => ['pipe', 'w'],
-            2 => ['pipe', 'w'],
-        ];
+        $sessionName = 'orbit_live_' . $transcode->getRandSubTargetPath();
 
-        $process = proc_open($command, $descriptors, $pipes);
+//        $command = escapeshellarg($command);
 
-        if (is_resource($process)) {
-            fclose($pipes[0]);
+//        $tmuxCommand = "tmux new-session -d -s $sessionName $command";
+        $tmuxCommand = "tmux new-session -t testing -d"; //TODO: this is the correct way
+//        $tmuxCommand = "tmux new-session -t orbit_live_1523839202 -d -s \"htop\"";
+//        $tmuxCommand = "tmux new -d -s orbit_live_1523839202 \"htop\"";
+//        $tmuxCommand = "tmux new -d -s $sessionName \"$command\"";
+        dump($sessionName);
 
-            stream_set_blocking($pipes[1], false);
-            stream_set_blocking($pipes[2], false);
-
-            while (true) {
-                $output = stream_get_contents($pipes[1]);
-                $error = stream_get_contents($pipes[2]);
-
-                if (feof($pipes[1]) && feof($pipes[2])) {
-                    break;
-                }
-
-                if (!empty($error)) {
-//                    dump($error);
-                    //TODO: parse and show in UI. maybe in terminal like looking window
-                }
-
-                $this->updateTranscodeStatus($transcode);
-
-                usleep(100000);
-            }
-
-            fclose($pipes[1]);
-            fclose($pipes[2]);
-
-            // Process the exit code if needed
-            //$exitCode = proc_close($process);
-        }
+//        shell_exec($tmuxCommand);
+        shell_exec("sudo -u test -S $tmuxCommand");
     }
+
+//    private function executeCommand(string $command, Transcode $transcode): void
+//    {
+//        $descriptors = [
+//            0 => ['pipe', 'r'],
+//            1 => ['pipe', 'w'],
+//            2 => ['pipe', 'w'],
+//        ];
+//
+//        $process = proc_open($command, $descriptors, $pipes);
+//
+//        if (is_resource($process)) {
+//            fclose($pipes[0]);
+//
+//            stream_set_blocking($pipes[1], false);
+//            stream_set_blocking($pipes[2], false);
+//
+//            while (true) {
+//                $output = stream_get_contents($pipes[1]);
+//                $error = stream_get_contents($pipes[2]);
+//
+//                if (feof($pipes[1]) && feof($pipes[2])) {
+//                    break;
+//                }
+//
+//                if (!empty($error)) {
+////                    dump($error);
+//                    //TODO: parse and show in UI. maybe in terminal like looking window
+//                }
+//
+//                $this->updateTranscodeStatus($transcode);
+//
+//                usleep(100000);
+//            }
+//
+//            fclose($pipes[1]);
+//            fclose($pipes[2]);
+//
+//            // Process the exit code if needed
+//            //$exitCode = proc_close($process);
+//        }
+//    }
 
     private function updateTranscodeStatus(Transcode $transcode): void
     {

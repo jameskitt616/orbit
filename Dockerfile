@@ -45,6 +45,8 @@ RUN apk add --no-cache \
     	python3 \
     	make \
     	supervisor \
+    	tmux \
+    	nano \
 	;
 
 RUN set -eux; \
