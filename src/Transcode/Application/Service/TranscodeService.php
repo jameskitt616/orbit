@@ -96,11 +96,10 @@ final readonly class TranscodeService
 
         $command = "ffmpeg -re -i $inputFile";
         $command .= " -c:v $videoCodec -c:a $audioCodec";
+        $command .= " -preset veryfast";
         $command .= " $audioTrack";
         $command .= " $representationCommand";
-        $command .= " -rtsp_transport tcp -f rtsp $publishUrl";
-
-        dump($command);
+        $command .= " -f rtsp -rtsp_transport tcp $publishUrl";
 
         $this->executeCommand($command, $transcode);
     }
