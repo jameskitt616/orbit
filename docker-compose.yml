@@ -5,6 +5,7 @@ services:
     build:
       context: .
       target: app_php_dev
+      network: host
       args:
         SYMFONY_VERSION: ${SYMFONY_VERSION:-}
         STABILITY: ${STABILITY:-stable}
@@ -35,6 +36,7 @@ services:
     build:
       context: .
       target: app_caddy
+      network: host
     depends_on:
       - php
     environment:

@@ -72,16 +72,10 @@ final readonly class TranscodeService
     }
 
     //TODO: refactor and cleanup this function after getting it working properly
-    public function hlsTranscode(Transcode $transcode): void
+    public function transcode(Transcode $transcode): void
     {
         $randSubTargetPath = $transcode->getRandSubTargetPath();
-//        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath);
 
-        $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath . '/' . $_ENV['STREAM_FILENAME'];
-        $progressLocation = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath . '/transcode_progress.txt';
-
-        //TODO: make configurable
-        $cpuThreads = '8';
         $audioCodec = 'libmp3lame';
 
         $videoCodec = $this->getVideoCodec($transcode->getTranscodeFormat());
@@ -90,15 +84,9 @@ final readonly class TranscodeService
         //TODO: if null -> extract resolution from ffmpeg command directly -> also extract video file length
         $representationWidth = $representation !== null ? $representation->getResolutionWidth() : 'original';
 
-        //TODO: create ffmpeg driver for this hls logic
+        //TODO: create ffmpeg driver for ffmpeg logic
         $inputFile = escapeshellarg($transcode->getFilePath());
-        $progressLocation = escapeshellarg($progressLocation);
-        $indexFileName = escapeshellarg($_ENV['STREAM_FILENAME'] . '.m3u8');
-        $m3u8IndexFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p.m3u8');
-        $tsFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p_%04d.ts');
-        $hlsMp4InitName = escapeshellarg($saveLocation . "_$representationWidth" . 'p_init.mp4');
         $publishUrl = escapeshellarg("rtsp://rtsp_server:8554/$randSubTargetPath");
-        dump($publishUrl);
 
         $audioTrackNumber = $transcode->getAudioTrackNumber();
         --$audioTrackNumber;
@@ -106,20 +94,12 @@ final readonly class TranscodeService
 
         $representationCommand = $this->createRepresentationCommand($representation);
 
-//        $command = "ffmpeg -re -i $inputFile -c:v $videoCodec -c:a $audioCodec $audioTrack $representationCommand -rtsp_transport tcp -f rtsp $publishUrl -f null -";
         $command = "ffmpeg -re -i $inputFile";
         $command .= " -c:v $videoCodec -c:a $audioCodec";
+        $command .= " -preset veryfast";
         $command .= " $audioTrack";
         $command .= " $representationCommand";
-        $command .= " -rtsp_transport tcp -f rtsp $publishUrl -f null -";
-
-
-
-//        $command = "ffmpeg -re -i $inputFile $audioTrack $representationCommand -rtsp_transport tcp -f rtsp $publishUrl -f null -";
-//        $command = "ffmpeg -re -i $inputFile -c copy $representationCommand $audioTrack -f rtsp $publishUrl -f null -";
-        dump($command);
-
-//        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $audioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation -progress $progressLocation -f null -";
+        $command .= " -f rtsp -rtsp_transport tcp $publishUrl";
 
         $this->executeCommand($command, $transcode);
     }
@@ -165,7 +145,7 @@ final readonly class TranscodeService
     {
         if ($representation === null) {
             return '-map 0:v:0';
-//            return '-c copy'; //TODO: copy just copies all the original audio/video over, we dont want that.
+//            return '-c copy'; //TODO: copies all the original audio/video over, we dont want that.
         }
 
         $resolution = $representation->getResolution();
@@ -181,45 +161,58 @@ final readonly class TranscodeService
 
     private function executeCommand(string $command, Transcode $transcode): void
     {
-        $descriptors = [
-            0 => ['pipe', 'r'],
-            1 => ['pipe', 'w'],
-            2 => ['pipe', 'w'],
-        ];
+        $sessionName = 'orbit_live_' . $transcode->getRandSubTargetPath();
+        $killSessionOnSuccess = "tmux kill-session -t $sessionName";
+        $command = escapeshellarg("$command && $killSessionOnSuccess");
 
-        $process = proc_open($command, $descriptors, $pipes);
+        $createDetachedSession = "sudo tmux new-session -t $sessionName -d";
+        shell_exec($createDetachedSession);
 
-        if (is_resource($process)) {
-            fclose($pipes[0]);
-
-            stream_set_blocking($pipes[1], false);
-            stream_set_blocking($pipes[2], false);
-
-            while (true) {
-                $output = stream_get_contents($pipes[1]);
-                $error = stream_get_contents($pipes[2]);
-
-                if (feof($pipes[1]) && feof($pipes[2])) {
-                    break;
-                }
-
-                if (!empty($error)) {
-//                    dump($error);
-                    //TODO: parse and show in UI. maybe in terminal like looking window
-                }
-
-                $this->updateTranscodeStatus($transcode);
-
-                usleep(100000);
-            }
-
-            fclose($pipes[1]);
-            fclose($pipes[2]);
-
-            // Process the exit code if needed
-            //$exitCode = proc_close($process);
-        }
+        $execCommand = "sudo tmux send -t $sessionName $command ENTER";
+        shell_exec($execCommand);
     }
+
+//    private function executeCommand(string $command, Transcode $transcode): void
+//    {
+//        $descriptors = [
+//            0 => ['pipe', 'r'],
+//            1 => ['pipe', 'w'],
+//            2 => ['pipe', 'w'],
+//        ];
+//
+//        $process = proc_open($command, $descriptors, $pipes);
+//
+//        if (is_resource($process)) {
+//            fclose($pipes[0]);
+//
+//            stream_set_blocking($pipes[1], false);
+//            stream_set_blocking($pipes[2], false);
+//
+//            while (true) {
+//                $output = stream_get_contents($pipes[1]);
+//                $error = stream_get_contents($pipes[2]);
+//
+//                if (feof($pipes[1]) && feof($pipes[2])) {
+//                    break;
+//                }
+//
+//                if (!empty($error)) {
+////                    dump($error);
+//                    //TODO: parse and show in UI. maybe in terminal like looking window
+//                }
+//
+//                $this->updateTranscodeStatus($transcode);
+//
+//                usleep(100000);
+//            }
+//
+//            fclose($pipes[1]);
+//            fclose($pipes[2]);
+//
+//            // Process the exit code if needed
+//            //$exitCode = proc_close($process);
+//        }
+//    }
 
     private function updateTranscodeStatus(Transcode $transcode): void
     {

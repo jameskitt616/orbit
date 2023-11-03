@@ -23,7 +23,7 @@ readonly class TriggerHandler
     public function __invoke(Trigger $command): void
     {
         $transcode = $this->transcodeRepository->findById($command->id);
-        $this->transcodeService->hlsTranscode($transcode);
+        $this->transcodeService->transcode($transcode);
 
         $transcode->setTranscodingProgress(100);
         $this->transcodeRepository->save($transcode);
