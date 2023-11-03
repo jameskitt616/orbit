@@ -3,7 +3,8 @@
 # Orbit
 
 A [Docker](https://www.docker.com/) and [PHP](https://www.php.net/)-[Symfony](https://symfony.com) based application,
-using [FFmpeg](https://ffmpeg.org/) to transcode video files.
+using [FFmpeg](https://ffmpeg.org/) and [Mediamtx](https://github.com/bluenviron/mediamtx) to live stream video files
+via [RTSP](https://en.wikipedia.org/wiki/Real_Time_Streaming_Protocol).
 
 # Contents
 
@@ -48,11 +49,15 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 7. Don't forget to set up some reverse proxy (just like Caddy or Nginx) with SSL/TLS Certificates
 
 # Updating
-> **_NOTE:_** Please remember to periodically check the [Docker Compose file](https://raw.githubusercontent.com/jameskitt616/orbit/main/docker-compose.prod.yml) or the README of this project for any changes. This is especially important if you encounter issues after an update.
+
+> **_NOTE:_** Please remember to periodically check
+> the [Docker Compose file](https://raw.githubusercontent.com/jameskitt616/orbit/main/docker-compose.prod.yml) or the
+> README of this project for any changes. This is especially important if you encounter issues after an update.
 
 1. Run `docker compose pull && docker compose up -d && docker image prune -f`
 
-> **_NOTE:_** `docker image prune -f` removes unused Docker images from your local machine. The -f flag forces the deletion without confirmation prompts.
+> **_NOTE:_** `docker image prune -f` removes unused Docker images from your local machine. The -f flag forces the
+> deletion without confirmation prompts.
 
 # Features
 
@@ -73,7 +78,8 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 - [ ] Enabling the ability to start streaming from a specific timestamp.
 - [ ] Provide a method to download a video file from a given URL.
 
-Generally, this project is still under development, and there will be ongoing work on various smaller fixes, features, and updates, which may not be explicitly mentioned above.
+Generally, this project is still under development, and there will be ongoing work on various smaller fixes, features,
+and updates, which may not be explicitly mentioned above.
 
 # Screenshots
 
