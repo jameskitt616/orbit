@@ -135,10 +135,10 @@ final readonly class TranscodeService
         $streams = [];
 
         foreach ($lines as $line) {
-            if (str_contains($line, "$property:")) {
+            if (str_contains($line, ": $property:")) {
                 preg_match('/\((\w+)\)/', $line, $matches);
                 $languageCode = strtoupper($matches[1]);
-                $attributes = explode("$property: ", $line)[1];
+                $attributes = explode(": $property: ", $line)[1];
                 $streamName = $languageCode . ' - ' . $attributes;
                 preg_match('/Stream #\d+:(\d+)/', $line, $matches);
                 $streamNumber = $matches[1];
