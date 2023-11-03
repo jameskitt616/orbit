@@ -75,13 +75,7 @@ final readonly class TranscodeService
     public function transcode(Transcode $transcode): void
     {
         $randSubTargetPath = $transcode->getRandSubTargetPath();
-//        shell_exec('mkdir ' . $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath);
 
-        $saveLocation = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath . '/' . $_ENV['STREAM_FILENAME'];
-        $progressLocation = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath . '/transcode_progress.txt';
-
-        //TODO: make configurable
-        $cpuThreads = '8';
         $audioCodec = 'libmp3lame';
 
         $videoCodec = $this->getVideoCodec($transcode->getTranscodeFormat());
@@ -90,15 +84,9 @@ final readonly class TranscodeService
         //TODO: if null -> extract resolution from ffmpeg command directly -> also extract video file length
         $representationWidth = $representation !== null ? $representation->getResolutionWidth() : 'original';
 
-        //TODO: create ffmpeg driver for this hls logic
+        //TODO: create ffmpeg driver for ffmpeg logic
         $inputFile = escapeshellarg($transcode->getFilePath());
-        $progressLocation = escapeshellarg($progressLocation);
-        $indexFileName = escapeshellarg($_ENV['STREAM_FILENAME'] . '.m3u8');
-        $m3u8IndexFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p.m3u8');
-        $tsFileLocation = escapeshellarg($saveLocation . "_$representationWidth" . 'p_%04d.ts');
-        $hlsMp4InitName = escapeshellarg($saveLocation . "_$representationWidth" . 'p_init.mp4');
         $publishUrl = escapeshellarg("rtsp://rtsp_server:8554/$randSubTargetPath");
-        dump($publishUrl);
 
         $audioTrackNumber = $transcode->getAudioTrackNumber();
         --$audioTrackNumber;
@@ -106,21 +94,13 @@ final readonly class TranscodeService
 
         $representationCommand = $this->createRepresentationCommand($representation);
 
-//        $command = "ffmpeg -re -i $inputFile -c:v $videoCodec -c:a $audioCodec $audioTrack $representationCommand -rtsp_transport tcp -f rtsp $publishUrl -f null -";
         $command = "ffmpeg -re -i $inputFile";
         $command .= " -c:v $videoCodec -c:a $audioCodec";
         $command .= " $audioTrack";
         $command .= " $representationCommand";
         $command .= " -rtsp_transport tcp -f rtsp $publishUrl";
-//        $command .= " -rtsp_transport tcp -f rtsp $publishUrl -f null -";
 
-
-
-//        $command = "ffmpeg -re -i $inputFile $audioTrack $representationCommand -rtsp_transport tcp -f rtsp $publishUrl -f null -";
-//        $command = "ffmpeg -re -i $inputFile -c copy $representationCommand $audioTrack -f rtsp $publishUrl -f null -";
         dump($command);
-
-//        $command = "ffmpeg -y -i $inputFile -c:v $videoCodec -c:a $audioCodec -keyint_min 25 -g 250 -sc_threshold 40 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -hls_segment_type mpegts -hls_fmp4_init_filename $hlsMp4InitName -hls_segment_filename $tsFileLocation -master_pl_name $indexFileName -map 0:v:0 $representationCommand -f hls $audioTrack -threads $cpuThreads $m3u8IndexFileLocation -progress $progressLocation -f null -";
 
         $this->executeCommand($command, $transcode);
     }
@@ -183,7 +163,8 @@ final readonly class TranscodeService
     private function executeCommand(string $command, Transcode $transcode): void
     {
         $sessionName = 'orbit_live_' . $transcode->getRandSubTargetPath();
-        $command = escapeshellarg($command);
+        $killSessionOnSuccess = "tmux kill-session -t $sessionName";
+        $command = escapeshellarg("$command && $killSessionOnSuccess");
 
         $createDetachedSession = "sudo tmux new-session -t $sessionName -d";
         shell_exec($createDetachedSession);
