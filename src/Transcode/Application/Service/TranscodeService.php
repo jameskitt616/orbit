@@ -183,18 +183,13 @@ final readonly class TranscodeService
     private function executeCommand(string $command, Transcode $transcode): void
     {
         $sessionName = 'orbit_live_' . $transcode->getRandSubTargetPath();
+        $command = escapeshellarg($command);
 
-//        $command = escapeshellarg($command);
+        $createDetachedSession = "sudo tmux new-session -t $sessionName -d";
+        shell_exec($createDetachedSession);
 
-//        $tmuxCommand = "tmux new-session -d -s $sessionName $command";
-        $tmuxCommand = "tmux new-session -t testing -d"; //TODO: this is the correct way
-//        $tmuxCommand = "tmux new-session -t orbit_live_1523839202 -d -s \"htop\"";
-//        $tmuxCommand = "tmux new -d -s orbit_live_1523839202 \"htop\"";
-//        $tmuxCommand = "tmux new -d -s $sessionName \"$command\"";
-        dump($sessionName);
-
-//        shell_exec($tmuxCommand);
-        shell_exec("sudo -u test -S $tmuxCommand");
+        $execCommand = "sudo tmux send -t $sessionName $command ENTER";
+        shell_exec($execCommand);
     }
 
 //    private function executeCommand(string $command, Transcode $transcode): void

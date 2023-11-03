@@ -1,16 +1,12 @@
 #syntax=docker/dockerfile:1.4
 
-# The different stages of this Dockerfile are meant to be built into separate images
 # https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
-# https://docs.docker.com/compose/compose-file/#target
 
-# Builder images
 FROM composer/composer:2-bin AS composer
 
 FROM mlocati/php-extension-installer:latest AS php_extension_installer
 
-# Build Caddy
-FROM caddy:2.6-builder-alpine AS app_caddy_builder
+FROM caddy:builder-alpine AS app_caddy_builder
 
 RUN xcaddy build
 
@@ -32,7 +28,7 @@ WORKDIR /srv/app
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
 COPY --from=php_extension_installer --link /usr/bin/install-php-extensions /usr/local/bin/
 
-# persistent / runtime deps
+#TODO: check what's really needed. e.g. pyhton?
 RUN apk add --no-cache \
 		acl \
 		fcgi \
@@ -47,6 +43,7 @@ RUN apk add --no-cache \
     	supervisor \
     	tmux \
     	nano \
+    	sudo \
 	;
 
 RUN set -eux; \
@@ -67,6 +64,8 @@ RUN apk add --no-cache --virtual .pgsql-deps postgresql-dev; \
 	apk del .pgsql-deps
 ###< doctrine/doctrine-bundle ###
 ###< recipes ###
+
+RUN echo "www-data ALL=(ALL) NOPASSWD: /usr/bin/tmux" >> /etc/sudoers
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY --link docker/php/conf.d/app.ini $PHP_INI_DIR/conf.d/
@@ -124,7 +123,6 @@ RUN chmod 707 /orbit/transcode
 RUN yarn install
 RUN yarn encore dev
 
-# Dev image
 FROM app_php AS app_php_dev
 
 ENV APP_ENV=dev XDEBUG_MODE=off
@@ -143,8 +141,7 @@ RUN set -eux; \
 
 RUN rm -f .env.local.php
 
-# Caddy image
-FROM caddy:2.6-alpine AS app_caddy
+FROM caddy:builder-alpine AS app_caddy
 
 WORKDIR /srv/app
 
