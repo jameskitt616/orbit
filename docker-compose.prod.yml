@@ -4,6 +4,9 @@ services:
   php:
     image: ghcr.io/jameskitt616/orbit_php:latest
     restart: unless-stopped
+    depends_on:
+      - database
+      - rtsp_server
     volumes:
       - ./data/php_socket:/var/run/php
       # Set this to the path where to find your video files 
@@ -27,6 +30,7 @@ services:
     image: ghcr.io/jameskitt616/orbit_caddy:latest
     depends_on:
       - php
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile", "--watch"]
     environment:
       SERVER_NAME: ${SERVER_NAME:-localhost, caddy:80}
     restart: unless-stopped

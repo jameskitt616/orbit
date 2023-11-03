@@ -12,6 +12,7 @@ services:
     restart: unless-stopped
     depends_on:
       - database
+      - rtsp_server
     volumes:
       - ./data/php_socket:/var/run/php
       - /home/james/Videos/test:/orbit/videos
