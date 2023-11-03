@@ -1,11 +1,8 @@
 :80 {
-    log
-
-    handle {
-        root * /srv/app/public
-        php_fastcgi unix//var/run/php/php-fpm.sock
-        encode zstd gzip
-        file_server
-        header X-Forwarded-Proto {scheme}
-    }
+    log /var/log/orbit.log
+    root * /srv/app/public
+    php_fastcgi unix//var/run/php/php-fpm.sock
+    encode zstd gzip
+    file_server
+    header X-Forwarded-Proto {scheme}
 }
