@@ -11,7 +11,7 @@ readonly class SystemInformationService
 {
     public function getStoragePaths(): array
     {
-        $paths = [$_ENV['VIDEO_PATH'], $_ENV['TRANSCODE_PATH']];
+        $paths = [$_ENV['VIDEO_PATH']];
         $storagePaths = [];
 
         foreach ($paths as $path) {

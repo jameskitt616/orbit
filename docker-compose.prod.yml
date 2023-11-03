@@ -4,8 +4,6 @@ services:
   php:
     image: ghcr.io/jameskitt616/orbit_php:latest
     restart: unless-stopped
-    depends_on:
-      - rabbitmq
     volumes:
       - ./data/php_socket:/var/run/php
       - ./data/live/transcode:/orbit/transcode
@@ -54,15 +52,6 @@ services:
     volumes:
       - ./data/database_data:/var/lib/postgresql/data:rw
 
-  rabbitmq:
-    image: rabbitmq:3.11-management
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    ports:
-      - "5671:5672"
-      - "15671:15672"
-  
   rtsp_server:
     image: bluenviron/mediamtx:latest-ffmpeg
     restart: unless-stopped

@@ -28,7 +28,6 @@ WORKDIR /srv/app
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
 COPY --from=php_extension_installer --link /usr/bin/install-php-extensions /usr/local/bin/
 
-#TODO: check what's really needed. e.g. pyhton?
 RUN apk add --no-cache \
 		acl \
 		fcgi \
@@ -38,9 +37,6 @@ RUN apk add --no-cache \
     	ffmpeg \
     	yarn \
     	nodejs \
-    	python3 \
-    	make \
-    	supervisor \
     	tmux \
     	nano \
     	sudo \
@@ -79,11 +75,6 @@ RUN chmod +x /usr/local/bin/docker-healthcheck
 
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["docker-healthcheck"]
 
-RUN mkdir -p /etc/supervisor/conf.d
-RUN rm /etc/supervisord.conf
-COPY --link docker/supervisor/supervisord.conf /etc/supervisor/
-COPY --link docker/supervisor/messenger-worker.conf /etc/supervisor/conf.d/
-
 COPY --link docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
 
@@ -117,9 +108,7 @@ RUN set -eux; \
 		chmod +x bin/console; sync; \
     fi
 
-RUN mkdir -p /orbit/transcode
-RUN mkdir /orbit/videos
-RUN chmod 707 /orbit/transcode
+RUN mkdir -p /orbit/videos
 RUN yarn install
 RUN yarn encore dev
 

@@ -12,11 +12,8 @@ services:
     restart: unless-stopped
     depends_on:
       - database
-      - message_transport
-      - rabbitmq
     volumes:
       - ./data/php_socket:/var/run/php
-      #- /home/james/docker/data/video_data/live:/orbit/transcode
       - /home/james/Videos/test:/orbit/videos
     healthcheck:
       interval: 10s
@@ -46,7 +43,6 @@ services:
       - ./data/php_socket:/var/run/php
       - ./data/caddy_data:/data
       - ./data/caddy_config:/config
-      #- /home/james/docker/data/video_data/live:/orbit/transcode
     ports:
       - "80:80"
   
@@ -64,23 +60,6 @@ services:
       - ./data/database_data:/var/lib/postgresql/data:rw
   ###< doctrine/doctrine-bundle ###
 
-  message_transport:
-    image: redis:7.0.11-alpine
-    restart: on-failure
-    volumes:
-      - ./data/redis-data:/data
-    ports:
-      - "6379:6379"
-
-  rabbitmq:
-    image: rabbitmq:3.11-management
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    ports:
-      - "5671:5672"
-      - "15671:15672"
-        
   rtsp_server:
     image: bluenviron/mediamtx:latest-ffmpeg
     restart: unless-stopped

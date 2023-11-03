@@ -216,7 +216,7 @@ final readonly class TranscodeService
 
     private function updateTranscodeStatus(Transcode $transcode): void
     {
-        $progressLocation = $_ENV['TRANSCODE_PATH'] . '/' . $transcode->getRandSubTargetPath() . '/transcode_progress.txt';
+        $progressLocation = '/orbit/transcode/' . $transcode->getRandSubTargetPath() . '/transcode_progress.txt';
         $progress = shell_exec("tail $progressLocation");
 
         if (preg_match('/out_time_ms=(\d+)/', $progress, $matches)) {
