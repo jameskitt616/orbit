@@ -6,7 +6,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/php_socket:/var/run/php
-      - ./data/live/transcode:/orbit/transcode
       # Set this to the path where to find your video files 
       - /path/to/videos:/orbit/videos
     healthcheck:
@@ -35,7 +34,6 @@ services:
       - ./data/php_socket:/var/run/php
       - ./data/caddy_data:/data
       - ./data/caddy_config:/config
-      - ./data/live/transcode:/orbit/transcode
     ports:
       - "80:80"
   
