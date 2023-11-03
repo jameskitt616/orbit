@@ -50,7 +50,6 @@ system.load_average: "Sys Load avg. (1m, 5m, 15m)"
 system.ram: "RAM"
 
 live.stream: "Stream"
-live.stream.nav.description: "Livestreams don't function like traditional livestreams; it's more akin to live transcoding, allowing you to watch the stream as it's being transcoded"
 live.stream.list.description: "List of the currently available Streams"
 live.stream.description: "Information and details about the Stream"
 live.stream.no_available: "No Streams found"

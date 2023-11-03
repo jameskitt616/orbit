@@ -10,10 +10,6 @@
                     <div class="px-4 sm:px-0">
                         <h3 class="text-base font-semibold leading-7 text-gray-500">
                             {{ 'live.stream.current_streams'|trans }}
-                            {#                            <div class="tooltip" #}
-                            {#                                 data-message="Live Streams do not sync in VRChat, if someone joins the lobby they will start from the beginning"> #}
-                            {#                                <i class="fas fa-circle-info"></i> #}
-                            {#                            </div> #}
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
                             {{ 'live.stream.list.description'|trans }}
@@ -30,12 +26,12 @@
                 </div>
             </div>
 
-            {#            <div> #}
-            {#                <label> #}
-            {#                    <input type="text" autofocus placeholder="{{ 'common.search'|trans }}" #}
-            {#                           class="block w-full rounded-md border-0 py-1.5 px-1 mb-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"> #}
-            {#                </label> #}
-            {#            </div> #}
+            {# <div> #}
+            {#     <label> #}
+            {#         <input type="text" autofocus placeholder="{{ 'common.search'|trans }}" #}
+            {#                class="block w-full rounded-md border-0 py-1.5 px-1 mb-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"> #}
+            {#     </label> #}
+            {# </div> #}
             <div class="max-h-96 overflow-auto border-t border-b py-2 h-96">
                 {% for transcode in transcodes %}
                     <a href="{{ path('transcode_show', {'transcode': transcode.id}) }}"

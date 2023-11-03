@@ -75,11 +75,8 @@ final readonly class TranscodeService
     public function transcode(Transcode $transcode): void
     {
         $randSubTargetPath = $transcode->getRandSubTargetPath();
-
         $audioCodec = 'libmp3lame';
-
         $videoCodec = $this->getVideoCodec($transcode->getTranscodeFormat());
-
         $representation = $transcode->getRepresentation();
         //TODO: if null -> extract resolution from ffmpeg command directly -> also extract video file length
         $representationWidth = $representation !== null ? $representation->getResolutionWidth() : 'original';

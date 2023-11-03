@@ -51,13 +51,13 @@ final class TranscodeController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/load/source/files', name: 'transcode_load_source_files', methods: ['GET'])]
+    #[Route(path: '/source/load', name: 'transcode_load_source_files', methods: ['GET'])]
     public function loadSourceFiles(): Response
     {
         return new JsonResponse($this->transcodeService->loadSourceFiles($_ENV['VIDEO_PATH']));
     }
 
-    #[Route(path: '/select/source', name: 'transcode_select_source', methods: ['GET', 'POST'])]
+    #[Route(path: '/source/select', name: 'transcode_select_source', methods: ['GET', 'POST'])]
     public function selectSource(Request $request): Response
     {
         $url = $this->generateUrl('transcode_select_source');
