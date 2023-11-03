@@ -59,7 +59,7 @@ live.stream.source.select.description: "Select the Source Video-file to transcod
 live.stream.filename: "Filename"
 live.stream.transcoding.configuration: "Transcoding configuration"
 live.stream.transcoding.configuration.description: "Configure options for the transcoding process"
-live.stream.transcoding.progress: "Transcoding progress"
+live.stream.progress: "Progress"
 live.stream.representation: "Representation"
 live.stream.audio_track: "Audio Track"
 live.stream.subtitle_track: "Subtitle Track"
