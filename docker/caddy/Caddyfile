@@ -1,11 +1,6 @@
 :80 {
     log
 
-    handle_path /live* {
-        root * /orbit/transcode
-        file_server browse
-    }
-
     handle {
         root * /srv/app/public
         php_fastcgi unix//var/run/php/php-fpm.sock

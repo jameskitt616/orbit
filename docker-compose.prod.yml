@@ -4,11 +4,8 @@ services:
   php:
     image: ghcr.io/jameskitt616/orbit_php:latest
     restart: unless-stopped
-    depends_on:
-      - rabbitmq
     volumes:
       - ./data/php_socket:/var/run/php
-      - ./data/live/transcode:/orbit/transcode
       # Set this to the path where to find your video files 
       - /path/to/videos:/orbit/videos
     healthcheck:
@@ -16,6 +13,7 @@ services:
       timeout: 3s
       retries: 3
       start_period: 30s
+      test: 1s
     environment:
       #TODO: You should definitely change the password in production
       DATABASE_URL: postgresql://${POSTGRES_USER:-orbit}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-orbit}?serverVersion=${POSTGRES_VERSION:-15}&charset=${POSTGRES_CHARSET:-utf8}
@@ -36,7 +34,6 @@ services:
       - ./data/php_socket:/var/run/php
       - ./data/caddy_data:/data
       - ./data/caddy_config:/config
-      - ./data/live/transcode:/orbit/transcode
     ports:
       - "80:80"
   
@@ -53,11 +50,14 @@ services:
     volumes:
       - ./data/database_data:/var/lib/postgresql/data:rw
 
-  rabbitmq:
-    image: rabbitmq:3.11-management
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+  rtsp_server:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    restart: unless-stopped
     ports:
-      - "5671:5672"
-      - "15671:15672"
+      - "8554:8554"
+      - "1935:1935"
+      - "8888:8888"
+      - "8889:8889"
+      - "8890:8890"
+    environment:
+      - MTX_PROTOCOLS=tcp

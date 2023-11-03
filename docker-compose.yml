@@ -5,23 +5,22 @@ services:
     build:
       context: .
       target: app_php_dev
+      network: host
       args:
         SYMFONY_VERSION: ${SYMFONY_VERSION:-}
         STABILITY: ${STABILITY:-stable}
     restart: unless-stopped
     depends_on:
       - database
-      - message_transport
-      - rabbitmq
     volumes:
       - ./data/php_socket:/var/run/php
-      - /home/james/docker/data/video_data/live:/orbit/transcode
       - /home/james/Videos/test:/orbit/videos
     healthcheck:
       interval: 10s
       timeout: 3s
       retries: 3
       start_period: 30s
+      test: 1s
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-orbit}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-orbit}?serverVersion=${POSTGRES_VERSION:-15}&charset=${POSTGRES_CHARSET:-utf8}
       # dev and prod (for production set to prod)
@@ -34,6 +33,7 @@ services:
     build:
       context: .
       target: app_caddy
+      network: host
     depends_on:
       - php
     environment:
@@ -43,7 +43,6 @@ services:
       - ./data/php_socket:/var/run/php
       - ./data/caddy_data:/data
       - ./data/caddy_config:/config
-      - /home/james/docker/data/video_data/live:/orbit/transcode
     ports:
       - "80:80"
   
@@ -61,19 +60,14 @@ services:
       - ./data/database_data:/var/lib/postgresql/data:rw
   ###< doctrine/doctrine-bundle ###
 
-  message_transport:
-    image: redis:7.0.11-alpine
-    restart: on-failure
-    volumes:
-      - ./data/redis-data:/data
+  rtsp_server:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    restart: unless-stopped
     ports:
-      - "6379:6379"
-
-  rabbitmq:
-    image: rabbitmq:3.11-management
+      - "8554:8554"
+      - "1935:1935"
+      - "8888:8888"
+      - "8889:8889"
+      - "8890:8890"
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    ports:
-      - "5671:5672"
-      - "15671:15672"
+      - MTX_PROTOCOLS=tcp

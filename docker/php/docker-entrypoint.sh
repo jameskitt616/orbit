@@ -65,7 +65,4 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
 fi
 
-echo "Starting supervisor"
-supervisord -c /etc/supervisor/supervisord.conf
-
 exec docker-php-entrypoint "$@"

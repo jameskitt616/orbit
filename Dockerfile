@@ -1,16 +1,12 @@
 #syntax=docker/dockerfile:1.4
 
-# The different stages of this Dockerfile are meant to be built into separate images
 # https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
-# https://docs.docker.com/compose/compose-file/#target
 
-# Builder images
 FROM composer/composer:2-bin AS composer
 
 FROM mlocati/php-extension-installer:latest AS php_extension_installer
 
-# Build Caddy
-FROM caddy:2.6-builder-alpine AS app_caddy_builder
+FROM caddy:builder-alpine AS app_caddy_builder
 
 RUN xcaddy build
 
@@ -32,7 +28,6 @@ WORKDIR /srv/app
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
 COPY --from=php_extension_installer --link /usr/bin/install-php-extensions /usr/local/bin/
 
-# persistent / runtime deps
 RUN apk add --no-cache \
 		acl \
 		fcgi \
@@ -42,9 +37,9 @@ RUN apk add --no-cache \
     	ffmpeg \
     	yarn \
     	nodejs \
-    	python3 \
-    	make \
-    	supervisor \
+    	tmux \
+    	nano \
+    	sudo \
 	;
 
 RUN set -eux; \
@@ -53,8 +48,6 @@ RUN set -eux; \
 		intl \
 		opcache \
 		zip \
-		redis \
-		amqp \
     ;
 
 ###> recipes ###
@@ -65,6 +58,8 @@ RUN apk add --no-cache --virtual .pgsql-deps postgresql-dev; \
 	apk del .pgsql-deps
 ###< doctrine/doctrine-bundle ###
 ###< recipes ###
+
+RUN echo "www-data ALL=(ALL) NOPASSWD: /usr/bin/tmux" >> /etc/sudoers
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY --link docker/php/conf.d/app.ini $PHP_INI_DIR/conf.d/
@@ -77,11 +72,6 @@ COPY --link docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
 RUN chmod +x /usr/local/bin/docker-healthcheck
 
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["docker-healthcheck"]
-
-RUN mkdir -p /etc/supervisor/conf.d
-RUN rm /etc/supervisord.conf
-COPY --link docker/supervisor/supervisord.conf /etc/supervisor/
-COPY --link docker/supervisor/messenger-worker.conf /etc/supervisor/conf.d/
 
 COPY --link docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
@@ -116,13 +106,10 @@ RUN set -eux; \
 		chmod +x bin/console; sync; \
     fi
 
-RUN mkdir -p /orbit/transcode
-RUN mkdir /orbit/videos
-RUN chmod 707 /orbit/transcode
+RUN mkdir -p /orbit/videos
 RUN yarn install
 RUN yarn encore dev
 
-# Dev image
 FROM app_php AS app_php_dev
 
 ENV APP_ENV=dev XDEBUG_MODE=off
@@ -141,8 +128,7 @@ RUN set -eux; \
 
 RUN rm -f .env.local.php
 
-# Caddy image
-FROM caddy:2.6-alpine AS app_caddy
+FROM caddy:builder-alpine AS app_caddy
 
 WORKDIR /srv/app
 

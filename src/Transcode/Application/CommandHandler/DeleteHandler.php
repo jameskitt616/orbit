@@ -18,12 +18,10 @@ readonly class DeleteHandler
     public function __invoke(Delete $command): void
     {
         $transcode = $command->transcode;
+        $sessionName = 'orbit_live_' . $transcode->getRandSubTargetPath();
 
-        $randSubTargetPath = $transcode->getRandSubTargetPath();
-        if (!empty($randSubTargetPath)) {
-            $path = $_ENV['TRANSCODE_PATH'] . '/' . $randSubTargetPath;
-            shell_exec("rm -rf $path");
-        }
+        $createDetachedSession = "sudo tmux kill-session -t $sessionName";
+        shell_exec($createDetachedSession);
 
         $this->transcodeRepository->delete($transcode);
     }

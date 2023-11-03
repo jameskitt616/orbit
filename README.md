@@ -20,7 +20,7 @@ using [FFmpeg](https://ffmpeg.org/) to transcode video files.
 
 The objective of this project is to develop an optimized video transcoding and streaming system. This system will be
 capable of handling video files of different formats and sizes, converting them into a specific format, and generating
-.m3u8 stream files to facilitate seamless internet streaming.
+rtsp streams to facilitate seamless internet streaming.
 
 The system has been designed to allow concurrent processing of multiple video files. It utilizes a combination of
 open-source tools and custom scripts to handle the transcoding processes efficiently.
@@ -28,11 +28,7 @@ open-source tools and custom scripts to handle the transcoding processes efficie
 The workflow of the system begins with users uploading video files to a designated server directory. In the future, this
 process can be accomplished through a user-friendly web interface. Users can browse the uploaded files and select the
 ones they want to transcode. An interactive form is available to guide users through the selection of the file, desired
-video qualities, audio track, and format.
-
-Upon detection of a new file, the system automatically initiates the transcoding process. Please note that the current
-system is limited to processing 20 concurrent transcoding processes. Any additional processes beyond this limit will be
-queued and processed subsequently.
+video qualities, audio track, and format. Upon submitting the form, a rtsp stream will be generated automatically.
 
 To facilitate management of the transcoding and streaming process, the system provides a user-friendly web-based
 interface. Additionally, users can access various settings to customize their experience.
@@ -49,8 +45,7 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 5. Open `http://localhost` or `http://<ip-of-your-server>` in your favorite web browser (make sure to properly configure
    the firewall of your server)
 6. Run `docker compose up -d` to run the Docker containers in detached daemon mode
-7. Run `chmod 707 -R data/live/transcode/` as *root* in the directory containing your Docker Compose file
-8. Don't forget to set up some reverse proxy (just like Caddy or Nginx) with SSL/TLS Certificates
+7. Don't forget to set up some reverse proxy (just like Caddy or Nginx) with SSL/TLS Certificates
 
 # Updating
 > **_NOTE:_** Please remember to periodically check the [Docker Compose file](https://raw.githubusercontent.com/jameskitt616/orbit/main/docker-compose.prod.yml) or the README of this project for any changes. This is especially important if you encounter issues after an update.
@@ -70,21 +65,15 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 
 ## Planned Features
 
-- [x] Select Audio Tracks (currently being worked on)
+- [x] Select Audio Tracks
 - [ ] Select Subtitles
 - [ ] Enabling users to upload video files through a user-friendly web interface (Web-UI).
 - [ ] Optimizing the system for mobile view and enabling installation via Browser Web Progressive App (WPA).
-- [ ] Offering the ability to configure custom representations, specifying bitrate and quality settings.
-- [ ] Providing estimated time of arrival (ETA) for transcoding processes.
-- [ ] Enabling the ability to start transcoding from a specific timestamp.
-- [ ] Perform file transcoding without utilizing the HLS live feature, which means direct playback is not supported.
+- [x] Offering the ability to configure custom representations, specifying bitrate and quality settings.
+- [ ] Enabling the ability to start streaming from a specific timestamp.
 - [ ] Provide a method to download a video file from a given URL.
 
 Generally, this project is still under development, and there will be ongoing work on various smaller fixes, features, and updates, which may not be explicitly mentioned above.
-
-> **_NOTE:_** If there is a significant demand for it, I may consider learning Rust, C++, or another suitable
-> programming language to develop a program or application for controlling the Orbit system from within VR. This would
-> allow users to conveniently manage Streams without needing to leave the VR environment.
 
 # Screenshots
 
@@ -110,4 +99,4 @@ Created by [jameskitt616](https://jameskitt616.one/).
 * [FFmpeg](https://ffmpeg.org)
 * [tailwindcss](https://tailwindcss.com/)
 * [Font Awesome](https://fontawesome.com/)
-* [RabbitMQ](https://www.rabbitmq.com/)
+* [Mediamtx](https://github.com/bluenviron/mediamtx)
