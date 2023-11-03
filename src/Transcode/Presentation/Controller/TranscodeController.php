@@ -8,6 +8,7 @@ use App\Kernel\Application\CommandBus;
 use App\Security\Application\Service\SecurityService;
 use App\Transcode\Application\Command\Create;
 use App\Transcode\Application\Command\Delete;
+use App\Transcode\Application\Service\ProgressService;
 use App\Transcode\Application\Service\TranscodeService;
 use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Transcode;
@@ -29,6 +30,7 @@ final class TranscodeController extends AbstractController
         private readonly SecurityService     $securityService,
         private readonly TranscodeRepository $transcodeRepository,
         private readonly TranscodeService    $transcodeService,
+        private readonly ProgressService     $progressService,
     )
     {
     }
@@ -37,6 +39,7 @@ final class TranscodeController extends AbstractController
     public function list(): Response
     {
         $transcodes = $this->transcodeRepository->findAllByUser($this->securityService->getCurrentUser());
+        $this->progressService->updateProgressForAll();
 
         return $this->render('transcode/list.html.twig', [
             'transcodes' => $transcodes,
@@ -46,6 +49,8 @@ final class TranscodeController extends AbstractController
     #[Route(path: '/show/{transcode}', name: 'transcode_show', methods: ['GET'])]
     public function show(Transcode $transcode): Response
     {
+        $this->progressService->updateProgress($transcode);
+
         return $this->render('transcode/show.html.twig', [
             'transcode' => $transcode,
         ]);

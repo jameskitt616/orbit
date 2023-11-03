@@ -9,11 +9,6 @@ use App\Transcode\Domain\Model\Representation;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Model\VideoProperty;
 use App\Transcode\Domain\Repository\TranscodeRepository;
-use DateTime;
-use Streaming\Format\HEVC;
-use Streaming\Format\StreamFormat;
-use Streaming\Format\VP9;
-use Streaming\Format\X264;
 
 final readonly class TranscodeService
 {
@@ -142,7 +137,6 @@ final readonly class TranscodeService
     {
         if ($representation === null) {
             return '-map 0:v:0';
-//            return '-c copy'; //TODO: copies all the original audio/video over, we dont want that.
         }
 
         $resolution = $representation->getResolution();
