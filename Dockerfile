@@ -48,8 +48,6 @@ RUN set -eux; \
 		intl \
 		opcache \
 		zip \
-		redis \
-		amqp \
     ;
 
 ###> recipes ###
