@@ -26,13 +26,17 @@ readonly class CreateHandler
 
         $videoPropertyAudio = $command->videoPropertyAudio;
         if ($videoPropertyAudio !== null) {
-            $transcode->setAudioTrackNumber((int) $videoPropertyAudio->streamNumber);
+            $audioTrackNumber = (int) $videoPropertyAudio->streamNumber;
+            --$audioTrackNumber;
+            $transcode->setAudioTrackNumber($audioTrackNumber);
             $transcode->setAudioTrackNumberTitle($videoPropertyAudio->streamName);
         }
 
         $videoPropertySubtitle = $command->videoPropertySubtitle;
         if ($videoPropertySubtitle !== null) {
-            $transcode->setSubtitleNumber((int) $videoPropertySubtitle->streamNumber);
+            $subtitleNumber = (int) $videoPropertySubtitle->streamNumber;
+            --$subtitleNumber;
+            $transcode->setSubtitleNumber($subtitleNumber);
             $transcode->setSubtitleNumberTitle($videoPropertySubtitle->streamName);
         }
 

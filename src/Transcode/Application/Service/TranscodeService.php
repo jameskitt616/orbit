@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Transcode\Application\Service;
 
-use App\Transcode\Domain\Enum\Format;
+use App\Transcode\Domain\Enum\AudioFormat;
+use App\Transcode\Domain\Enum\VideoFormat;
 use App\Transcode\Domain\Model\Representation;
 use App\Transcode\Domain\Model\Transcode;
 use App\Transcode\Domain\Model\VideoProperty;
@@ -62,27 +63,31 @@ final readonly class TranscodeService
     public function transcode(Transcode $transcode): void
     {
         $randSubTargetPath = $transcode->getRandSubTargetPath();
-        $audioCodec = 'libmp3lame';
+        $audioCodec = $this->getAudioCodec('AAC'); //TODO: make selectable in form
+        $audioChannels = $this->getAudioChannels($transcode);
+        $audioTrackNumber = $transcode->getAudioTrackNumber();
         $videoCodec = $this->getVideoCodec($transcode->getTranscodeFormat());
         $representation = $transcode->getRepresentation();
-        //TODO: if null -> extract resolution from ffmpeg command directly -> also extract video file length
-        $representationWidth = $representation !== null ? $representation->getResolutionWidth() : 'original';
 
-        //TODO: create ffmpeg driver for ffmpeg logic
         $inputFile = escapeshellarg($transcode->getFilePath());
         $publishUrl = escapeshellarg("rtsp://rtsp_server:8554/$randSubTargetPath");
 
-        $audioTrackNumber = $transcode->getAudioTrackNumber();
-        --$audioTrackNumber;
-        $audioTrack = "-map 0:a:$audioTrackNumber";
+        //TODO: subtitles can also be none
+        //TODO: add subtitle functionality
+        //$subtitleTrackNumber = $transcode->getSubtitleNumber();
+        //--$subtitleTrackNumber;
+        //$subtitleTrack = "-map 0:a:$subtitleTrackNumber";
+        //https://superuser.com/a/1636356
+        //http://ffmpeg.org/ffmpeg-all.html#subtitles-1
+        //-vf "subtitles='/path/to.mkv':si=7"
 
         $representationCommand = $this->createRepresentationCommand($representation);
 
         $command = "ffmpeg -re -i $inputFile";
-        $command .= " -c:v $videoCodec -c:a $audioCodec";
-        $command .= " -preset veryfast";
-        $command .= " $audioTrack";
+        $command .= " -c:v $videoCodec";
         $command .= " $representationCommand";
+        $command .= " -preset veryfast";
+        $command .= " -map 0:a:$audioTrackNumber -c:a $audioCodec -ac $audioChannels";
         $command .= " -f rtsp -rtsp_transport tcp $publishUrl";
 
         $this->executeCommand($command, $transcode);
@@ -102,7 +107,7 @@ final readonly class TranscodeService
 
         //TODO: this is flawed, it ignores the original aspect ratio
         return "-map 0:v:0 -s:v:0 $resolution -b:v:0 $bitrate";
-//        return "-s:v:0 $resolution -b:v:0 $bitrate" . "k $fixAspectRatio";
+        //return "-s:v:0 $resolution -b:v:0 $bitrate" . "k $fixAspectRatio";
     }
 
     private function executeCommand(string $command, Transcode $transcode): void
@@ -118,16 +123,35 @@ final readonly class TranscodeService
         shell_exec($execCommand);
     }
 
+    private function getAudioChannels(Transcode $transcode): string
+    {
+        $filePath = escapeshellarg($transcode->getFilePath());
+        $audioStreamNumber = $transcode->getAudioTrackNumber();
+
+        $command = "ffprobe -i $filePath -show_entries stream=channels -select_streams a:$audioStreamNumber -of compact=p=0:nk=1 -v 0";
+        $channels = shell_exec($command);
+
+        return preg_replace('/[^0-9.]+/', '', $channels);
+    }
+
+    private function getAudioCodec(string $format): string
+    {
+        return match ($format) {
+            AudioFormat::OPUS->value => 'opus',
+            AudioFormat::AAC->value => 'aac',
+            default => 'libmp3lame',
+        };
+    }
+
     private function getVideoCodec(string $format): string
     {
         return match ($format) {
-            Format::HEVC->value => 'libx265',
-            Format::VP9->value => 'libvpx-vp9',
+            VideoFormat::HEVC->value => 'libx265',
             default => 'libx264',
         };
     }
 
-    public function getAvailableTracksByFilePathAndVideoProperty(string $filePath, string $property): array
+    public function getAvailableTracksByFilePathAndProperty(string $filePath, string $property): array
     {
         $filePath = escapeshellarg($filePath);
         $output = shell_exec("ffmpeg -i $filePath 2>&1");
@@ -136,12 +160,18 @@ final readonly class TranscodeService
 
         foreach ($lines as $line) {
             if (str_contains($line, ": $property:")) {
+                $languageCode = '';
                 preg_match('/\((\w+)\)/', $line, $matches);
-                $languageCode = strtoupper($matches[1]);
+                if (isset($matches[1])) {
+                    $description = $matches[1];
+                    $languageCode = strtoupper($description) . ' - ';
+                }
+
                 $attributes = explode(": $property: ", $line)[1];
-                $streamName = $languageCode . ' - ' . $attributes;
-                preg_match('/Stream #\d+:(\d+)/', $line, $matches);
-                $streamNumber = $matches[1];
+                $streamName = $languageCode . $attributes;
+
+                preg_match('/Stream #\d+:(\d+)/', $line, $streamIds);
+                $streamNumber = $streamIds[1];
                 $streams[] = new VideoProperty($streamNumber, $streamName);
             }
         }

@@ -83,6 +83,12 @@ In summary, the goal of this project is to deliver an efficient solution for tra
 Generally, this project is still under development, and there will be ongoing work on various smaller fixes, features,
 and updates, which may not be explicitly mentioned above.
 
+## Known Bugs
+
+- [ ] When not using "Original Representation" and the video's aspect ratio is not 16:9. The output might be stretched.
+- [ ] Progress calculation might do nothing.
+- [ ] Storage calculation in settings might display wrong Format
+
 # Screenshots
 
 ![Transcode List](docker/screenshots/transcode_list.png)

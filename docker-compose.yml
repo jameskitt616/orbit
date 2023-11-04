@@ -69,6 +69,6 @@ services:
       - "1935:1935"
       - "8888:8888"
       - "8889:8889"
-      - "8890:8890"
+      - "8890:8890/udp"
     environment:
       - MTX_PROTOCOLS=tcp

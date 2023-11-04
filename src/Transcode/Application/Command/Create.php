@@ -6,7 +6,7 @@ namespace App\Transcode\Application\Command;
 
 use App\Kernel\Application\Command;
 use App\Security\Domain\Model\User;
-use App\Transcode\Domain\Enum\Format;
+use App\Transcode\Domain\Enum\VideoFormat;
 use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Representation;
 use App\Transcode\Domain\Model\Transcode;
@@ -29,7 +29,7 @@ class Create implements Command
     {
         $this->currentUser = $currentUser;
         $this->file = $file;
-        $this->format = Format::x264->name;
+        $this->format = VideoFormat::x264->name;
         $this->videoPropertyAudio = null;
         $this->videoPropertySubtitle = null;
         $this->representation = null;

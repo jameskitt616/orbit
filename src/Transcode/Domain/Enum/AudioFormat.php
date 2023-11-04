@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Transcode\Domain\Enum;
 
-enum Format: string
+enum AudioFormat: string
 {
-    case x264 = 'x264';
-    case HEVC = 'HEVC (x265)';
-    case VP9 = 'VP9';
+    case AAC = 'AAC';
+    case OPUS = 'OPUS';
+    case MP3 = 'MP3';
 
     public static function names(): array
     {

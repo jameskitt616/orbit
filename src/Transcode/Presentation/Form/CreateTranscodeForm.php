@@ -6,7 +6,7 @@ namespace App\Transcode\Presentation\Form;
 
 use App\Transcode\Application\Command\Create;
 use App\Transcode\Application\Service\TranscodeService;
-use App\Transcode\Domain\Enum\Format;
+use App\Transcode\Domain\Enum\VideoFormat;
 use App\Transcode\Domain\Enum\VideoProperty;
 use App\Transcode\Domain\Model\File;
 use App\Transcode\Domain\Model\Representation;
@@ -32,8 +32,8 @@ final class CreateTranscodeForm extends AbstractType
     {
         /** @var File $file */
         $file = $options['file'];;
-        $audioTracks = $this->transcodeService->getAvailableTracksByFilePathAndVideoProperty($file->filePath, VideoProperty::AUDIO->value);
-        $subtitles = $this->transcodeService->getAvailableTracksByFilePathAndVideoProperty($file->filePath, VideoProperty::SUBTITLE->value);
+        $audioTracks = $this->transcodeService->getAvailableTracksByFilePathAndProperty($file->filePath, VideoProperty::AUDIO->value);
+        $subtitles = $this->transcodeService->getAvailableTracksByFilePathAndProperty($file->filePath, VideoProperty::SUBTITLE->value);
 
         $builder->add('videoPropertyAudio', ChoiceType::class, [
             'label' => false,
@@ -53,7 +53,7 @@ final class CreateTranscodeForm extends AbstractType
 
         $builder->add('format', ChoiceType::class, [
             'label' => false,
-            'choices' => Format::getFormats(),
+            'choices' => VideoFormat::getFormats(),
         ]);
 
         $builder->add('representation', EntityType::class, [
