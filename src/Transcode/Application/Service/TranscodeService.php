@@ -77,6 +77,9 @@ final readonly class TranscodeService
         //$subtitleTrackNumber = $transcode->getSubtitleNumber();
         //--$subtitleTrackNumber;
         //$subtitleTrack = "-map 0:a:$subtitleTrackNumber";
+        //https://superuser.com/a/1636356
+        //http://ffmpeg.org/ffmpeg-all.html#subtitles-1
+        //-vf "subtitles='/path/to.mkv':si=7"
 
         $representationCommand = $this->createRepresentationCommand($representation);
 

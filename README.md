@@ -86,7 +86,8 @@ and updates, which may not be explicitly mentioned above.
 ## Known Bugs
 
 - [ ] When not using "Original Representation" and the video's aspect ratio is not 16:9. The output might be stretched.
-- [ ] Progress calculation does nothing.
+- [ ] Progress calculation might do nothing.
+- [ ] Storage calculation in settings might display wrong Format
 
 # Screenshots
 
