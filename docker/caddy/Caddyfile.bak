@@ -1,4 +1,4 @@
-:80 {
+localhost:443 {
     log
 
     handle_path /live* {
@@ -12,4 +12,15 @@
         file_server
         header X-Forwarded-Proto {scheme}
     }
+}
+
+:80 {
+    log
+
+    #redir https://{host}{uri} permanent
+    #reverse_proxy https://localhost  {
+    #    header_up Host {upstream_hostport}
+    #}
+    #reverse_proxy https://jameskitt616.one
+    reverse_proxy https://127.0.0.1
 }

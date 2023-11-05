@@ -10,7 +10,19 @@ transcoding.init = function () {
   $('.copyUrl').click(transcoding.copyUrl);
   $('#deleteTranscode').click(transcoding.delete);
   transcoding.fileTree();
+  transcoding.detectRequestScheme();
 };
+
+transcoding.detectRequestScheme = function () {
+
+  $('.urlProtocol').each(function () {
+    let url = $(this).val();
+    if (url.slice(0, 4) !== 'http') {
+      let urlWithProtocol = window.location.protocol + '//' + url;
+      $(this).val(urlWithProtocol);
+    }
+  })
+}
 
 transcoding.fileTree = function () {
 

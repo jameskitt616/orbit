@@ -37,8 +37,6 @@ services:
       network: host
     depends_on:
       - php
-    environment:
-      SERVER_NAME: ${SERVER_NAME:-localhost, caddy:80}
     restart: unless-stopped
     volumes:
       - ./data/php_socket:/var/run/php
@@ -46,6 +44,7 @@ services:
       - ./data/caddy_config:/config
     ports:
       - "80:80"
+      - "443:443"
   
   ###> doctrine/doctrine-bundle ###
   database:
