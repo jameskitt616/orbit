@@ -2,6 +2,9 @@
 
 # Orbit
 
+
+> **_NOTE:_** Orbit is archvived for now, due if found a much simpler and versatile way streaming to VRChat. Checkout [jameskitt616/vrchat_streaming](https://github.com/jameskitt616/vrchat_streaming).
+
 A [Docker](https://www.docker.com/) and [PHP](https://www.php.net/)-[Symfony](https://symfony.com) based application,
 using [FFmpeg](https://ffmpeg.org/) and [Mediamtx](https://github.com/bluenviron/mediamtx) to live stream video files
 via [RTSP](https://en.wikipedia.org/wiki/Real_Time_Streaming_Protocol).

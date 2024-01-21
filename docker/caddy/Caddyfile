@@ -1,9 +1,22 @@
 :80 {
     log
 
-    handle_path /live* {
-        reverse_proxy rtsp_server:8888
-    }
+    #handle_path /live/* {
+    #    #rewrite * /
+    #    #rewrite * /live{uri}
+    #    #rewrite /live /{uri}
+    #    #reverse_proxy rtsp_server:8888/
+    #    reverse_proxy rtsp_server:8888/{uri}
+    #    #respond {uri}
+    #}
+
+    #handle_path /live/* {
+    #    reverse_proxy rtsp_server:8888/{uri}
+    #}
+
+    #handle_path /live/1069118668 {
+    #    reverse_proxy rtsp_server:8888/1069118668
+    #}
 
     handle {
         root * /srv/app/public
